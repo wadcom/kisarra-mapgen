@@ -44,9 +44,14 @@ layout_mode = 2
 text = "Cells per player:"
 
 [node name="CellsPerPlayer" type="Label" parent="CellsPerPlayerControl"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 2.08165e-12)
 layout_mode = 2
-text = "999"
+text = "9"
+
+[node name="Padding" type="Control" parent="CellsPerPlayerControl"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
 
 [node name="HSlider" type="HSlider" parent="CellsPerPlayerControl"]
 layout_mode = 2
@@ -57,3 +62,4 @@ max_value = 200.0
 value = 9.0
 
 [connection signal="pressed" from="ButtonBar/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="value_changed" from="CellsPerPlayerControl/HSlider" to="." method="_on_cells_per_player_value_changed"]
