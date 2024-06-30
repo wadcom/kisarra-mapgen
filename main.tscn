@@ -17,7 +17,7 @@ script = ExtResource("1_43uwm")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="HBoxContainer"]
+[node name="CenteredArea" type="CenterContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -26,9 +26,24 @@ layout_mode = 2
 
 [node name="ButtonBar" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+alignment = 2
 
 [node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/ButtonBar"]
 layout_mode = 2
 text = "Quit"
+
+[node name="PlayersQuantityControls" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/PlayersQuantityControls"]
+layout_mode = 2
+text = "Players:"
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer/PlayersQuantityControls"]
+layout_mode = 2
+min_value = 2.0
+max_value = 11.0
+value = 2.0
+alignment = 1
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/ButtonBar/QuitButton" to="." method="_on_quit_button_pressed"]
