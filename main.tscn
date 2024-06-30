@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dgxgawmmqyyqm"]
+[gd_scene load_steps=2 format=3 uid="uid://dgxgawmmqyyqm"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_43uwm"]
 
 [node name="Main" type="MarginContainer"]
 anchors_preset = 15
@@ -10,6 +12,7 @@ theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
+script = ExtResource("1_43uwm")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -27,3 +30,5 @@ layout_mode = 2
 [node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/ButtonBar"]
 layout_mode = 2
 text = "Quit"
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/ButtonBar/QuitButton" to="." method="_on_quit_button_pressed"]
