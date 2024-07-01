@@ -74,7 +74,7 @@ func _setup_bases(params, base_positions):
 		exclusion_area.position = \
 			p * _globals.PIXELS_PER_CELL_SIDE + Vector2.ONE * (_globals.PIXELS_PER_CELL_SIDE / 2.0)
 		exclusion_area.set_radius(params.base_placement.min_dist_to_other_bases)
-		exclusion_area.modulate = Color(Color.RED, 0.2)
+		exclusion_area.modulate = Color(Color.BLACK, 0.05)
 		$Constraints.add_child(exclusion_area)
 
 
