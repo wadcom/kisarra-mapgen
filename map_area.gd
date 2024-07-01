@@ -23,8 +23,7 @@ func update_parameters(params):
 
 
 func _calculate_bt_density(params, bt_positions):
-	var content = 50
-	var decay_factor = 0.75
+	var decay_factor = params.satellite_bt.decay
 
 	var total_bt = []
 	for x in params.map_size:
@@ -34,7 +33,7 @@ func _calculate_bt_density(params, bt_positions):
 			var t = 0.0
 			for bt_p in bt_positions:
 				var d = bt_p.distance_to(p)
-				t += content * pow(decay_factor, d)
+				t += params.satellite_bt.peak_density * pow(decay_factor, d)
 
 			total_bt.append(int(t))
 

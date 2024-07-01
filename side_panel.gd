@@ -7,7 +7,7 @@ var _params = {
 	cells_per_player = 120,
 	map_size = 22,
 	players_qty = 2,
-	satellite_bt = { distance_to_base = 75 },
+	satellite_bt = { decay = 0.7, distance_to_base = 75, peak_density = 45 },
 }
 
 
@@ -18,7 +18,9 @@ func _ready():
 
 	%BaseDistanceToOtherBasesSlider.value = _params.base_placement.min_dist_to_other_bases
 
+	%SatelliteBtDecaySlider.value = _params.satellite_bt.decay
 	%SatelliteBtDistanceToBaseSlider.value = _params.satellite_bt.distance_to_base
+	%SatelliteBtPeakDensitySlider.value = _params.satellite_bt.peak_density
 
 	_update_labels()
 
@@ -51,8 +53,20 @@ func _on_players_quantity_value_changed(value):
 	parameters_changed.emit(_params)
 
 
+func _on_satellite_bt_decay_value_changed(value):
+	_params.satellite_bt.decay = value
+	_update_labels()
+	parameters_changed.emit(_params)
+
+
 func _on_satellite_bt_distance_to_base_value_changed(value):
 	_params.satellite_bt.distance_to_base = int(value)
+	_update_labels()
+	parameters_changed.emit(_params)
+
+
+func _on_satellite_bt_peak_density_value_changed(value):
+	_params.satellite_bt.peak_density = int(value)
 	_update_labels()
 	parameters_changed.emit(_params)
 
@@ -65,5 +79,7 @@ func _update_labels():
 
 	%BaseDistanceToOtherBasesLabel.text = str(_params.base_placement.min_dist_to_other_bases)
 
+	%SatelliteBtDecayLabel.text = "%.2f" % [_params.satellite_bt.decay]
 	%SatelliteBtDistanceToBaseLabel.text = str(_params.satellite_bt.distance_to_base)
+	%SatelliteBtPeakDensityLabel.text = str(_params.satellite_bt.peak_density)
 
