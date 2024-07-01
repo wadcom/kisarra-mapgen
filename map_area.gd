@@ -13,8 +13,10 @@ func update_parameters(params):
 
 	%DiagnosticsText.clear()
 
+	var base_positions = _pick_base_positions(params)
+
+	_setup_bases(params, base_positions)
 	_setup_ground_cells(params)
-	_setup_bases(params)
 
 
 func _setup_ground_cells(params):
@@ -30,7 +32,7 @@ func _setup_ground_cells(params):
 			$GroundCells.add_child(cell)
 
 
-func _setup_bases(params):
+func _setup_bases(params, base_positions):
 	for b in $Bases.get_children():
 		$Bases.remove_child(b)
 		b.queue_free()
@@ -39,26 +41,10 @@ func _setup_bases(params):
 		$Constraints.remove_child(c)
 		c.queue_free()
 
-	var available = []
-	for x in params.map_size:
-		for y in params.map_size:
-			available.append(Vector2(x, y))
-
-	available.shuffle()
-
-	var base_positions = []
-	for i in params.players_qty:
-		if available.size() == 0:
-			%DiagnosticsText.add_text("No cells available to place a base\n")
-			break
-
-		var p = available.pop_back()
-
+	for p in base_positions:
 		var base = base_cell_prefab.instantiate()
 		base.position = p * _globals.PIXELS_PER_CELL_SIDE
 		$Bases.add_child(base)
-
-		base_positions.append(p)
 
 		var exclusion_area = round_area_prefab.instantiate()
 		exclusion_area.position = \
@@ -67,12 +53,8 @@ func _setup_bases(params):
 		exclusion_area.modulate = Color(Color.RED, 0.2)
 		$Constraints.add_child(exclusion_area)
 
-		available = available.filter(
-			func(a): 
-				var d = a.distance_to(p) * _globals.CELL_SIDE_KMS
-				return d > params.base_placement.min_dist_to_other_bases
-		)
 
+func _pick_satellite_bt_positions(params, base_positions):
 	var satellite_bt_radius = params.satellite_bt.distance_to_base / _globals.CELL_SIDE_KMS
 	var bt_positions = []
 	for base_pos in base_positions:
@@ -102,4 +84,31 @@ func _setup_bases(params):
 
 		bt_positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
 
-	print("XXX: ", bt_positions)
+	return bt_positions
+
+
+func _pick_base_positions(params):
+	var available = []
+	for x in params.map_size:
+		for y in params.map_size:
+			available.append(Vector2(x, y))
+
+	available.shuffle()
+
+	var base_positions = []
+	for i in params.players_qty:
+		if available.size() == 0:
+			%DiagnosticsText.add_text("No cells available to place a base\n")
+			break
+
+		var p = available.pop_back()
+
+		base_positions.append(p)
+
+		available = available.filter(
+			func(a): 
+				var d = a.distance_to(p) * _globals.CELL_SIDE_KMS
+				return d > params.base_placement.min_dist_to_other_bases
+		)
+
+	return base_positions
