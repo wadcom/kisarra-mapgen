@@ -7,6 +7,7 @@ var _params = {
 	cells_per_player = 120,
 	map_size = 22,
 	players_qty = 2,
+	satellite_bt = { distance_to_base = 75 },
 }
 
 
@@ -16,6 +17,8 @@ func _ready():
 	%PlayersQuantity.value = _params.players_qty
 
 	%BaseDistanceToOtherBasesSlider.value = _params.base_placement.min_dist_to_other_bases
+
+	%SatelliteBtDistanceToBaseSlider.value = _params.satellite_bt.distance_to_base
 
 	_update_labels()
 
@@ -48,6 +51,12 @@ func _on_players_quantity_value_changed(value):
 	parameters_changed.emit(_params)
 
 
+func _on_satellite_bt_distance_to_base_value_changed(value):
+	_params.satellite_bt.distance_to_base = int(value)
+	_update_labels()
+	parameters_changed.emit(_params)
+
+
 func _update_labels():
 	%CellsPerPlayerLabel.text = str(_params.cells_per_player)
 	%MapSizeLabel.text = str(_params.map_size)
@@ -55,3 +64,6 @@ func _update_labels():
 	%RecommendedMapSizeLabel.text = str(ceil(sqrt(_params.players_qty * _params.cells_per_player)))
 
 	%BaseDistanceToOtherBasesLabel.text = str(_params.base_placement.min_dist_to_other_bases)
+
+	%SatelliteBtDistanceToBaseLabel.text = str(_params.satellite_bt.distance_to_base)
+

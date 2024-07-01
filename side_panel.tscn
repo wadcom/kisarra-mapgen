@@ -140,8 +140,42 @@ min_value = 20.0
 max_value = 300.0
 value = 20.0
 
+[node name="HSeparator3" type="HSeparator" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SatelliteBtSectionLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Satellite Bt Sources"
+
+[node name="SatelliteBtControls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SatelliteBtControls"]
+layout_mode = 2
+text = "Distance to base:"
+
+[node name="SatelliteBtDistanceToBaseLabel" type="Label" parent="SatelliteBtControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="SatelliteBtControls"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="SatelliteBtDistanceToBaseSlider" type="HSlider" parent="SatelliteBtControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 20.0
+max_value = 200.0
+value = 20.0
+
 [connection signal="pressed" from="ButtonBar/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="value_changed" from="PlayersQuantityControls/PlayersQuantity" to="." method="_on_players_quantity_value_changed"]
 [connection signal="value_changed" from="CellsPerPlayerControl/CellsPerPlayer" to="." method="_on_cells_per_player_value_changed"]
 [connection signal="value_changed" from="MapSizeControls/Controls/MapSize" to="." method="_on_map_size_value_changed"]
 [connection signal="value_changed" from="BaseDistanceToOtherBasesSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="value_changed" from="SatelliteBtControls/SatelliteBtDistanceToBaseSlider" to="." method="_on_satellite_bt_distance_to_base_value_changed"]
