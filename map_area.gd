@@ -33,7 +33,16 @@ func _setup_bases(params):
 		$Bases.remove_child(b)
 		b.queue_free()
 
+	var available = []
+	for x in params.map_size:
+		for y in params.map_size:
+			available.append(Vector2(x, y))
+
+	available.shuffle()
+
 	for i in params.players_qty:
+		var p = available.pop_back()
+
 		var base = base_cell_prefab.instantiate()
-		base.position = Vector2(i, 0) * _globals.PIXELS_PER_CELL_SIDE
+		base.position = p * _globals.PIXELS_PER_CELL_SIDE
 		$Bases.add_child(base)
