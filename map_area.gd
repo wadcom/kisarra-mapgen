@@ -1,6 +1,7 @@
 extends ColorRect
 
 @export var base_cell_prefab: PackedScene
+@export var round_area_prefab: PackedScene
 @export var sand_cell_prefab: PackedScene
 
 
@@ -34,6 +35,10 @@ func _setup_bases(params):
 		$Bases.remove_child(b)
 		b.queue_free()
 
+	for c in $Constraints.get_children():
+		$Constraints.remove_child(c)
+		c.queue_free()
+
 	var available = []
 	for x in params.map_size:
 		for y in params.map_size:
@@ -51,6 +56,11 @@ func _setup_bases(params):
 		var base = base_cell_prefab.instantiate()
 		base.position = p * _globals.PIXELS_PER_CELL_SIDE
 		$Bases.add_child(base)
+
+		var exclusion_area = round_area_prefab.instantiate()
+		exclusion_area.position = p * _globals.PIXELS_PER_CELL_SIDE
+		exclusion_area.set_radius(100)
+		$Constraints.add_child(exclusion_area)
 
 		available = available.filter(
 			func(a): 
