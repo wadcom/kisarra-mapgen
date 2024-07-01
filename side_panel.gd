@@ -3,7 +3,9 @@ extends VBoxContainer
 signal parameters_changed(params: Variant)
 
 var _params = {
-	base_placement = { min_dist_to_other_bases = 40 },
+	base_placement = {
+		min_dist_to_map_edge = 100, min_dist_to_other_bases = 40,
+	},
 	cells_per_player = 120,
 	map_size = 22,
 	players_qty = 2,
