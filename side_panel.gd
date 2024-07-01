@@ -3,6 +3,7 @@ extends VBoxContainer
 signal parameters_changed(params: Variant)
 
 var _params = {
+	base_placement = { min_dist_to_other_bases = 40 },
 	cells_per_player = 120,
 	map_size = 22,
 	players_qty = 2,
@@ -14,11 +15,19 @@ func _ready():
 	%MapSize.value = _params.map_size
 	%PlayersQuantity.value = _params.players_qty
 
+	%BaseDistanceToOtherBasesSlider.value = _params.base_placement.min_dist_to_other_bases
+
 	_update_labels()
 
 
 func _on_quit_button_pressed():
 	get_tree().quit()
+
+
+func _on_base_distance_to_other_bases_value_changed(value):
+	_params.base_placement.min_dist_to_other_bases = int(value)
+	_update_labels()
+	parameters_changed.emit(_params)
 
 
 func _on_cells_per_player_value_changed(value):
@@ -44,3 +53,5 @@ func _update_labels():
 	%MapSizeLabel.text = str(_params.map_size)
 
 	%RecommendedMapSizeLabel.text = str(ceil(sqrt(_params.players_qty * _params.cells_per_player)))
+
+	%BaseDistanceToOtherBasesLabel.text = str(_params.base_placement.min_dist_to_other_bases)
