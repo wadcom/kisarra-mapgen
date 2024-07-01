@@ -111,10 +111,16 @@ func _pick_satellite_bt_positions(params, base_positions):
 
 
 func _pick_base_positions(params):
+	var map_center = Vector2.ONE * params.map_size / 2.0
+
 	var available = []
 	for x in params.map_size:
 		for y in params.map_size:
 			var p = Vector2(x + 0.5, y + 0.5)
+
+			var d = p.distance_to(map_center) * _globals.CELL_SIDE_KMS
+			if d < params.base_placement.central_dead_zone_radius:
+				continue
 
 			var off_edge = [
 				Vector2(p.x, -0.5),
@@ -125,7 +131,7 @@ func _pick_base_positions(params):
 
 			var is_too_close = off_edge.any(
 				func(off_edge_pos):
-					var d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
+					d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
 					return d < params.base_placement.min_dist_to_map_edge
 			)
 
