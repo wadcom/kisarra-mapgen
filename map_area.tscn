@@ -10,4 +10,5 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+color = Color(0.0827414, 0.0827414, 0.0827414, 1)
 script = ExtResource("1_8qfge")
