@@ -46,3 +46,10 @@ func _setup_bases(params):
 		var base = base_cell_prefab.instantiate()
 		base.position = p * _globals.PIXELS_PER_CELL_SIDE
 		$Bases.add_child(base)
+
+		available = available.filter(
+			func(a): 
+				var d = a.distance_to(p) * _globals.CELL_SIDE_KMS
+				return d > params.base_placement.min_dist_to_other_bases
+		)
+

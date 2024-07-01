@@ -1,1 +1,2 @@
 const PIXELS_PER_CELL_SIDE = 10
+const CELL_SIDE_KMS = 10
