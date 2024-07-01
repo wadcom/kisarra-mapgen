@@ -22,19 +22,19 @@ func _on_quit_button_pressed():
 
 
 func _on_cells_per_player_value_changed(value):
-	_params.cells_per_player = value
+	_params.cells_per_player = int(value)
 	_update_labels()
 	parameters_changed.emit(_params)
 
 
 func _on_map_size_value_changed(value):
-	_params.map_size = value
+	_params.map_size = int(value)
 	_update_labels()
 	parameters_changed.emit(_params)
 
 
 func _on_players_quantity_value_changed(value):
-	_params.players_qty = value
+	_params.players_qty = int(value)
 	_update_labels()
 	parameters_changed.emit(_params)
 
