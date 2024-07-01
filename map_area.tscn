@@ -17,7 +17,7 @@ script = ExtResource("1_8qfge")
 base_cell_prefab = ExtResource("2_e1c3d")
 sand_cell_prefab = ExtResource("2_fjadh")
 
-[node name="Cells" type="Control" parent="."]
+[node name="GroundCells" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
