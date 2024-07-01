@@ -10,9 +10,10 @@ const _globals = preload("res://globals.gd")
 func update_parameters(params):
 	custom_minimum_size = Vector2.ONE * _globals.PIXELS_PER_CELL_SIDE * params.map_size
 
+	%DiagnosticsText.clear()
+
 	_setup_ground_cells(params)
 	_setup_bases(params)
-
 
 
 func _setup_ground_cells(params):
@@ -41,6 +42,10 @@ func _setup_bases(params):
 	available.shuffle()
 
 	for i in params.players_qty:
+		if available.size() == 0:
+			%DiagnosticsText.add_text("No cells available to place a base\n")
+			break
+
 		var p = available.pop_back()
 
 		var base = base_cell_prefab.instantiate()
