@@ -114,6 +114,24 @@ func _pick_base_positions(params):
 	var available = []
 	for x in params.map_size:
 		for y in params.map_size:
+			var p = Vector2(x + 0.5, y + 0.5)
+
+			var off_edge = [
+				Vector2(p.x, -0.5),
+				Vector2(p.x, params.map_size+0.5),
+				Vector2(-0.5, p.y),
+				Vector2(params.map_size+0.5, p.y),
+			]
+
+			var is_too_close = off_edge.any(
+				func(off_edge_pos):
+					var d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
+					return d < params.base_placement.min_dist_to_map_edge
+			)
+
+			if is_too_close:
+				continue
+
 			available.append(Vector2(x, y))
 
 	available.shuffle()
