@@ -11,11 +11,8 @@ func update_parameters(params):
 	custom_minimum_size = Vector2.ONE * _globals.PIXELS_PER_CELL_SIDE * params.map_size
 
 	_setup_ground_cells(params)
+	_setup_bases(params)
 
-	for i in params.players_qty:
-		var base = base_cell_prefab.instantiate()
-		base.position = Vector2(i, 0) * _globals.PIXELS_PER_CELL_SIDE
-		$Bases.add_child(base)
 
 
 func _setup_ground_cells(params):
@@ -29,3 +26,14 @@ func _setup_ground_cells(params):
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
+
+
+func _setup_bases(params):
+	for b in $Bases.get_children():
+		$Bases.remove_child(b)
+		b.queue_free()
+
+	for i in params.players_qty:
+		var base = base_cell_prefab.instantiate()
+		base.position = Vector2(i, 0) * _globals.PIXELS_PER_CELL_SIDE
+		$Bases.add_child(base)
