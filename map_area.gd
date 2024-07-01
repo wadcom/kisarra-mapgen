@@ -58,8 +58,10 @@ func _setup_bases(params):
 		$Bases.add_child(base)
 
 		var exclusion_area = round_area_prefab.instantiate()
-		exclusion_area.position = p * _globals.PIXELS_PER_CELL_SIDE
-		exclusion_area.set_radius(100)
+		exclusion_area.position = \
+			p * _globals.PIXELS_PER_CELL_SIDE + Vector2.ONE * (_globals.PIXELS_PER_CELL_SIDE / 2.0)
+		exclusion_area.set_radius(params.base_placement.min_dist_to_other_bases)
+		exclusion_area.modulate = Color(Color.RED, 0.2)
 		$Constraints.add_child(exclusion_area)
 
 		available = available.filter(
