@@ -1,0 +1,1 @@
+const PIXELS_PER_CELL_SIDE = 10
