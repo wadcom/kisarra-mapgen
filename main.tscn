@@ -20,6 +20,7 @@ script = ExtResource("1_43uwm")
 layout_mode = 2
 
 [node name="CenteredArea" type="CenterContainer" parent="HBoxContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://de6ailbpe4obu"]
+
+[ext_resource type="Script" path="res://sand_cell.gd" id="1_nobb4"]
+
+[node name="SandCell" type="ColorRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.905882, 0.796078, 0.219608, 1)
+script = ExtResource("1_nobb4")
