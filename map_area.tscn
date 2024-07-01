@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ca8i0jh687k0m"]
+[gd_scene load_steps=4 format=3 uid="uid://ca8i0jh687k0m"]
 
 [ext_resource type="Script" path="res://map_area.gd" id="1_8qfge"]
+[ext_resource type="PackedScene" uid="uid://djvis3o7e1smv" path="res://base_cell.tscn" id="2_e1c3d"]
 [ext_resource type="PackedScene" uid="uid://de6ailbpe4obu" path="res://sand_cell.tscn" id="2_fjadh"]
 
 [node name="MapArea" type="ColorRect"]
@@ -13,9 +14,15 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.0827414, 0.0827414, 0.0827414, 1)
 script = ExtResource("1_8qfge")
+base_cell_prefab = ExtResource("2_e1c3d")
 sand_cell_prefab = ExtResource("2_fjadh")
 
 [node name="Cells" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Bases" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
