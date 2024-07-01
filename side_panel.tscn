@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dx3nhpeskgree"]
+[gd_scene load_steps=3 format=3 uid="uid://dx3nhpeskgree"]
 
 [ext_resource type="Script" path="res://side_panel.gd" id="1_5myw4"]
+[ext_resource type="PackedScene" uid="uid://cmaianmlgg7yw" path="res://bases_settings.tscn" id="2_6nc0g"]
 
 [node name="SidePanel" type="VBoxContainer"]
 custom_minimum_size = Vector2(300, 2.08165e-12)
@@ -110,35 +111,9 @@ text = "99"
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="BasesSectionLabel" type="Label" parent="."]
-layout_mode = 2
-text = "Bases"
-
-[node name="BasesDistanceToOtherBasesControls" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="BasesDistanceToOtherBasesControls"]
-layout_mode = 2
-text = "Minimum distance to other bases:"
-
-[node name="BaseDistanceToOtherBasesLabel" type="Label" parent="BasesDistanceToOtherBasesControls"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(28, 2.08165e-12)
-layout_mode = 2
-
-[node name="Control" type="Control" parent="BasesDistanceToOtherBasesControls"]
-custom_minimum_size = Vector2(10, 2.08165e-12)
-layout_mode = 2
-
-[node name="BaseDistanceToOtherBasesSlider" type="HSlider" parent="."]
+[node name="BasesSettings" parent="." instance=ExtResource("2_6nc0g")]
 unique_name_in_owner = true
 layout_mode = 2
-min_value = 20.0
-max_value = 300.0
-value = 20.0
 
 [node name="HSeparator3" type="HSeparator" parent="."]
 layout_mode = 2
@@ -225,7 +200,7 @@ step = 0.05
 [connection signal="value_changed" from="PlayersQuantityControls/PlayersQuantity" to="." method="_on_players_quantity_value_changed"]
 [connection signal="value_changed" from="CellsPerPlayerControl/CellsPerPlayer" to="." method="_on_cells_per_player_value_changed"]
 [connection signal="value_changed" from="MapSizeControls/Controls/MapSize" to="." method="_on_map_size_value_changed"]
-[connection signal="value_changed" from="BaseDistanceToOtherBasesSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="parameters_changed" from="BasesSettings" to="." method="_on_bases_settings_parameters_changed"]
 [connection signal="value_changed" from="SatelliteBtDistanceToBaseControls/SatelliteBtDistanceToBaseSlider" to="." method="_on_satellite_bt_distance_to_base_value_changed"]
 [connection signal="value_changed" from="SatelliteBtPeakDensityControls/SatelliteBtPeakDensitySlider" to="." method="_on_satellite_bt_peak_density_value_changed"]
 [connection signal="value_changed" from="SatelliteBtDecayControls/SatelliteBtDecaySlider" to="." method="_on_satellite_bt_decay_value_changed"]

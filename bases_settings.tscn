@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmaianmlgg7yw"]
+
+[ext_resource type="Script" path="res://bases_settings.gd" id="1_8abl6"]
+
+[node name="BasesSettings" type="VBoxContainer"]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+script = ExtResource("1_8abl6")
+
+[node name="SectionLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Bases"
+
+[node name="DistanceToOtherBases" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DistanceToOtherBases"]
+layout_mode = 2
+text = "Minimum distance to other bases:"
+
+[node name="DistanceToOtherBasesLabel" type="Label" parent="DistanceToOtherBases"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="DistanceToOtherBases"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="DistanceToOtherBasesSlider" type="HSlider" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 20.0
+max_value = 300.0
+value = 20.0
+
+[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
+[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
