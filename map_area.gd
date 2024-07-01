@@ -46,6 +46,7 @@ func _setup_bases(params):
 
 	available.shuffle()
 
+	var base_positions = []
 	for i in params.players_qty:
 		if available.size() == 0:
 			%DiagnosticsText.add_text("No cells available to place a base\n")
@@ -56,6 +57,8 @@ func _setup_bases(params):
 		var base = base_cell_prefab.instantiate()
 		base.position = p * _globals.PIXELS_PER_CELL_SIDE
 		$Bases.add_child(base)
+
+		base_positions.append(p)
 
 		var exclusion_area = round_area_prefab.instantiate()
 		exclusion_area.position = \
@@ -70,3 +73,33 @@ func _setup_bases(params):
 				return d > params.base_placement.min_dist_to_other_bases
 		)
 
+	var satellite_bt_radius = params.satellite_bt.distance_to_base / _globals.CELL_SIDE_KMS
+	var bt_positions = []
+	for base_pos in base_positions:
+		var available_cxys = {}
+		for a in 360:
+			var p = (
+				Vector2.from_angle(a / 360.0 * TAU) * satellite_bt_radius \
+					+ base_pos + Vector2.ONE / 2.0
+			).floor()
+
+			if p.x < 0 or p.y < 0 or p.x >= params.map_size or p.y >= params.map_size:
+				continue
+
+			var cxy = p.x * 1000 + p.y
+			available_cxys[cxy] = true
+
+		if available_cxys.size() < 1:
+			%DiagnosticsText.add_text(
+				"Nowhere to put satellite Bt source around base at %d,%d\n" % [
+					base_pos.x, base_pos.y
+				]
+			)
+			continue
+
+		var cxys = available_cxys.keys()
+		cxys.shuffle()
+
+		bt_positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
+
+	print("XXX: ", bt_positions)
