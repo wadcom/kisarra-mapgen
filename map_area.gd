@@ -14,19 +14,43 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	var base_positions = _pick_base_positions(params)
+	var satellite_bt_positions = _pick_satellite_bt_positions(params, base_positions)
+
+	var bt_density = _calculate_bt_density(params, satellite_bt_positions)
 
 	_setup_bases(params, base_positions)
-	_setup_ground_cells(params)
+	_setup_ground_cells(params, bt_density)
 
 
-func _setup_ground_cells(params):
+func _calculate_bt_density(params, bt_positions):
+	var content = 50
+	var decay_factor = 0.75
+
+	var total_bt = []
+	for x in params.map_size:
+		for y in params.map_size:
+			var p = Vector2(x, y)
+			
+			var t = 0.0
+			for bt_p in bt_positions:
+				var d = bt_p.distance_to(p)
+				t += content * pow(decay_factor, d)
+
+			total_bt.append(int(t))
+
+	return total_bt
+
+
+func _setup_ground_cells(params, bt_density):
 	for c in $GroundCells.get_children():
 		$GroundCells.remove_child(c)
 		c.queue_free()
 
 	for x in params.map_size:
 		for y in params.map_size:
+
 			var cell = sand_cell_prefab.instantiate()
+			cell.set_bt_density(bt_density.pop_front())
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
