@@ -15,8 +15,9 @@ func update_parameters(params):
 
 	var base_positions = _pick_base_positions(params)
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
+	var extra_bt_sources = _pick_extra_bt_sources(params, base_positions)
 
-	var bt_density = _calculate_bt_density(params, satellite_bt_sources)
+	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 
 	_setup_bases(params, base_positions)
 	_setup_ground_cells(params, bt_density)
@@ -73,6 +74,48 @@ func _setup_bases(params, base_positions):
 		exclusion_area.set_radius(params.base_placement.min_dist_to_other_bases)
 		exclusion_area.modulate = Color(Color.BLACK, 0.05)
 		$Constraints.add_child(exclusion_area)
+
+
+func _pick_extra_bt_sources(params, base_positions):
+	var bt_sources = []
+
+	var available_cxys = {}
+	for x in params.map_size:
+		for y in params.map_size:
+			var p = Vector2(x, y)
+
+			var too_close = false
+			for base_pos in base_positions:
+				var d = p.distance_to(base_pos) * _globals.CELL_SIDE_KMS
+				if d < params.betirium.extra_sources.distance_to_any_base:
+					too_close = true
+					break
+
+			if too_close:
+				continue
+
+			var cxy = p.x * 1000 + p.y
+			available_cxys[cxy] = true
+
+	for i in params.betirium.extra_sources.count:
+		if available_cxys.size() < 1:
+			%DiagnosticsText.add_text("Nowhere to put extra Bt source\n")
+			break
+
+		var cxys = available_cxys.keys()
+		cxys.shuffle()
+
+		bt_sources.append(
+			{
+				decay_factor = params.betirium.extra_sources.decay,
+				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
+				peak_density = params.betirium.extra_sources.peak_density,
+			},
+		)
+
+		available_cxys.erase(cxys[0])
+
+	return bt_sources
 
 
 func _pick_satellite_bt_sources(params, base_positions):

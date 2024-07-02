@@ -9,7 +9,7 @@ var _params = {
 		min_dist_to_other_bases = 40,
 	},
 	betirium = {
-		extra_sources = { decay = 0.7, distance_to_any_base = 200, peak_density = 80 },
+		extra_sources = { count = 2, decay = 0.7, distance_to_any_base = 200, peak_density = 80 },
 		satellite_sources = { decay = 0.7, distance_to_base = 75, peak_density = 45 },
 	},
 	cells_per_player = 120,
