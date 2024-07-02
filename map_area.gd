@@ -14,26 +14,24 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	var base_positions = _pick_base_positions(params)
-	var satellite_bt_positions = _pick_satellite_bt_positions(params, base_positions)
+	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
 
-	var bt_density = _calculate_bt_density(params, satellite_bt_positions)
+	var bt_density = _calculate_bt_density(params, satellite_bt_sources)
 
 	_setup_bases(params, base_positions)
 	_setup_ground_cells(params, bt_density)
 
 
-func _calculate_bt_density(params, bt_positions):
-	var decay_factor = params.betirium.satellite_sources.decay
-
+func _calculate_bt_density(params, bt_sources):
 	var total_bt = []
 	for x in params.map_size:
 		for y in params.map_size:
 			var p = Vector2(x, y)
 			
 			var t = 0.0
-			for bt_p in bt_positions:
-				var d = bt_p.distance_to(p)
-				t += params.betirium.satellite_sources.peak_density * pow(decay_factor, d)
+			for s in bt_sources:
+				var d = s.position.distance_to(p)
+				t += s.peak_density * pow(s.decay_factor, d)
 
 			total_bt.append(int(t))
 
@@ -77,10 +75,12 @@ func _setup_bases(params, base_positions):
 		$Constraints.add_child(exclusion_area)
 
 
-func _pick_satellite_bt_positions(params, base_positions):
+func _pick_satellite_bt_sources(params, base_positions):
 	var satellite_bt_radius = \
 		params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
-	var bt_positions = []
+
+	var bt_sources = []
+
 	for base_pos in base_positions:
 		var available_cxys = {}
 		for a in 360:
@@ -106,9 +106,15 @@ func _pick_satellite_bt_positions(params, base_positions):
 		var cxys = available_cxys.keys()
 		cxys.shuffle()
 
-		bt_positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
+		bt_sources.append(
+			{
+				decay_factor = params.betirium.satellite_sources.decay,
+				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
+				peak_density = params.betirium.satellite_sources.peak_density,
+			},
+		)
 
-	return bt_positions
+	return bt_sources
 
 
 func _pick_base_positions(params):
