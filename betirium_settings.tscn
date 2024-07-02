@@ -1,0 +1,90 @@
+[gd_scene load_steps=2 format=3 uid="uid://dm0td7dg4tqpp"]
+
+[ext_resource type="Script" path="res://betirium_settings.gd" id="1_liex4"]
+
+[node name="BetiriumSettings" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_liex4")
+
+[node name="SatelliteBtSectionLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Satellite Bt Sources"
+
+[node name="SatelliteBtDistanceToBaseControls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SatelliteBtDistanceToBaseControls"]
+layout_mode = 2
+text = "Distance to base:"
+
+[node name="SatelliteBtDistanceToBaseLabel" type="Label" parent="SatelliteBtDistanceToBaseControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="SatelliteBtDistanceToBaseControls"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="SatelliteBtDistanceToBaseSlider" type="HSlider" parent="SatelliteBtDistanceToBaseControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 20.0
+max_value = 200.0
+step = 5.0
+value = 20.0
+
+[node name="SatelliteBtPeakDensityControls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SatelliteBtPeakDensityControls"]
+layout_mode = 2
+text = "Peak density:"
+
+[node name="SatelliteBtPeakDensityLabel" type="Label" parent="SatelliteBtPeakDensityControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+text = "999"
+
+[node name="Control" type="Control" parent="SatelliteBtPeakDensityControls"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="SatelliteBtPeakDensitySlider" type="HSlider" parent="SatelliteBtPeakDensityControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="SatelliteBtDecayControls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SatelliteBtDecayControls"]
+layout_mode = 2
+text = "Decay:"
+
+[node name="SatelliteBtDecayLabel" type="Label" parent="SatelliteBtDecayControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 2.08165e-12)
+layout_mode = 2
+text = "0.99"
+
+[node name="Control" type="Control" parent="SatelliteBtDecayControls"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="SatelliteBtDecaySlider" type="HSlider" parent="SatelliteBtDecayControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+
+[connection signal="value_changed" from="SatelliteBtDistanceToBaseControls/SatelliteBtDistanceToBaseSlider" to="." method="_on_satellite_bt_distance_to_base_slider_value_changed"]
+[connection signal="value_changed" from="SatelliteBtPeakDensityControls/SatelliteBtPeakDensitySlider" to="." method="_on_satellite_bt_peak_density_slider_value_changed"]
+[connection signal="value_changed" from="SatelliteBtDecayControls/SatelliteBtDecaySlider" to="." method="_on_satellite_bt_decay_slider_value_changed"]

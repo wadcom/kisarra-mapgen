@@ -23,7 +23,7 @@ func update_parameters(params):
 
 
 func _calculate_bt_density(params, bt_positions):
-	var decay_factor = params.satellite_bt.decay
+	var decay_factor = params.betirium.satellite_sources.decay
 
 	var total_bt = []
 	for x in params.map_size:
@@ -33,7 +33,7 @@ func _calculate_bt_density(params, bt_positions):
 			var t = 0.0
 			for bt_p in bt_positions:
 				var d = bt_p.distance_to(p)
-				t += params.satellite_bt.peak_density * pow(decay_factor, d)
+				t += params.betirium.satellite_sources.peak_density * pow(decay_factor, d)
 
 			total_bt.append(int(t))
 
@@ -78,7 +78,8 @@ func _setup_bases(params, base_positions):
 
 
 func _pick_satellite_bt_positions(params, base_positions):
-	var satellite_bt_radius = params.satellite_bt.distance_to_base / _globals.CELL_SIDE_KMS
+	var satellite_bt_radius = \
+		params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
 	var bt_positions = []
 	for base_pos in base_positions:
 		var available_cxys = {}
