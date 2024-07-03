@@ -63,4 +63,5 @@ theme_override_constants/margin_bottom = 10
 [node name="SidePanel" parent="HBoxContainer/Panel/MarginContainer" instance=ExtResource("2_fiq7s")]
 layout_mode = 2
 
+[connection signal="export_requested" from="HBoxContainer/Panel/MarginContainer/SidePanel" to="." method="_on_export_requested"]
 [connection signal="parameters_changed" from="HBoxContainer/Panel/MarginContainer/SidePanel" to="." method="_on_parameters_changed"]

@@ -5,6 +5,8 @@ extends ColorRect
 @export var sand_cell_prefab: PackedScene
 
 
+var _export_data
+
 const _globals = preload("res://globals.gd")
 
 
@@ -21,12 +23,34 @@ func update_parameters(params):
 
 	_setup_bases(params, base_positions)
 	_setup_ground_cells(params, bt_density)
+ 
+	_prepare_export_data(params, base_positions, bt_density)
+
+
+func export_map():
+	return _export_data
+
+
+func _prepare_export_data(params, base_positions, betirium):
+	_export_data = {
+		size = params.map_size,
+		playersQuantity = params.players_qty,
+		betirium = betirium,
+		basePositions = [],
+	}
+
+	for bp in base_positions:
+		_export_data.basePositions.append({x = bp.x, y = bp.y})
+
+	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
+		params = params
+	}
 
 
 func _calculate_bt_density(params, bt_sources):
 	var total_bt = []
-	for x in params.map_size:
-		for y in params.map_size:
+	for y in params.map_size:
+		for x in params.map_size:
 			var p = Vector2(x, y)
 			
 			var t = 0.0
@@ -44,11 +68,13 @@ func _setup_ground_cells(params, bt_density):
 		$GroundCells.remove_child(c)
 		c.queue_free()
 
-	for x in params.map_size:
-		for y in params.map_size:
+	var i = 0
+	for y in params.map_size:
+		for x in params.map_size:
 
 			var cell = sand_cell_prefab.instantiate()
-			cell.set_bt_density(bt_density.pop_front())
+			cell.set_bt_density(bt_density[i])
+			i += 1
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)

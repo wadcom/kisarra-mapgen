@@ -1,5 +1,6 @@
 extends VBoxContainer
 
+signal export_requested
 signal parameters_changed(params: Variant)
 
 var _params = {
@@ -72,3 +73,7 @@ func _update_labels():
 
 func _on_refresh_button_pressed():
 	parameters_changed.emit(_params)
+
+
+func _on_export_button_pressed():
+	export_requested.emit()

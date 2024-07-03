@@ -25,6 +25,10 @@ text = "Refresh"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="ExportButton" type="Button" parent="ButtonBar"]
+layout_mode = 2
+text = "Export"
+
 [node name="QuitButton" type="Button" parent="ButtonBar"]
 layout_mode = 2
 text = "Quit"
@@ -147,6 +151,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [connection signal="pressed" from="ButtonBar/RefreshButton" to="." method="_on_refresh_button_pressed"]
+[connection signal="pressed" from="ButtonBar/ExportButton" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="ButtonBar/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/PlayersQuantityControls/PlayersQuantity" to="." method="_on_players_quantity_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/CellsPerPlayerControl/CellsPerPlayer" to="." method="_on_cells_per_player_value_changed"]
