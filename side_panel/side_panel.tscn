@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dx3nhpeskgree"]
 
-[ext_resource type="Script" path="res://side_panel.gd" id="1_5myw4"]
+[ext_resource type="Script" path="res://side_panel/side_panel.gd" id="1_5myw4"]
 [ext_resource type="PackedScene" uid="uid://cmaianmlgg7yw" path="res://side_panel/bases_settings.tscn" id="2_6nc0g"]
 [ext_resource type="PackedScene" uid="uid://dm0td7dg4tqpp" path="res://side_panel/betirium_settings.tscn" id="3_oclno"]
 
