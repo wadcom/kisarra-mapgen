@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://dm0td7dg4tqpp"]
 
-[ext_resource type="Script" path="res://betirium_settings.gd" id="1_liex4"]
+[ext_resource type="Script" path="res://side_panel/betirium_settings.gd" id="1_8ko5e"]
 
 [node name="BetiriumSettings" type="VBoxContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_liex4")
+script = ExtResource("1_8ko5e")
 
 [node name="SatelliteBtSectionLabel" type="Label" parent="."]
 layout_mode = 2
