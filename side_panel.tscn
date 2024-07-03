@@ -27,7 +27,7 @@ size_flags_horizontal = 3
 
 [node name="ExportButton" type="Button" parent="ButtonBar"]
 layout_mode = 2
-text = "Export"
+text = "Export to clipboard"
 
 [node name="QuitButton" type="Button" parent="ButtonBar"]
 layout_mode = 2

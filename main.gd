@@ -7,4 +7,4 @@ func _on_parameters_changed(params):
 
 func _on_export_requested():
 	var data = %MapArea.export_map()
-	print(data)
+	DisplayServer.clipboard_set(JSON.stringify(data, "  "))
