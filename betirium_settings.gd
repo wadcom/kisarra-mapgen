@@ -15,6 +15,9 @@ func _update_controls():
 	%ExtraSourceDistanceToBasesLabel.text = str(_params.extra_sources.distance_to_any_base)
 	%ExtraSourceDistanceToBasesSlider.value = _params.extra_sources.distance_to_any_base
 
+	%ExtraSourcePeakDensityLabel.text = str(_params.extra_sources.peak_density)
+	%ExtraSourcePeakDensitySlider.value = _params.extra_sources.peak_density
+
 	%ExtraSourcesQuantitySpinBox.value = _params.extra_sources.count
 
 	%SatelliteBtDecayLabel.text = "%.2f" % [_params.satellite_sources.decay]
@@ -57,6 +60,13 @@ func _on_extra_source_distance_to_bases_slider_value_changed(value):
 
 func _on_extra_sources_quantity_spin_box_value_changed(value):
 	_params.extra_sources.count = int(value)
+
+	_update_controls()
+	parameters_changed.emit(_params)
+
+
+func _on_extra_source_peak_density_slider_value_changed(value):
+	_params.extra_sources.peak_density = int(value)
 
 	_update_controls()
 	parameters_changed.emit(_params)

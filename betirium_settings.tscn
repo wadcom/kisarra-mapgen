@@ -127,8 +127,32 @@ max_value = 500.0
 step = 5.0
 value = 20.0
 
+[node name="ExtraSourcePeakDensityControls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ExtraSourcePeakDensityControls"]
+layout_mode = 2
+text = "Peak density:"
+
+[node name="ExtraSourcePeakDensityLabel" type="Label" parent="ExtraSourcePeakDensityControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+text = "999"
+
+[node name="Control" type="Control" parent="ExtraSourcePeakDensityControls"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="ExtraSourcePeakDensitySlider" type="HSlider" parent="ExtraSourcePeakDensityControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
 [connection signal="value_changed" from="SatelliteBtDistanceToBaseControls/SatelliteBtDistanceToBaseSlider" to="." method="_on_satellite_bt_distance_to_base_slider_value_changed"]
 [connection signal="value_changed" from="SatelliteBtPeakDensityControls/SatelliteBtPeakDensitySlider" to="." method="_on_satellite_bt_peak_density_slider_value_changed"]
 [connection signal="value_changed" from="SatelliteBtDecayControls/SatelliteBtDecaySlider" to="." method="_on_satellite_bt_decay_slider_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/ExtraSourcesQuantitySpinBox" to="." method="_on_extra_sources_quantity_spin_box_value_changed"]
 [connection signal="value_changed" from="ExtraSourceDistanceToBasesControls/ExtraSourceDistanceToBasesSlider" to="." method="_on_extra_source_distance_to_bases_slider_value_changed"]
+[connection signal="value_changed" from="ExtraSourcePeakDensityControls/ExtraSourcePeakDensitySlider" to="." method="_on_extra_source_peak_density_slider_value_changed"]
