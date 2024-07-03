@@ -4,9 +4,9 @@ signal parameters_changed(params: Variant)
 
 var _params = {
 	base_placement = {
-		central_dead_zone_radius = 50,
-		min_dist_to_map_edge = 100,
-		min_dist_to_other_bases = 40,
+		central_dead_zone_radius = 100,
+		min_dist_to_map_edge = 60,
+		min_dist_to_other_bases = 175,
 	},
 	betirium = {
 		extra_sources = { count = 2, decay = 0.7, distance_to_any_base = 200, peak_density = 80 },
