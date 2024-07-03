@@ -69,3 +69,6 @@ func _update_labels():
 
 	%RecommendedMapSizeLabel.text = str(ceil(sqrt(_params.players_qty * _params.cells_per_player)))
 
+
+func _on_refresh_button_pressed():
+	parameters_changed.emit(_params)
