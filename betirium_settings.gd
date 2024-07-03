@@ -12,6 +12,9 @@ func set_params(params):
 
 
 func _update_controls():
+	%ExtraSourcesDecayLabel.text = "%.2f" % [_params.extra_sources.decay]
+	%ExtraSourcesDecaySlider.value = _params.extra_sources.decay
+
 	%ExtraSourceDistanceToBasesLabel.text = str(_params.extra_sources.distance_to_any_base)
 	%ExtraSourceDistanceToBasesSlider.value = _params.extra_sources.distance_to_any_base
 
@@ -67,6 +70,13 @@ func _on_extra_sources_quantity_spin_box_value_changed(value):
 
 func _on_extra_source_peak_density_slider_value_changed(value):
 	_params.extra_sources.peak_density = int(value)
+
+	_update_controls()
+	parameters_changed.emit(_params)
+
+
+func _on_extra_sources_decay_slider_value_changed(value):
+	_params.extra_sources.decay = value
 
 	_update_controls()
 	parameters_changed.emit(_params)
