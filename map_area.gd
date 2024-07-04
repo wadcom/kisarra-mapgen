@@ -30,29 +30,26 @@ func update_parameters(params):
 
 
 func _make_octave(octave_size):
-	var grad_x = []
-	grad_x.resize(octave_size + 1)
-
-	var grad_y = []
-	grad_y.resize(octave_size + 1)
+	var grad = []
+	grad.resize(octave_size + 1)
 
 	for x in (octave_size + 1):
-		grad_x[x] = []
-		grad_x[x].resize(octave_size + 1)
-
-		grad_y[x] = []
-		grad_y[x].resize(octave_size + 1)
+		grad[x] = []
+		grad[x].resize(octave_size + 1)
 
 		for y in (octave_size + 1):
-			grad_x[x][y] = randf_range(-1, 1)
-			grad_y[x][y] = randf_range(-1, 1)
+			grad[x][y] = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 
-	return {grad_x = grad_x, grad_y = grad_y, size = octave_size}
+	return grad
 
+
+func _get_height_at(octave, x, y):
+	return 0
 	
 func _xxx():
-	print("XXX ", _make_octave(1))
-	print("XXX ", _make_octave(2))
+	var octave1 = _make_octave(1)
+	print("XXX ", octave1)
+	print("XXX ", _get_height_at(octave1, 0.5, 0.5))
 
 
 func export_map():
