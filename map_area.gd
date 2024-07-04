@@ -8,6 +8,7 @@ extends ColorRect
 var _export_data
 
 const _globals = preload("res://globals.gd")
+const _perlin_noise = preload("res://perlin_noise.gd")
 
 
 func update_parameters(params):
@@ -29,48 +30,10 @@ func update_parameters(params):
 	_xxx()
 
 
-func _make_octave(octave_size):
-	var grad = []
-	grad.resize(octave_size + 1)
-
-	for x in (octave_size + 1):
-		grad[x] = []
-		grad[x].resize(octave_size + 1)
-
-		for y in (octave_size + 1):
-			grad[x][y] = Vector2(randf_range(-1, 1), randf_range(-1, 1))
-
-	return grad
-
-
-func _get_scaled_height(octave, c: Vector2i, p: Vector2):
-	var d = p - Vector2(c)
-	return d.dot(octave[c.x][c.y])
-
-
-func _get_height_at(octave, map_size, p: Vector2):
-	var octave_size = octave.size() - 1
-
-	var octave_p = p / map_size * octave_size
-
-	var c = Vector2i(octave_p / octave_size)
-	var f = octave_p - Vector2(c)
-
-	var tl = _get_scaled_height(octave, c, f)
-	var tr = _get_scaled_height(octave, c + Vector2i(1, 0), f)
-	var t = lerp(tl, tr, f.x)
-
-	var bl = _get_scaled_height(octave, c + Vector2i(0, 1), f)
-	var br = _get_scaled_height(octave, c + Vector2i(1, 1), f)
-	var b = lerp(bl, br, f.x)
-
-	return lerp(t, b, f.y)
-
-	
 func _xxx():
-	var octave1 = _make_octave(1)
+	var octave1 = _perlin_noise.make_octave(1)
 	print("XXX ", octave1)
-	print("XXX ", _get_height_at(octave1, 5, Vector2(2.5, 3.5)))
+	print("XXX ", _perlin_noise.get_height(octave1, 5, Vector2(2.5, 3.5)))
 
 
 func export_map():
