@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://djvis3o7e1smv"]
 
-[ext_resource type="Script" path="res://base_cell.gd" id="1_t2xek"]
+[ext_resource type="Script" path="res://map_area/base_cell.gd" id="1_mkulj"]
 
 [node name="BaseCell" type="ColorRect"]
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 1, 1)
-script = ExtResource("1_t2xek")
+script = ExtResource("1_mkulj")
