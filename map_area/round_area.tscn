@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbhypu0aiefk"]
+
+[ext_resource type="Texture2D" uid="uid://bdwutctor1df1" path="res://media/White Disc.png" id="1_fv412"]
+[ext_resource type="Script" path="res://map_area/round_area.gd" id="2_tqlih"]
+
+[node name="RoundArea" type="Sprite2D"]
+texture = ExtResource("1_fv412")
+script = ExtResource("2_tqlih")

@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://djvis3o7e1smv" path="res://map_area/base_cell.tscn" id="2_e1c3d"]
 [ext_resource type="PackedScene" uid="uid://de6ailbpe4obu" path="res://map_area/sand_cell.tscn" id="2_fjadh"]
 [ext_resource type="PackedScene" uid="uid://dtp0putph15ls" path="res://map_area/mountain_cell.tscn" id="3_7gub7"]
-[ext_resource type="PackedScene" uid="uid://dbhypu0aiefk" path="res://round_area.tscn" id="3_sqwi0"]
+[ext_resource type="PackedScene" uid="uid://dbhypu0aiefk" path="res://map_area/round_area.tscn" id="3_sqwi0"]
 
 [node name="MapArea" type="ColorRect"]
 anchors_preset = 15
