@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dx3nhpeskgree"]
+[gd_scene load_steps=5 format=3 uid="uid://dx3nhpeskgree"]
 
 [ext_resource type="Script" path="res://side_panel/side_panel.gd" id="1_5myw4"]
 [ext_resource type="PackedScene" uid="uid://cmaianmlgg7yw" path="res://side_panel/bases_settings.tscn" id="2_6nc0g"]
 [ext_resource type="PackedScene" uid="uid://dm0td7dg4tqpp" path="res://side_panel/betirium_settings.tscn" id="3_oclno"]
+[ext_resource type="PackedScene" uid="uid://dk4mfhpnkvxup" path="res://side_panel/mountains_settings.tscn" id="4_farua"]
 
 [node name="SidePanel" type="VBoxContainer"]
 custom_minimum_size = Vector2(320, 2.08165e-12)
@@ -147,6 +148,13 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="BetiriumSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("3_oclno")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MountainsSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("4_farua")]
 unique_name_in_owner = true
 layout_mode = 2
 

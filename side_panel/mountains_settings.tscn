@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk4mfhpnkvxup"]
+
+[ext_resource type="Script" path="res://side_panel/mountains_settings.gd" id="1_miht6"]
+
+[node name="MountainsSettings" type="VBoxContainer"]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+script = ExtResource("1_miht6")
+
+[node name="SectionLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Mountains"
+
+[node name="HeightThreshold" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HeightThreshold"]
+layout_mode = 2
+text = "Height threshold:"
+
+[node name="HeightThresholdLabel" type="Label" parent="HeightThreshold"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 2.08165e-12)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="HeightThreshold"]
+custom_minimum_size = Vector2(10, 2.08165e-12)
+layout_mode = 2
+
+[node name="HeightThresholdSlider" type="HSlider" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 10)
+layout_mode = 2
+
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]

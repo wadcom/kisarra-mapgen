@@ -15,6 +15,7 @@ var _params = {
 	},
 	cells_per_player = 120,
 	map_size = 22,
+	mountains = { height_threshold = 0.0 },
 	players_qty = 2,
 }
 
@@ -26,6 +27,7 @@ func _ready():
 
 	%BasesSettings.set_params(_params.base_placement)
 	%BetiriumSettings.set_params(_params.betirium)
+	%MountainsSettings.set_params(_params.mountains)
 
 	_update_labels()
 
