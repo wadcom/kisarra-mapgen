@@ -37,6 +37,108 @@ step = 0.01
 custom_minimum_size = Vector2(2.08165e-12, 10)
 layout_mode = 2
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Perlin noise octaves"
+
+[node name="OctavesSettings" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 4
+
+[node name="EnabledLabel" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "Enabled"
+
+[node name="Enabled1" type="CheckBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Enabled2" type="CheckBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Enabled3" type="CheckBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="SizeLabel" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "Size"
+
+[node name="Size1" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 64.0
+value = 1.0
+
+[node name="Size2" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 64.0
+value = 1.0
+
+[node name="Size3" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 64.0
+value = 1.0
+
+[node name="WeightLabel" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "Weight
+"
+
+[node name="Weight1" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="Weight2" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="Weight3" type="SpinBox" parent="OctavesSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="PercentagePadding" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+
+[node name="PercentageLabel1" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "33%"
+horizontal_alignment = 1
+
+[node name="PercentageLabel2" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "33%"
+horizontal_alignment = 1
+
+[node name="PercentageLabel3" type="Label" parent="OctavesSettings"]
+layout_mode = 2
+text = "33%"
+horizontal_alignment = 1
+
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="pressed" from="OctavesSettings/Enabled1" to="." method="_on_octave_controls_updated"]
+[connection signal="pressed" from="OctavesSettings/Enabled2" to="." method="_on_octave_controls_updated"]
+[connection signal="pressed" from="OctavesSettings/Enabled3" to="." method="_on_octave_controls_updated"]
+[connection signal="value_changed" from="OctavesSettings/Size1" to="." method="_on_size_value_changed"]
+[connection signal="value_changed" from="OctavesSettings/Size2" to="." method="_on_size_value_changed"]
+[connection signal="value_changed" from="OctavesSettings/Size3" to="." method="_on_size_value_changed"]
+[connection signal="value_changed" from="OctavesSettings/Weight1" to="." method="_on_weight_value_changed"]
+[connection signal="value_changed" from="OctavesSettings/Weight2" to="." method="_on_weight_value_changed"]
+[connection signal="value_changed" from="OctavesSettings/Weight3" to="." method="_on_weight_value_changed"]

@@ -16,7 +16,14 @@ var _params = {
 	},
 	cells_per_player = 120,
 	map_size = 22,
-	mountains = { height_threshold = 0.0 },
+	mountains = {
+		height_threshold = 0.0,
+		octaves = [
+			{ enabled = true, size = 1, weight = 1},
+			{ enabled = true, size = 2, weight = 2},
+			{ enabled = true, size = 4, weight = 3},
+		]
+	},
 	players_qty = 2,
 }
 
