@@ -18,7 +18,7 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	var height_map = _make_height_map(params)
-	var base_positions = _pick_base_positions(params)
+	var base_positions = _pick_base_positions(params, height_map)
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
 	var extra_bt_sources = _pick_extra_bt_sources(params, base_positions)
 
@@ -79,6 +79,11 @@ func _calculate_bt_density(params, bt_sources):
 	return total_bt
 
 
+func _is_mountain(params, height_map, p: Vector2i):
+	var idx = p.y * params.map_size + p.x
+	return height_map[idx] > 0
+
+
 func _setup_ground_cells(params, bt_density, height_map):
 	for c in $GroundCells.get_children():
 		$GroundCells.remove_child(c)
@@ -89,11 +94,11 @@ func _setup_ground_cells(params, bt_density, height_map):
 		for x in params.map_size:
 
 			var cell
-			if height_map[i] <= 0.0:
+			if _is_mountain(params, height_map, Vector2i(x, y)):
+				cell = mountain_cell_prefab.instantiate()
+			else:
 				cell = sand_cell_prefab.instantiate()
 				cell.set_bt_density(bt_density[i])
-			else:
-				cell = mountain_cell_prefab.instantiate()
 
 			i += 1
 
@@ -207,7 +212,7 @@ func _pick_satellite_bt_sources(params, base_positions):
 	return bt_sources
 
 
-func _pick_base_positions(params):
+func _pick_base_positions(params, height_map):
 	var map_center = Vector2.ONE * params.map_size / 2.0
 
 	var available = []
@@ -233,6 +238,9 @@ func _pick_base_positions(params):
 			)
 
 			if is_too_close:
+				continue
+
+			if _is_mountain(params, height_map, Vector2i(p)):
 				continue
 
 			available.append(Vector2(x, y))
