@@ -7,6 +7,8 @@ extends ColorRect
 
 
 var _export_data
+var _bt_density
+var _height_map
 
 const _globals = preload("res://globals.gd")
 const _perlin_noise = preload("res://perlin_noise.gd")
@@ -17,17 +19,26 @@ func update_parameters(params):
 
 	%DiagnosticsText.clear()
 
-	var height_map = _make_height_map(params)
-	var base_positions = _pick_base_positions(params, height_map)
+	_height_map = _make_height_map(params)
+	var base_positions = _pick_base_positions(params, _height_map)
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
 	var extra_bt_sources = _pick_extra_bt_sources(params, base_positions)
 
-	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 
 	_setup_bases(params, base_positions)
-	_setup_ground_cells(params, bt_density, height_map)
+	_setup_ground_cells(params, _bt_density, _height_map)
  
-	_prepare_export_data(params, base_positions, bt_density)
+	_prepare_export_data(params, base_positions, _bt_density)
+
+
+func update_mountains_height_threshold(params):
+	%DiagnosticsText.clear()
+
+	_setup_ground_cells(params, _bt_density, _height_map)
+ 
+	# XXX: update export data
+	# _prepare_export_data(params, base_positions, bt_density)
 
 
 func _make_height_map(params):
@@ -81,7 +92,7 @@ func _calculate_bt_density(params, bt_sources):
 
 func _is_mountain(params, height_map, p: Vector2i):
 	var idx = p.y * params.map_size + p.x
-	return height_map[idx] > 0
+	return height_map[idx] > params.mountains.height_threshold
 
 
 func _setup_ground_cells(params, bt_density, height_map):

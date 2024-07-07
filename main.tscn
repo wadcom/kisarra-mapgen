@@ -64,4 +64,5 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [connection signal="export_requested" from="HBoxContainer/Panel/MarginContainer/SidePanel" to="." method="_on_export_requested"]
+[connection signal="height_threshold_changed" from="HBoxContainer/Panel/MarginContainer/SidePanel" to="." method="_on_mountains_height_threshold_changed"]
 [connection signal="parameters_changed" from="HBoxContainer/Panel/MarginContainer/SidePanel" to="." method="_on_parameters_changed"]

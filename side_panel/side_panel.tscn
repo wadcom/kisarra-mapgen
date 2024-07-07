@@ -166,3 +166,4 @@ layout_mode = 2
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/MapSizeControls/Controls/MapSize" to="." method="_on_map_size_value_changed"]
 [connection signal="parameters_changed" from="ScrollContainer/VBoxContainer/BasesSettings" to="." method="_on_bases_settings_parameters_changed"]
 [connection signal="parameters_changed" from="ScrollContainer/VBoxContainer/BetiriumSettings" to="." method="_on_betirium_settings_parameters_changed"]
+[connection signal="height_threshold_updated" from="ScrollContainer/VBoxContainer/MountainsSettings" to="." method="_on_mountains_settings_height_threshold_updated"]

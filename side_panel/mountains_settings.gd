@@ -1,5 +1,8 @@
 extends VBoxContainer
 
+signal height_threshold_updated(height_threshold)
+
+
 var _params
 
 
@@ -17,4 +20,4 @@ func _on_height_threshold_slider_value_changed(value):
 	_params.height_threshold = value
 
 	_update_controls()
-	# parameters_changed.emit(_params)
+	height_threshold_updated.emit(value)
