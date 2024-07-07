@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ca8i0jh687k0m"]
+[gd_scene load_steps=6 format=3 uid="uid://ca8i0jh687k0m"]
 
 [ext_resource type="Script" path="res://map_area.gd" id="1_8qfge"]
 [ext_resource type="PackedScene" uid="uid://djvis3o7e1smv" path="res://base_cell.tscn" id="2_e1c3d"]
 [ext_resource type="PackedScene" uid="uid://de6ailbpe4obu" path="res://sand_cell.tscn" id="2_fjadh"]
+[ext_resource type="PackedScene" uid="uid://dtp0putph15ls" path="res://mountain_cell.tscn" id="3_7gub7"]
 [ext_resource type="PackedScene" uid="uid://dbhypu0aiefk" path="res://round_area.tscn" id="3_sqwi0"]
 
 [node name="MapArea" type="ColorRect"]
@@ -16,6 +17,7 @@ size_flags_vertical = 4
 color = Color(0.0827414, 0.0827414, 0.0827414, 1)
 script = ExtResource("1_8qfge")
 base_cell_prefab = ExtResource("2_e1c3d")
+mountain_cell_prefab = ExtResource("3_7gub7")
 round_area_prefab = ExtResource("3_sqwi0")
 sand_cell_prefab = ExtResource("2_fjadh")
 

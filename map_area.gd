@@ -1,6 +1,7 @@
 extends ColorRect
 
 @export var base_cell_prefab: PackedScene
+@export var mountain_cell_prefab: PackedScene
 @export var round_area_prefab: PackedScene
 @export var sand_cell_prefab: PackedScene
 
@@ -16,6 +17,7 @@ func update_parameters(params):
 
 	%DiagnosticsText.clear()
 
+	var height_map = _make_height_map(params)
 	var base_positions = _pick_base_positions(params)
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
 	var extra_bt_sources = _pick_extra_bt_sources(params, base_positions)
@@ -23,17 +25,22 @@ func update_parameters(params):
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 
 	_setup_bases(params, base_positions)
-	_setup_ground_cells(params, bt_density)
+	_setup_ground_cells(params, bt_density, height_map)
  
 	_prepare_export_data(params, base_positions, bt_density)
 
-	_xxx()
 
-
-func _xxx():
+func _make_height_map(params):
 	var octave1 = _perlin_noise.make_octave(1)
-	print("XXX ", octave1)
-	print("XXX ", _perlin_noise.get_height(octave1, 5, Vector2(2.5, 3.5)))
+
+	var height = []
+	for y in params.map_size:
+		for x in params.map_size:
+			var p = Vector2(x + 0.5, y + 0.5)
+			var h = _perlin_noise.get_height(octave1, params.map_size, p)
+			height.append(h)
+
+	return height
 
 
 func export_map():
@@ -72,7 +79,7 @@ func _calculate_bt_density(params, bt_sources):
 	return total_bt
 
 
-func _setup_ground_cells(params, bt_density):
+func _setup_ground_cells(params, bt_density, height_map):
 	for c in $GroundCells.get_children():
 		$GroundCells.remove_child(c)
 		c.queue_free()
@@ -81,8 +88,13 @@ func _setup_ground_cells(params, bt_density):
 	for y in params.map_size:
 		for x in params.map_size:
 
-			var cell = sand_cell_prefab.instantiate()
-			cell.set_bt_density(bt_density[i])
+			var cell
+			if height_map[i] <= 0.0:
+				cell = sand_cell_prefab.instantiate()
+				cell.set_bt_density(bt_density[i])
+			else:
+				cell = mountain_cell_prefab.instantiate()
+
 			i += 1
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
