@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_43uwm"]
 [ext_resource type="PackedScene" uid="uid://dx3nhpeskgree" path="res://side_panel/side_panel.tscn" id="2_fiq7s"]
-[ext_resource type="PackedScene" uid="uid://ca8i0jh687k0m" path="res://map_area.tscn" id="2_rts0s"]
+[ext_resource type="PackedScene" uid="uid://ca8i0jh687k0m" path="res://map_area/map_area.tscn" id="2_rts0s"]
 
 [node name="Main" type="MarginContainer"]
 anchors_preset = 15
