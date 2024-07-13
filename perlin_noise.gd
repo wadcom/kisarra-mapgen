@@ -17,7 +17,7 @@ static func get_height(octave, map_size, p: Vector2):
 
 	var octave_p = p / map_size * octave_size
 
-	var c = Vector2i(octave_p / octave_size)
+	var c = Vector2i(octave_p)
 	var f = octave_p - Vector2(c)
 
 	var top_left = _interpolate_height(octave, c, f)
