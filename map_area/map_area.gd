@@ -42,13 +42,30 @@ func update_mountains_height_threshold(params):
 
 
 func _make_height_map(params):
-	var octave1 = _perlin_noise.make_octave(1)
+	var octaves = []
+
+	var total_weight = 0.0
+
+	for o_params in params.mountains.octaves:
+		if o_params.enabled:
+			octaves.append(_perlin_noise.make_octave(o_params.size))
+			total_weight += o_params.weight
+		else:
+			octaves.append(null)
 
 	var height = []
 	for y in params.map_size:
 		for x in params.map_size:
 			var p = Vector2(x + 0.5, y + 0.5)
-			var h = _perlin_noise.get_height(octave1, params.map_size, p)
+
+			var h = 0.0
+			for i in octaves.size():
+				if octaves[i] == null:
+					continue
+
+				var o_h = _perlin_noise.get_height(octaves[i], params.map_size, p)
+				h += o_h * params.mountains.octaves[i].weight / total_weight
+
 			height.append(h)
 
 	return height
