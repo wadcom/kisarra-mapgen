@@ -37,8 +37,8 @@ func update_mountains_height_threshold(params):
 
 	_setup_ground_cells(params, _bt_density, _height_map)
  
-	# XXX: update export data
-	# _prepare_export_data(params, base_positions, bt_density)
+	var base_positions = _pick_base_positions(params, _height_map)
+	_prepare_export_data(params, base_positions)
 
 
 func _make_height_map(params):
