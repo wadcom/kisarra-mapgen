@@ -29,7 +29,7 @@ func update_parameters(params):
 	_setup_bases(params, base_positions)
 	_setup_ground_cells(params, _bt_density, _height_map)
  
-	_prepare_export_data(params, base_positions, _bt_density)
+	_prepare_export_data(params, base_positions)
 
 
 func update_mountains_height_threshold(params):
@@ -75,16 +75,29 @@ func export_map():
 	return _export_data
 
 
-func _prepare_export_data(params, base_positions, betirium):
+func _prepare_export_data(params, base_positions):
+	var terrain = Array()
+	terrain.resize(params.map_size)
+
+	for y in params.map_size:
+		var t = ""
+		for x in params.map_size:
+			if _is_mountain(params, _height_map, Vector2i(x, y)):
+				t += "m"
+			else:
+				t += "s"
+
+		terrain[y] = t
+
 	_export_data = {
+		betirium = _bt_density,
 		size = params.map_size,
-		playersQuantity = params.players_qty,
-		betirium = betirium,
-		basePositions = [],
+		terrain = terrain,
+		version = 1,
 	}
 
 	for bp in base_positions:
-		_export_data.basePositions.append({x = bp.x, y = bp.y})
+		_export_data.terrain[bp.y][bp.x] = "b"
 
 	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
 		params = params
