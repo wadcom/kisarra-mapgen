@@ -7,6 +7,7 @@ extends ColorRect
 
 
 var _export_data
+var _base_positions
 var _bt_density
 var _height_map
 
@@ -20,16 +21,13 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	_height_map = _make_height_map(params)
-	var base_positions = _pick_base_positions(params, _height_map)
-	var satellite_bt_sources = _pick_satellite_bt_sources(params, base_positions)
-	var extra_bt_sources = _pick_extra_bt_sources(params, base_positions)
+	_base_positions = _pick_base_positions(params, _height_map)
 
-	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+	update_betirium(params)
 
-	_setup_bases(params, base_positions)
-	_setup_ground_cells(params, _bt_density, _height_map)
+	_setup_bases(params, _base_positions)
  
-	_prepare_export_data(params, base_positions)
+	_prepare_export_data(params, _base_positions)
 
 
 func update_mountains_height_threshold(params):
@@ -39,6 +37,13 @@ func update_mountains_height_threshold(params):
  
 	var base_positions = _pick_base_positions(params, _height_map)
 	_prepare_export_data(params, base_positions)
+
+
+func update_betirium(params):
+	var satellite_bt_sources = _pick_satellite_bt_sources(params, _base_positions)
+	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
+	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+	_setup_ground_cells(params, _bt_density, _height_map)
 
 
 func get_bt_density():

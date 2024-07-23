@@ -16,6 +16,12 @@ func _on_mountains_height_threshold_changed(params):
 	_update_bt_stats()
 
 
+func _on_side_panel_betirium_parameters_changed(params):
+	%MapArea.update_betirium(params)
+	_update_bt_stats()
+
+
 func _update_bt_stats():
 	var bt = %MapArea.get_bt_density()
 	%BetiriumStats.update_stats(bt)
+

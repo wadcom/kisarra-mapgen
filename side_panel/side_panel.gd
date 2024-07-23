@@ -1,5 +1,6 @@
 extends VBoxContainer
 
+signal betirium_parameters_changed(params)
 signal export_requested
 signal height_threshold_changed(height_threshold)
 signal parameters_changed(params: Variant)
@@ -71,7 +72,7 @@ func _on_bases_settings_parameters_changed(params):
 func _on_betirium_settings_parameters_changed(params):
 	_params.betirium = params
 	_update_labels()
-	parameters_changed.emit(_params)
+	betirium_parameters_changed.emit(_params)
 
 
 func _update_labels():
