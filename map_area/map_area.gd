@@ -41,6 +41,10 @@ func update_mountains_height_threshold(params):
 	_prepare_export_data(params, base_positions)
 
 
+func get_bt_density():
+	return _bt_density
+
+
 func _make_height_map(params):
 	var octaves = []
 
