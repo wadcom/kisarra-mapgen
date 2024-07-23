@@ -131,5 +131,5 @@ text = "33%"
 horizontal_alignment = 1
 
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
-[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
