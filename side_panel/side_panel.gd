@@ -16,7 +16,7 @@ var _params = {
 		satellite_sources = { decay = 0.7, distance_to_base = 75, peak_density = 45 },
 	},
 	cells_per_player = 180,
-	map_size = 22,
+	map_size = "updated automatically",
 	mountains = {
 		height_threshold = 0.0,
 		octaves = [
@@ -30,6 +30,8 @@ var _params = {
 
 
 func _ready():
+	_params.map_size = _calculate_recommended_map_size()
+
 	%CellsPerPlayer.value = _params.cells_per_player
 	%MapSize.value = _params.map_size
 	%PlayersQuantity.value = _params.players_qty
@@ -79,7 +81,7 @@ func _update_labels():
 	%CellsPerPlayerLabel.text = str(_params.cells_per_player)
 	%MapSizeLabel.text = str(_params.map_size)
 
-	%RecommendedMapSizeLabel.text = str(ceil(sqrt(_params.players_qty * _params.cells_per_player)))
+	%RecommendedMapSizeLabel.text = str(_calculate_recommended_map_size())
 
 
 func _on_refresh_button_pressed():
@@ -93,3 +95,7 @@ func _on_export_button_pressed():
 func _on_mountains_settings_height_threshold_updated(height_threshold):
 	_params.mountains.height_threshold = height_threshold
 	height_threshold_changed.emit(_params)
+
+
+func _calculate_recommended_map_size():
+	return ceil(sqrt(_params.players_qty * _params.cells_per_player))
