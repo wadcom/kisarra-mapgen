@@ -41,4 +41,3 @@ func _update_controls():
 
 	%DistanceToOtherBasesLabel.text = str(_params.min_dist_to_other_bases)
 	%DistanceToOtherBasesSlider.value = _params.min_dist_to_other_bases
-
