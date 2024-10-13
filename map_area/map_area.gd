@@ -84,7 +84,7 @@ func export_map():
 	return _export_data
 
 
-func _prepare_export_data(params, base_positions):
+func _make_terrain(params, base_positions):
 	var terrain = Array()
 	terrain.resize(params.map_size)
 
@@ -98,15 +98,21 @@ func _prepare_export_data(params, base_positions):
 
 		terrain[y] = t
 
+	for bp in base_positions:
+		terrain[bp.y][bp.x] = "b"
+
+	return terrain
+
+
+func _prepare_export_data(params, base_positions):
+	var terrain = _make_terrain(params, base_positions)
+
 	_export_data = {
 		betirium = _bt_density,
 		size = params.map_size,
 		terrain = terrain,
 		version = 1,
 	}
-
-	for bp in base_positions:
-		_export_data.terrain[bp.y][bp.x] = "b"
 
 	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
 		params = params
