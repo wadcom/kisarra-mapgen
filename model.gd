@@ -23,6 +23,10 @@ func setup_surface(params, height_map):
 			_surface[x][y] = cell
 
 
+func get_surface():
+	return _surface
+
+
 func _is_mountain(params, height_map, p: Vector2i):
 	var idx = p.y * params.map_size + p.x
 	return height_map[idx] > params.mountains.height_threshold

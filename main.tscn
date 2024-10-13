@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgxgawmmqyyqm"]
+[gd_scene load_steps=6 format=3 uid="uid://dgxgawmmqyyqm"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_43uwm"]
 [ext_resource type="PackedScene" uid="uid://dx3nhpeskgree" path="res://side_panel/side_panel.tscn" id="2_fiq7s"]
 [ext_resource type="PackedScene" uid="uid://ca8i0jh687k0m" path="res://map_area/map_area.tscn" id="2_rts0s"]
 [ext_resource type="PackedScene" uid="uid://b8jwe0t6h8s5q" path="res://betirium_stats.tscn" id="3_db5po"]
+[ext_resource type="PackedScene" uid="uid://dj1x5wbbo3buw" path="res://terrain_stats.tscn" id="4_chqej"]
 
 [node name="Main" type="MarginContainer"]
 anchors_preset = 15
@@ -56,6 +57,10 @@ zxc
 "
 
 [node name="BetiriumStats" parent="HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_db5po")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TerrainStats" parent="HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_chqej")]
 unique_name_in_owner = true
 layout_mode = 2
 

@@ -3,7 +3,7 @@ extends MarginContainer
 
 func _on_parameters_changed(params):
 	%MapArea.update_parameters(params)
-	_update_bt_stats()
+	_update_stats()
 
 
 func _on_export_requested():
@@ -13,15 +13,15 @@ func _on_export_requested():
 
 func _on_mountains_height_threshold_changed(params):
 	%MapArea.update_mountains_height_threshold(params)
-	_update_bt_stats()
+	_update_stats()
 
 
 func _on_side_panel_betirium_parameters_changed(params):
 	%MapArea.update_betirium(params)
-	_update_bt_stats()
+	_update_stats()
 
 
-func _update_bt_stats():
+func _update_stats():
 	var bt = %MapArea.get_bt_density()
 	%BetiriumStats.update_stats(bt)
-
+	%TerrainStats.update_stats()
