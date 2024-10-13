@@ -141,6 +141,8 @@ func _is_mountain(params, height_map, p: Vector2i):
 
 
 func _setup_ground_cells(params, bt_density, height_map):
+	Model.setup_surface(params, height_map)
+
 	for c in $GroundCells.get_children():
 		$GroundCells.remove_child(c)
 		c.queue_free()
