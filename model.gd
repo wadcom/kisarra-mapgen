@@ -1,5 +1,7 @@
 extends Node
 
+signal surface_updated
+
 var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
@@ -21,6 +23,8 @@ func setup_surface(params, height_map):
 				cell = { type = SurfaceType.SAND }
 
 			_surface[x][y] = cell
+
+	surface_updated.emit()
 
 
 func get_surface():
