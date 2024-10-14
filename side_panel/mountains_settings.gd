@@ -6,6 +6,10 @@ signal height_threshold_updated(height_threshold)
 var _params
 
 
+func _ready() -> void:
+	Model.surface_updated.connect(_on_surface_updated)
+
+
 func set_params(params):
 	_params = params
 	_update_controls_from_params()
@@ -83,3 +87,20 @@ func _on_weight_value_changed(_value):
 
 func _on_size_value_changed(_value):
 	_on_octave_controls_updated()
+
+
+func _on_surface_updated():
+	var surface = Model.get_surface()
+
+	var mountains = 0
+	var total = 0
+	for column in surface:
+		for cell in column:
+			total += 1
+			if cell.type == Model.SurfaceType.MOUNTAINS:
+				mountains += 1
+
+	var r = round(float(mountains) / total / 0.05) * 0.05
+
+	%DensityLabel.text = "%.2f" % [r]
+	%DensitySlider.value = r
