@@ -18,7 +18,7 @@ var _params = {
 	cells_per_player = 180,
 	map_size = "updated automatically",
 	mountains = {
-		height_threshold = 0.0,
+		height_threshold = 0.3,
 		octaves = [
 			{ enabled = true, size = 1, weight = 1},
 			{ enabled = true, size = 2, weight = 2},
