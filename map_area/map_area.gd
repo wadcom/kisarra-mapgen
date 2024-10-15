@@ -33,8 +33,11 @@ func update_mountains_height_threshold(params):
 
 	_setup_ground_cells(params, _height_map)
  
-	var base_positions = _pick_base_positions(params, _height_map)
-	_prepare_export_data(params, base_positions)
+	_base_positions = _pick_base_positions(params, _height_map)
+
+	_setup_bases(params, _base_positions)
+
+	_prepare_export_data(params, _base_positions)
 
 
 func update_betirium(params):
