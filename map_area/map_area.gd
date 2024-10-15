@@ -5,10 +5,8 @@ extends ColorRect
 @export var round_area_prefab: PackedScene
 @export var sand_cell_prefab: PackedScene
 
-
 var _export_data
 var _base_positions
-var _bt_density
 var _height_map
 
 const _globals = preload("res://globals.gd")
@@ -43,8 +41,8 @@ func update_betirium(params):
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, _base_positions)
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
-	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
-	_update_model_betirium(params.map_size, _bt_density)
+	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+	_update_model_betirium(params.map_size, bt_density)
 
 	_setup_ground_cells(params, _height_map)
 
@@ -107,7 +105,7 @@ func _prepare_export_data(params, base_positions):
 	var terrain = _make_terrain(params, base_positions)
 
 	_export_data = {
-		betirium = _bt_density,
+		betirium = _represent_bt_for_export(Model.get_betirium_density()),
 		size = params.map_size,
 		terrain = terrain,
 		version = 1,
@@ -116,6 +114,19 @@ func _prepare_export_data(params, base_positions):
 	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
 		params = params
 	}
+
+
+func _represent_bt_for_export(bt_density):
+	assert(bt_density.size() == bt_density[0].size())
+
+	var map_size = bt_density.size()
+
+	var result = []
+	for y in map_size:
+		for x in map_size:
+			result.append(bt_density[x][y])
+
+	return result
 
 
 func _calculate_bt_density(params, bt_sources):
