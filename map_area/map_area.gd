@@ -33,7 +33,7 @@ func update_parameters(params):
 func update_mountains_height_threshold(params):
 	%DiagnosticsText.clear()
 
-	_setup_ground_cells(params, _bt_density, _height_map)
+	_setup_ground_cells(params, _height_map)
  
 	var base_positions = _pick_base_positions(params, _height_map)
 	_prepare_export_data(params, base_positions)
@@ -44,10 +44,9 @@ func update_betirium(params):
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
 	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
-
-	_setup_ground_cells(params, _bt_density, _height_map)
-
 	_update_model_betirium(params.map_size, _bt_density)
+
+	_setup_ground_cells(params, _height_map)
 
 
 func _make_height_map(params):
@@ -140,14 +139,15 @@ func _is_mountain(params, height_map, p: Vector2i):
 	return height_map[idx] > params.mountains.height_threshold
 
 
-func _setup_ground_cells(params, bt_density, height_map):
+func _setup_ground_cells(params, height_map):
 	Model.setup_surface(params, height_map)
+
+	var bt_density = Model.get_betirium_density()
 
 	for c in $GroundCells.get_children():
 		$GroundCells.remove_child(c)
 		c.queue_free()
 
-	var i = 0
 	for y in params.map_size:
 		for x in params.map_size:
 
@@ -156,9 +156,7 @@ func _setup_ground_cells(params, bt_density, height_map):
 				cell = mountain_cell_prefab.instantiate()
 			else:
 				cell = sand_cell_prefab.instantiate()
-				cell.set_bt_density(bt_density[i])
-
-			i += 1
+				cell.set_bt_density(bt_density[x][y])
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
