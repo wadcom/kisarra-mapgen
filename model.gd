@@ -22,6 +22,10 @@ func setup_surface(params, height_map):
 	surface_updated.emit()
 
 
+func get_betirium_density():
+	return _bt_density
+
+
 func get_height_map():
 	return _height_map
 

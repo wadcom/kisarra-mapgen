@@ -22,6 +22,5 @@ func _on_side_panel_betirium_parameters_changed(params):
 
 
 func _update_stats():
-	var bt = %MapArea.get_bt_density()
-	%BetiriumStats.update_stats(bt)
+	%BetiriumStats.update_stats()
 	%TerrainStats.update_stats()

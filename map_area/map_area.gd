@@ -50,10 +50,6 @@ func update_betirium(params):
 	_update_model_betirium(params.map_size, _bt_density)
 
 
-func get_bt_density():
-	return _bt_density
-
-
 func _make_height_map(params):
 	var octaves = []
 
