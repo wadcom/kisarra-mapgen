@@ -2,11 +2,17 @@ extends Node
 
 signal surface_updated
 
+var _bt_density
 var _height_map
 var _params
 var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
+
+
+func set_betirium_density(bt_density):
+	assert(bt_density.size() == _params.map_size)
+	_bt_density = bt_density
 
 
 func setup_surface(params, height_map):

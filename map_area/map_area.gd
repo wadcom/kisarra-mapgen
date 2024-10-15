@@ -42,8 +42,12 @@ func update_mountains_height_threshold(params):
 func update_betirium(params):
 	var satellite_bt_sources = _pick_satellite_bt_sources(params, _base_positions)
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
+
 	_bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+
 	_setup_ground_cells(params, _bt_density, _height_map)
+
+	_update_model_betirium(params.map_size, _bt_density)
 
 
 func get_bt_density():
@@ -162,6 +166,22 @@ func _setup_ground_cells(params, bt_density, height_map):
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
+
+
+func _update_model_betirium(map_size, bt_density):
+	var bt = Array()
+	bt.resize(map_size)
+	for x in map_size:
+		bt[x] = Array()
+		bt[x].resize(map_size)
+
+	var i = 0
+	for y in map_size:
+		for x in map_size:
+			bt[x][y] = bt_density[i]
+			i += 1
+
+	Model.set_betirium_density(bt)
 
 
 func _setup_bases(params, base_positions):
