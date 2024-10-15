@@ -25,7 +25,7 @@ func update_parameters(params):
 
 	_setup_bases(params, _base_positions)
  
-	_prepare_export_data(params, _base_positions)
+	_prepare_export_data(params)
 
 
 func update_mountains_height_threshold(params):
@@ -37,7 +37,7 @@ func update_mountains_height_threshold(params):
 
 	_setup_bases(params, _base_positions)
 
-	_prepare_export_data(params, _base_positions)
+	_prepare_export_data(params)
 
 
 func update_betirium(params):
@@ -84,8 +84,8 @@ func export_map():
 	return _export_data
 
 
-func _prepare_export_data(params, base_positions):
-	var terrain = _format_terrain(params, base_positions)
+func _prepare_export_data(params):
+	var terrain = _format_terrain(params, _base_positions)
 
 	_export_data = {
 		betirium = _format_bt(Model.get_betirium_density()),
