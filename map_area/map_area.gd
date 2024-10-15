@@ -35,6 +35,8 @@ func update_mountains_height_threshold(params):
  
 	_base_positions = _pick_base_positions(params, _height_map)
 
+	update_betirium(params)
+
 	_setup_bases(params, _base_positions)
 
 	_prepare_export_data(params)
