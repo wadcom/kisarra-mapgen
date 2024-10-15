@@ -92,6 +92,33 @@ func _on_size_value_changed(_value):
 func _on_surface_updated():
 	var surface = Model.get_surface()
 
+	var r = round(_calculate_mountains_density(surface) / 0.05) * 0.05
+
+	%DensityLabel.text = "%.2f" % [r]
+	%DensitySlider.set_value_no_signal(r)
+
+
+func _on_density_slider_value_changed(value: float) -> void:
+	var params = Model.get_params()
+	if params == null:
+		return
+
+	var height_map = Model.get_height_map()
+
+	var threshold = -2.0
+	while threshold <= 2.0:
+		params.mountains.height_threshold = threshold
+		var surface = Model.make_surface(params, height_map)
+		var d =_calculate_mountains_density(surface)
+
+		if d >= (value - 0.025) and d <= (value + 0.025):
+			%HeightThresholdSlider.value = threshold
+			break
+
+		threshold += 0.01
+
+
+func _calculate_mountains_density(surface):
 	var mountains = 0
 	var total = 0
 	for column in surface:
@@ -100,7 +127,4 @@ func _on_surface_updated():
 			if cell.type == Model.SurfaceType.MOUNTAINS:
 				mountains += 1
 
-	var r = round(float(mountains) / total / 0.05) * 0.05
-
-	%DensityLabel.text = "%.2f" % [r]
-	%DensitySlider.value = r
+	return float(mountains) / total
