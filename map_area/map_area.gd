@@ -81,7 +81,22 @@ func export_map():
 	return _export_data
 
 
-func _make_terrain(params, base_positions):
+func _prepare_export_data(params, base_positions):
+	var terrain = _format_terrain(params, base_positions)
+
+	_export_data = {
+		betirium = _format_bt(Model.get_betirium_density()),
+		size = params.map_size,
+		terrain = terrain,
+		version = 1,
+	}
+
+	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
+		params = params
+	}
+
+
+func _format_terrain(params, base_positions):
 	var terrain = Array()
 	terrain.resize(params.map_size)
 
@@ -101,22 +116,7 @@ func _make_terrain(params, base_positions):
 	return terrain
 
 
-func _prepare_export_data(params, base_positions):
-	var terrain = _make_terrain(params, base_positions)
-
-	_export_data = {
-		betirium = _represent_bt_for_export(Model.get_betirium_density()),
-		size = params.map_size,
-		terrain = terrain,
-		version = 1,
-	}
-
-	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
-		params = params
-	}
-
-
-func _represent_bt_for_export(bt_density):
+func _format_bt(bt_density):
 	assert(bt_density.size() == bt_density[0].size())
 
 	var map_size = bt_density.size()
