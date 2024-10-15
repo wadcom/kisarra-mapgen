@@ -11,14 +11,21 @@ enum SurfaceType { MOUNTAINS, SAND }
 
 
 func set_betirium_density(bt_density):
-	assert(bt_density.size() == _params.map_size)
 	_bt_density = bt_density
+
+	if _params != null and bt_density.size() != _params.map_size:
+		_params = null
 
 
 func setup_surface(params, height_map):
 	_height_map = height_map
 	_params = params
+
+	if _bt_density != null and _bt_density.size() != params.map_size:
+		_bt_density = null
+
 	_surface = make_surface(params, height_map)
+
 	surface_updated.emit()
 
 
