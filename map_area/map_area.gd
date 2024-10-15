@@ -42,7 +42,7 @@ func update_betirium(params):
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
-	_update_model_betirium(params.map_size, bt_density)
+	Model.set_betirium_density(bt_density)
 
 	_setup_ground_cells(params, _height_map)
 
@@ -130,9 +130,14 @@ func _represent_bt_for_export(bt_density):
 
 
 func _calculate_bt_density(params, bt_sources):
-	var total_bt = []
-	for y in params.map_size:
-		for x in params.map_size:
+	var bt = Array()
+	bt.resize(params.map_size)
+
+	for x in params.map_size:
+		bt[x] = Array()
+		bt[x].resize(params.map_size)
+
+		for y in params.map_size:
 			var p = Vector2(x, y)
 			
 			var t = 0.0
@@ -140,9 +145,9 @@ func _calculate_bt_density(params, bt_sources):
 				var d = s.position.distance_to(p)
 				t += s.peak_density * pow(s.decay_factor, d)
 
-			total_bt.append(int(t))
-
-	return total_bt
+			bt[x][y] = int(t)
+	
+	return bt
 
 
 func _is_mountain(params, height_map, p: Vector2i):
@@ -171,22 +176,6 @@ func _setup_ground_cells(params, height_map):
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
-
-
-func _update_model_betirium(map_size, bt_density):
-	var bt = Array()
-	bt.resize(map_size)
-	for x in map_size:
-		bt[x] = Array()
-		bt[x].resize(map_size)
-
-	var i = 0
-	for y in map_size:
-		for x in map_size:
-			bt[x][y] = bt_density[i]
-			i += 1
-
-	Model.set_betirium_density(bt)
 
 
 func _setup_bases(params, base_positions):
