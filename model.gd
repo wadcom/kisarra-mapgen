@@ -2,14 +2,26 @@ extends Node
 
 signal surface_updated
 
+var _height_map
+var _params
 var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
 
 
 func setup_surface(params, height_map):
+	_height_map = height_map
+	_params = params
 	_surface = make_surface(params, height_map)
 	surface_updated.emit()
+
+
+func get_height_map():
+	return _height_map
+
+
+func get_params():
+	return _params.duplicate(true)
 
 
 func get_surface():
