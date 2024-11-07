@@ -141,6 +141,7 @@ theme_override_constants/separation = 10
 
 [node name="BasesSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("2_6nc0g")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 
 [node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
@@ -156,6 +157,7 @@ layout_mode = 2
 
 [node name="MountainsSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("4_farua")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 
 [connection signal="pressed" from="ButtonBar/RefreshButton" to="." method="_on_refresh_button_pressed"]
