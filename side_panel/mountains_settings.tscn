@@ -93,6 +93,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 64.0
 value = 1.0
+alignment = 1
 
 [node name="Size2" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
@@ -100,6 +101,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 64.0
 value = 1.0
+alignment = 1
 
 [node name="Size3" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
@@ -107,6 +109,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 64.0
 value = 1.0
+alignment = 1
 
 [node name="WeightLabel" type="Label" parent="OctavesSettings"]
 layout_mode = 2
@@ -119,6 +122,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 10.0
 value = 1.0
+alignment = 1
 
 [node name="Weight2" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
@@ -126,6 +130,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 10.0
 value = 1.0
+alignment = 1
 
 [node name="Weight3" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
@@ -133,6 +138,7 @@ size_flags_horizontal = 4
 min_value = 1.0
 max_value = 10.0
 value = 1.0
+alignment = 1
 
 [node name="PercentagePadding" type="Label" parent="OctavesSettings"]
 layout_mode = 2
@@ -152,7 +158,7 @@ layout_mode = 2
 text = "33%"
 horizontal_alignment = 1
 
-[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
 [connection signal="value_changed" from="DensitySlider" to="." method="_on_density_slider_value_changed"]
