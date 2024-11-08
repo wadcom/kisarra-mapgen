@@ -13,24 +13,28 @@ func set_params(params):
 
 func _update_controls():
 	%ExtraSourcesDecayLabel.text = "%.2f" % [_params.extra_sources.decay]
-	%ExtraSourcesDecaySlider.value = _params.extra_sources.decay
+	%ExtraSourcesDecaySlider.set_value_no_signal(_params.extra_sources.decay)
 
 	%ExtraSourceDistanceToBasesLabel.text = str(_params.extra_sources.distance_to_any_base)
-	%ExtraSourceDistanceToBasesSlider.value = _params.extra_sources.distance_to_any_base
+	%ExtraSourceDistanceToBasesSlider.set_value_no_signal(
+		_params.extra_sources.distance_to_any_base,
+	)
 
 	%ExtraSourcePeakDensityLabel.text = str(_params.extra_sources.peak_density)
-	%ExtraSourcePeakDensitySlider.value = _params.extra_sources.peak_density
+	%ExtraSourcePeakDensitySlider.set_value_no_signal(_params.extra_sources.peak_density)
 
-	%ExtraSourcesQuantitySpinBox.value = _params.extra_sources.count
+	%ExtraSourcesQuantitySpinBox.set_value_no_signal(_params.extra_sources.count)
 
 	%SatelliteBtDecayLabel.text = "%.2f" % [_params.satellite_sources.decay]
-	%SatelliteBtDecaySlider.value = _params.satellite_sources.decay
+	%SatelliteBtDecaySlider.set_value_no_signal(_params.satellite_sources.decay)
 
 	%SatelliteBtDistanceToBaseLabel.text = str(_params.satellite_sources.distance_to_base)
-	%SatelliteBtDistanceToBaseSlider.value = _params.satellite_sources.distance_to_base
+	%SatelliteBtDistanceToBaseSlider.set_value_no_signal(
+		_params.satellite_sources.distance_to_base,
+	)
 
 	%SatelliteBtPeakDensityLabel.text = str(_params.satellite_sources.peak_density)
-	%SatelliteBtPeakDensitySlider.value = _params.satellite_sources.peak_density
+	%SatelliteBtPeakDensitySlider.set_value_no_signal(_params.satellite_sources.peak_density)
 
 
 func _on_satellite_bt_distance_to_base_slider_value_changed(value):

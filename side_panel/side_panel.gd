@@ -31,13 +31,13 @@ var _params = {
 
 func _ready():
 	_params.map_size = _calculate_recommended_map_size()
+	_update_betirium_settings()
 
 	%CellsPerPlayer.value = _params.cells_per_player
 	%MapSize.value = _params.map_size
 	%PlayersQuantity.value = _params.players_qty
 
 	%BasesSettings.set_params(_params.base_placement)
-	%BetiriumSettings.set_params(_params.betirium)
 	%MountainsSettings.set_params(_params.mountains)
 
 	_update_labels()
@@ -61,6 +61,7 @@ func _on_map_size_value_changed(value):
 
 func _on_players_quantity_value_changed(value):
 	_params.players_qty = int(value)
+	_update_betirium_settings()
 	_update_labels()
 	parameters_changed.emit(_params)
 
@@ -99,3 +100,8 @@ func _on_mountains_settings_height_threshold_updated(height_threshold):
 
 func _calculate_recommended_map_size():
 	return ceil(sqrt(_params.players_qty * _params.cells_per_player))
+
+
+func _update_betirium_settings():
+	_params.betirium.extra_sources.count = int(_params.players_qty / 2)
+	%BetiriumSettings.set_params(_params.betirium)
