@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dk4mfhpnkvxup"]
+[gd_scene load_steps=3 format=3 uid="uid://dk4mfhpnkvxup"]
 
 [ext_resource type="Script" path="res://side_panel/mountains_settings.gd" id="1_miht6"]
+[ext_resource type="Theme" uid="uid://bv58i8ec478w2" path="res://main_theme.tres" id="2_h6t42"]
 
 [node name="MountainsSettings" type="VBoxContainer"]
 custom_minimum_size = Vector2(300, 2.08165e-12)
@@ -73,15 +74,15 @@ text = "Enabled"
 
 [node name="Enabled1" type="CheckBox" parent="OctavesSettings"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 
 [node name="Enabled2" type="CheckBox" parent="OctavesSettings"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 
 [node name="Enabled3" type="CheckBox" parent="OctavesSettings"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 
 [node name="SizeLabel" type="Label" parent="OctavesSettings"]
 layout_mode = 2
@@ -90,6 +91,7 @@ text = "Size"
 [node name="Size1" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 64.0
 value = 1.0
@@ -98,6 +100,7 @@ alignment = 1
 [node name="Size2" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 64.0
 value = 1.0
@@ -106,6 +109,7 @@ alignment = 1
 [node name="Size3" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 64.0
 value = 1.0
@@ -119,6 +123,7 @@ text = "Weight
 [node name="Weight1" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 10.0
 value = 1.0
@@ -127,6 +132,7 @@ alignment = 1
 [node name="Weight2" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 10.0
 value = 1.0
@@ -135,6 +141,7 @@ alignment = 1
 [node name="Weight3" type="SpinBox" parent="OctavesSettings"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_h6t42")
 min_value = 1.0
 max_value = 10.0
 value = 1.0

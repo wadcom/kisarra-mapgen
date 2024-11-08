@@ -1,0 +1,4 @@
+[gd_resource type="Theme" format=3 uid="uid://bv58i8ec478w2"]
+
+[resource]
+LineEdit/constants/minimum_character_width = 2
