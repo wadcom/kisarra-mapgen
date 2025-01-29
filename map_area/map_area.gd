@@ -247,11 +247,11 @@ func _pick_extra_bt_sources(params, base_positions):
 	return bt_sources
 
 
-func _pick_satellite_bt_sources(params, base_positions):
+func _pick_satellite_bt_sources_positions(params, base_positions):
 	var satellite_bt_radius = \
 		params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
 
-	var bt_sources = []
+	var positions = []
 
 	for base_pos in base_positions:
 		var available_cxys = {}
@@ -278,10 +278,20 @@ func _pick_satellite_bt_sources(params, base_positions):
 		var cxys = available_cxys.keys()
 		cxys.shuffle()
 
+		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
+
+	return positions
+
+
+func _pick_satellite_bt_sources(params, base_positions):
+	var positions = _pick_satellite_bt_sources_positions(params, base_positions)
+
+	var bt_sources = []
+	for p in positions:
 		bt_sources.append(
 			{
 				decay_factor = params.betirium.satellite_sources.decay,
-				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
+				position = p,
 				peak_density = params.betirium.satellite_sources.peak_density,
 			},
 		)
