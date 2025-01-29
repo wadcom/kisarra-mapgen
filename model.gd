@@ -5,6 +5,7 @@ signal surface_updated
 var _bt_density
 var _height_map
 var _params
+var _satellite_bt_sources_positions
 var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
@@ -15,6 +16,10 @@ func set_betirium_density(bt_density):
 
 	if _params != null and bt_density.size() != _params.map_size:
 		_params = null
+
+
+func set_satellite_bt_sources_positions(satellite_bt_sources_positions):
+	_satellite_bt_sources_positions = satellite_bt_sources_positions
 
 
 func setup_surface(params, height_map):

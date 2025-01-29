@@ -46,6 +46,9 @@ func update_betirium(params):
 	var satellite_bt_sources_positions = _pick_satellite_bt_sources_positions(
 		params, _base_positions,
 	)
+
+	Model.set_satellite_bt_sources_positions(satellite_bt_sources_positions)
+
 	var satellite_bt_sources = _make_satellite_bt_sources(params, satellite_bt_sources_positions)
 
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
