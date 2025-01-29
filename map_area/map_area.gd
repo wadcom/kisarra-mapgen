@@ -43,7 +43,11 @@ func update_mountains_height_threshold(params):
 
 
 func update_betirium(params):
-	var satellite_bt_sources = _pick_satellite_bt_sources(params, _base_positions)
+	var satellite_bt_sources_positions = _pick_satellite_bt_sources_positions(
+		params, _base_positions,
+	)
+	var satellite_bt_sources = _pick_satellite_bt_sources(params, satellite_bt_sources_positions)
+
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
@@ -283,11 +287,9 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 	return positions
 
 
-func _pick_satellite_bt_sources(params, base_positions):
-	var positions = _pick_satellite_bt_sources_positions(params, base_positions)
-
+func _pick_satellite_bt_sources(params, sources_positions):
 	var bt_sources = []
-	for p in positions:
+	for p in sources_positions:
 		bt_sources.append(
 			{
 				decay_factor = params.betirium.satellite_sources.decay,
