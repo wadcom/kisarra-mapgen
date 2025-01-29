@@ -46,7 +46,7 @@ func update_betirium(params):
 	var satellite_bt_sources_positions = _pick_satellite_bt_sources_positions(
 		params, _base_positions,
 	)
-	var satellite_bt_sources = _pick_satellite_bt_sources(params, satellite_bt_sources_positions)
+	var satellite_bt_sources = _make_satellite_bt_sources(params, satellite_bt_sources_positions)
 
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
@@ -287,7 +287,7 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 	return positions
 
 
-func _pick_satellite_bt_sources(params, sources_positions):
+func _make_satellite_bt_sources(params, sources_positions):
 	var bt_sources = []
 	for p in sources_positions:
 		bt_sources.append(
