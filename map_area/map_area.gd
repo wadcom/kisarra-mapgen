@@ -43,6 +43,8 @@ func update_mountains_height_threshold(params):
 
 
 func update_betirium(params):
+	Model.set_params(params)
+
 	var satellite_bt_sources_positions = _pick_satellite_bt_sources_positions(
 		params, _base_positions,
 	)

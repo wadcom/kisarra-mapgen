@@ -18,6 +18,10 @@ func set_betirium_density(bt_density):
 		_params = null
 
 
+func set_params(params):
+	_params = params
+
+
 func set_satellite_bt_sources_positions(satellite_bt_sources_positions):
 	_satellite_bt_sources_positions = satellite_bt_sources_positions
 
