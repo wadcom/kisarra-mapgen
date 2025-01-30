@@ -2,6 +2,7 @@ extends Node
 
 signal surface_updated
 
+var _base_positions
 var _bt_density
 var _height_map
 var _params
@@ -185,3 +186,7 @@ func pick_base_positions(params, height_map):
 		)
 
 	return {positions = base_positions, warnings = warnings}
+
+
+func set_base_positions(base_positions):
+	_base_positions = base_positions

@@ -23,6 +23,8 @@ func update_parameters(params):
 	_base_positions = result.positions
 	_display_warnings(result.warnings)
 
+	Model.set_base_positions(_base_positions)
+
 	update_betirium(params)
 
 	_setup_bases(params, _base_positions)
@@ -38,6 +40,7 @@ func update_mountains_height_threshold(params):
 	var result = Model.pick_base_positions(params, _height_map)
 	_base_positions = result.positions
 	_display_warnings(result.warnings)
+	Model.set_base_positions(_base_positions)
 
 	update_betirium(params)
 
