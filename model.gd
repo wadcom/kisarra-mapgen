@@ -10,6 +10,7 @@ var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
 
+const _globals = preload("res://globals.gd")
 const _perlin_noise = preload("res://perlin_noise.gd")
 
 
@@ -128,3 +129,59 @@ func _make_satellite_bt_sources():
 func _is_mountain(params, height_map, p: Vector2i):
 	var idx = p.y * params.map_size + p.x
 	return height_map[idx] > params.mountains.height_threshold
+
+
+func pick_base_positions(params, height_map):
+	var map_center = Vector2.ONE * params.map_size / 2.0
+
+	var available = []
+	var warnings = []
+
+	for x in params.map_size:
+		for y in params.map_size:
+			var p = Vector2(x + 0.5, y + 0.5)
+
+			var d = p.distance_to(map_center) * _globals.CELL_SIDE_KMS
+			if d < params.base_placement.central_dead_zone_radius:
+				continue
+
+			var off_edge = [
+				Vector2(p.x, -0.5),
+				Vector2(p.x, params.map_size+0.5),
+				Vector2(-0.5, p.y),
+				Vector2(params.map_size+0.5, p.y),
+			]
+
+			var is_too_close = off_edge.any(
+				func(off_edge_pos):
+					d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
+					return d < params.base_placement.min_dist_to_map_edge
+			)
+
+			if is_too_close:
+				continue
+
+			if _is_mountain(params, height_map, Vector2i(p)):
+				continue
+
+			available.append(Vector2(x, y))
+
+	available.shuffle()
+
+	var base_positions = []
+	for i in params.players_qty:
+		if available.size() == 0:
+			warnings.append("No cells available to place a base\n")
+			break
+
+		var p = available.pop_back()
+
+		base_positions.append(p)
+
+		available = available.filter(
+			func(a): 
+				var d = a.distance_to(p) * _globals.CELL_SIDE_KMS
+				return d > params.base_placement.min_dist_to_other_bases
+		)
+
+	return {positions = base_positions, warnings = warnings}

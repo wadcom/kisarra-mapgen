@@ -18,7 +18,8 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	_height_map = Model.make_height_map(params)
-	var result = _pick_base_positions(params, _height_map)
+
+	var result = Model.pick_base_positions(params, _height_map)
 	_base_positions = result.positions
 	_display_warnings(result.warnings)
 
@@ -34,7 +35,7 @@ func update_mountains_height_threshold(params):
 
 	_setup_ground_cells(params, _height_map)
  
-	var result = _pick_base_positions(params, _height_map)
+	var result = Model.pick_base_positions(params, _height_map)
 	_base_positions = result.positions
 	_display_warnings(result.warnings)
 
@@ -264,62 +265,6 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
 
 	return {positions = positions, warnings = warnings}
-
-
-func _pick_base_positions(params, height_map):
-	var map_center = Vector2.ONE * params.map_size / 2.0
-
-	var available = []
-	var warnings = []
-
-	for x in params.map_size:
-		for y in params.map_size:
-			var p = Vector2(x + 0.5, y + 0.5)
-
-			var d = p.distance_to(map_center) * _globals.CELL_SIDE_KMS
-			if d < params.base_placement.central_dead_zone_radius:
-				continue
-
-			var off_edge = [
-				Vector2(p.x, -0.5),
-				Vector2(p.x, params.map_size+0.5),
-				Vector2(-0.5, p.y),
-				Vector2(params.map_size+0.5, p.y),
-			]
-
-			var is_too_close = off_edge.any(
-				func(off_edge_pos):
-					d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
-					return d < params.base_placement.min_dist_to_map_edge
-			)
-
-			if is_too_close:
-				continue
-
-			if _is_mountain(params, height_map, Vector2i(p)):
-				continue
-
-			available.append(Vector2(x, y))
-
-	available.shuffle()
-
-	var base_positions = []
-	for i in params.players_qty:
-		if available.size() == 0:
-			warnings.append("No cells available to place a base\n")
-			break
-
-		var p = available.pop_back()
-
-		base_positions.append(p)
-
-		available = available.filter(
-			func(a): 
-				var d = a.distance_to(p) * _globals.CELL_SIDE_KMS
-				return d > params.base_placement.min_dist_to_other_bases
-		)
-
-	return {positions = base_positions, warnings = warnings}
 
 
 func _display_warnings(warnings):
