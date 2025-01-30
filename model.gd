@@ -11,6 +11,10 @@ var _surface
 enum SurfaceType { MOUNTAINS, SAND }
 
 
+func get_satellite_bt_sources():
+	return _make_satellite_bt_sources()
+
+
 func set_betirium_density(bt_density):
 	_bt_density = bt_density
 
@@ -77,3 +81,17 @@ func make_surface(params, height_map):
 			surface[x][y] = cell
 
 	return surface
+
+
+func _make_satellite_bt_sources():
+	var bt_sources = []
+	for p in _satellite_bt_sources_positions:
+		bt_sources.append(
+			{
+				decay_factor = _params.betirium.satellite_sources.decay,
+				position = p,
+				peak_density = _params.betirium.satellite_sources.peak_density,
+			},
+		)
+
+	return bt_sources

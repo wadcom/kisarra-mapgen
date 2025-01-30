@@ -51,7 +51,7 @@ func update_betirium(params):
 
 	Model.set_satellite_bt_sources_positions(satellite_bt_sources_positions)
 
-	var satellite_bt_sources = _make_satellite_bt_sources(params, satellite_bt_sources_positions)
+	var satellite_bt_sources = Model.get_satellite_bt_sources()
 
 	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
 
@@ -290,20 +290,6 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
 
 	return positions
-
-
-func _make_satellite_bt_sources(params, sources_positions):
-	var bt_sources = []
-	for p in sources_positions:
-		bt_sources.append(
-			{
-				decay_factor = params.betirium.satellite_sources.decay,
-				position = p,
-				peak_density = params.betirium.satellite_sources.peak_density,
-			},
-		)
-
-	return bt_sources
 
 
 func _pick_base_positions(params, height_map):
