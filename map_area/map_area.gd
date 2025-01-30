@@ -20,8 +20,7 @@ func update_parameters(params):
 	_height_map = Model.make_height_map(params)
 	var result = _pick_base_positions(params, _height_map)
 	_base_positions = result.positions
-	for w in result.warnings:
-		%DiagnosticsText.add_text(w)
+	_display_warnings(result.warnings)
 
 	update_betirium(params)
 
@@ -37,8 +36,7 @@ func update_mountains_height_threshold(params):
  
 	var result = _pick_base_positions(params, _height_map)
 	_base_positions = result.positions
-	for w in result.warnings:
-		%DiagnosticsText.add_text(w)
+	_display_warnings(result.warnings)
 
 	update_betirium(params)
 
@@ -54,8 +52,7 @@ func update_betirium(params):
 
 	Model.set_satellite_bt_sources_positions(result.positions)
 
-	for w in result.warnings:
-		%DiagnosticsText.add_text(w)
+	_display_warnings(result.warnings)
 
 	var satellite_bt_sources = Model.get_satellite_bt_sources()
 
@@ -323,3 +320,8 @@ func _pick_base_positions(params, height_map):
 		)
 
 	return {positions = base_positions, warnings = warnings}
+
+
+func _display_warnings(warnings):
+	for w in warnings:
+		%DiagnosticsText.add_text(w)
