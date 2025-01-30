@@ -6,7 +6,6 @@ extends ColorRect
 @export var sand_cell_prefab: PackedScene
 
 var _export_data
-var _base_positions
 var _height_map
 
 const _globals = preload("res://globals.gd")
@@ -20,14 +19,13 @@ func update_parameters(params):
 	_height_map = Model.make_height_map(params)
 
 	var result = Model.pick_base_positions(params, _height_map)
-	_base_positions = result.positions
 	_display_warnings(result.warnings)
 
-	Model.set_base_positions(_base_positions)
+	Model.set_base_positions(result.positions)
 
 	update_betirium(params)
 
-	_setup_bases(params, _base_positions)
+	_setup_bases(params, Model.get_base_positions())
  
 	_prepare_export_data(params)
 
@@ -38,13 +36,12 @@ func update_mountains_height_threshold(params):
 	_setup_ground_cells(params, _height_map)
  
 	var result = Model.pick_base_positions(params, _height_map)
-	_base_positions = result.positions
 	_display_warnings(result.warnings)
-	Model.set_base_positions(_base_positions)
+	Model.set_base_positions(result.positions)
 
 	update_betirium(params)
 
-	_setup_bases(params, _base_positions)
+	_setup_bases(params, Model.get_base_positions())
 
 	_prepare_export_data(params)
 
@@ -52,7 +49,7 @@ func update_mountains_height_threshold(params):
 func update_betirium(params):
 	Model.set_params(params)
 
-	var result = _pick_satellite_bt_sources_positions(params, _base_positions)
+	var result = _pick_satellite_bt_sources_positions(params, Model.get_base_positions())
 
 	Model.set_satellite_bt_sources_positions(result.positions)
 
@@ -60,7 +57,7 @@ func update_betirium(params):
 
 	var satellite_bt_sources = Model.get_satellite_bt_sources()
 
-	var extra_bt_sources = _pick_extra_bt_sources(params, _base_positions)
+	var extra_bt_sources = _pick_extra_bt_sources(params, Model.get_base_positions())
 
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 	Model.set_betirium_density(bt_density)
@@ -73,7 +70,7 @@ func export_map():
 
 
 func _prepare_export_data(params):
-	var terrain = _format_terrain(params, _base_positions)
+	var terrain = _format_terrain(params, Model.get_base_positions())
 
 	_export_data = {
 		betirium = _format_bt(Model.get_betirium_density()),

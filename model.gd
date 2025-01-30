@@ -190,3 +190,7 @@ func pick_base_positions(params, height_map):
 
 func set_base_positions(base_positions):
 	_base_positions = base_positions
+
+
+func get_base_positions():
+	return _base_positions
