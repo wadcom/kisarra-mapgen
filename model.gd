@@ -29,9 +29,10 @@ func set_betirium_density(bt_density):
 func set_params(params):
 	_params = params
 
+	var result = _pick_satellite_bt_sources_positions()
 
-func set_satellite_bt_sources_positions(satellite_bt_sources_positions):
-	_satellite_bt_sources_positions = satellite_bt_sources_positions
+	_satellite_bt_sources_positions = result.positions
+	return {warnings = result.warnings}
 
 
 func setup_surface(params, height_map):
@@ -194,3 +195,40 @@ func set_base_positions(base_positions):
 
 func get_base_positions():
 	return _base_positions
+
+
+func _pick_satellite_bt_sources_positions():
+	var satellite_bt_radius = \
+		_params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
+
+	var positions = []
+	var warnings = []
+
+	for base_pos in _base_positions:
+		var available_cxys = {}
+		for a in 360:
+			var p = (
+				Vector2.from_angle(a / 360.0 * TAU) * satellite_bt_radius \
+					+ base_pos + Vector2.ONE / 2.0
+			).floor()
+
+			if p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size:
+				continue
+
+			var cxy = p.x * 1000 + p.y
+			available_cxys[cxy] = true
+
+		if available_cxys.size() < 1:
+			warnings.append(
+				"Nowhere to put satellite Bt source around base at %d,%d\n" % [
+					base_pos.x, base_pos.y
+				]
+			)
+			continue
+
+		var cxys = available_cxys.keys()
+		cxys.shuffle()
+
+		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
+
+	return {positions = positions, warnings = warnings}
