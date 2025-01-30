@@ -6,6 +6,7 @@ var _base_positions
 var _bt_density
 var _height_map
 var _params
+var _prev_params
 var _satellite_bt_sources_positions
 var _surface
 
@@ -27,12 +28,24 @@ func set_betirium_density(bt_density):
 
 
 func set_params(params):
+	if _should_invalidate_satellite_bt_sources_positions(params):
+		_satellite_bt_sources_positions = null
+
+	if _params == null:
+		_prev_params = null
+	else:
+		_prev_params = _params.duplicate(true)
+
 	_params = params
 
-	var result = _pick_satellite_bt_sources_positions()
+	var warnings = []
+	
+	if _satellite_bt_sources_positions == null:
+		var result = _pick_satellite_bt_sources_positions()
+		_satellite_bt_sources_positions = result.positions
+		warnings.append_array(result.warnings)
 
-	_satellite_bt_sources_positions = result.positions
-	return {warnings = result.warnings}
+	return {warnings = warnings}
 
 
 func setup_surface(params, height_map):
@@ -232,3 +245,17 @@ func _pick_satellite_bt_sources_positions():
 		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
 
 	return {positions = positions, warnings = warnings}
+
+
+func _should_invalidate_satellite_bt_sources_positions(new_params):
+	if _prev_params == null:
+		return true
+
+	if _prev_params.map_size != new_params.map_size:
+		return true
+
+	if _prev_params.betirium.satellite_sources.distance_to_base != \
+		new_params.betirium.satellite_sources.distance_to_base:
+		return true
+
+	return false
