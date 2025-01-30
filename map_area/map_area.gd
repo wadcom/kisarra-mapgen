@@ -45,11 +45,12 @@ func update_mountains_height_threshold(params):
 func update_betirium(params):
 	Model.set_params(params)
 
-	var satellite_bt_sources_positions = _pick_satellite_bt_sources_positions(
-		params, _base_positions,
-	)
+	var result = _pick_satellite_bt_sources_positions(params, _base_positions)
 
-	Model.set_satellite_bt_sources_positions(satellite_bt_sources_positions)
+	Model.set_satellite_bt_sources_positions(result.positions)
+
+	for w in result.warnings:
+		%DiagnosticsText.add_text(w)
 
 	var satellite_bt_sources = Model.get_satellite_bt_sources()
 
@@ -261,6 +262,7 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 		params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
 
 	var positions = []
+	var warnings = []
 
 	for base_pos in base_positions:
 		var available_cxys = {}
@@ -277,7 +279,7 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 			available_cxys[cxy] = true
 
 		if available_cxys.size() < 1:
-			%DiagnosticsText.add_text(
+			warnings.append(
 				"Nowhere to put satellite Bt source around base at %d,%d\n" % [
 					base_pos.x, base_pos.y
 				]
@@ -289,7 +291,7 @@ func _pick_satellite_bt_sources_positions(params, base_positions):
 
 		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
 
-	return positions
+	return {positions = positions, warnings = warnings}
 
 
 func _pick_base_positions(params, height_map):
