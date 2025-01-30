@@ -10,7 +10,6 @@ var _base_positions
 var _height_map
 
 const _globals = preload("res://globals.gd")
-const _perlin_noise = preload("res://perlin_noise.gd")
 
 
 func update_parameters(params):
@@ -18,7 +17,7 @@ func update_parameters(params):
 
 	%DiagnosticsText.clear()
 
-	_height_map = _make_height_map(params)
+	_height_map = Model.make_height_map(params)
 	_base_positions = _pick_base_positions(params, _height_map)
 
 	update_betirium(params)
@@ -60,36 +59,6 @@ func update_betirium(params):
 	Model.set_betirium_density(bt_density)
 
 	_setup_ground_cells(params, _height_map)
-
-
-func _make_height_map(params):
-	var octaves = []
-
-	var total_weight = 0.0
-
-	for o_params in params.mountains.octaves:
-		if o_params.enabled:
-			octaves.append(_perlin_noise.make_octave(o_params.size))
-			total_weight += o_params.weight
-		else:
-			octaves.append(null)
-
-	var height = []
-	for y in params.map_size:
-		for x in params.map_size:
-			var p = Vector2(x + 0.5, y + 0.5)
-
-			var h = 0.0
-			for i in octaves.size():
-				if octaves[i] == null:
-					continue
-
-				var o_h = _perlin_noise.get_height(octaves[i], params.map_size, p)
-				h += o_h * params.mountains.octaves[i].weight / total_weight
-
-			height.append(h)
-
-	return height
 
 
 func export_map():

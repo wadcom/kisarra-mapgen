@@ -10,6 +10,8 @@ var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
 
+const _perlin_noise = preload("res://perlin_noise.gd")
+
 
 func get_satellite_bt_sources():
 	return _make_satellite_bt_sources()
@@ -58,9 +60,35 @@ func get_surface():
 	return _surface
 
 
-func _is_mountain(params, height_map, p: Vector2i):
-	var idx = p.y * params.map_size + p.x
-	return height_map[idx] > params.mountains.height_threshold
+# TODO: unexport
+func make_height_map(params):
+	var octaves = []
+
+	var total_weight = 0.0
+
+	for o_params in params.mountains.octaves:
+		if o_params.enabled:
+			octaves.append(_perlin_noise.make_octave(o_params.size))
+			total_weight += o_params.weight
+		else:
+			octaves.append(null)
+
+	var height = []
+	for y in params.map_size:
+		for x in params.map_size:
+			var p = Vector2(x + 0.5, y + 0.5)
+
+			var h = 0.0
+			for i in octaves.size():
+				if octaves[i] == null:
+					continue
+
+				var o_h = _perlin_noise.get_height(octaves[i], params.map_size, p)
+				h += o_h * params.mountains.octaves[i].weight / total_weight
+
+			height.append(h)
+
+	return height
 
 
 func make_surface(params, height_map):
@@ -95,3 +123,8 @@ func _make_satellite_bt_sources():
 		)
 
 	return bt_sources
+
+
+func _is_mountain(params, height_map, p: Vector2i):
+	var idx = p.y * params.map_size + p.x
+	return height_map[idx] > params.mountains.height_threshold
