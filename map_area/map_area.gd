@@ -18,7 +18,10 @@ func update_parameters(params):
 	%DiagnosticsText.clear()
 
 	_height_map = Model.make_height_map(params)
-	_base_positions = _pick_base_positions(params, _height_map)
+	var result = _pick_base_positions(params, _height_map)
+	_base_positions = result.positions
+	for w in result.warnings:
+		%DiagnosticsText.add_text(w)
 
 	update_betirium(params)
 
@@ -32,7 +35,10 @@ func update_mountains_height_threshold(params):
 
 	_setup_ground_cells(params, _height_map)
  
-	_base_positions = _pick_base_positions(params, _height_map)
+	var result = _pick_base_positions(params, _height_map)
+	_base_positions = result.positions
+	for w in result.warnings:
+		%DiagnosticsText.add_text(w)
 
 	update_betirium(params)
 
@@ -267,6 +273,8 @@ func _pick_base_positions(params, height_map):
 	var map_center = Vector2.ONE * params.map_size / 2.0
 
 	var available = []
+	var warnings = []
+
 	for x in params.map_size:
 		for y in params.map_size:
 			var p = Vector2(x + 0.5, y + 0.5)
@@ -301,7 +309,7 @@ func _pick_base_positions(params, height_map):
 	var base_positions = []
 	for i in params.players_qty:
 		if available.size() == 0:
-			%DiagnosticsText.add_text("No cells available to place a base\n")
+			warnings.append("No cells available to place a base\n")
 			break
 
 		var p = available.pop_back()
@@ -314,4 +322,4 @@ func _pick_base_positions(params, height_map):
 				return d > params.base_placement.min_dist_to_other_bases
 		)
 
-	return base_positions
+	return {positions = base_positions, warnings = warnings}
