@@ -12,10 +12,10 @@ var _params = {
 		min_dist_to_other_bases = 175,
 	},
 	betirium = {
-		extra_sources = { count = 2, decay = 0.7, distance_to_any_base = 200, peak_density = 80 },
-		satellite_sources = { decay = 0.7, distance_to_base = 75, peak_density = 45 },
+		extra_sources = { count = 2, decay = 0.35, distance_to_any_base = 200, peak_density = 100 },
+		satellite_sources = { decay = 0.25, distance_to_base = 60, peak_density = 80 },
 	},
-	cells_per_player = 180,
+	cells_per_player = 190,
 	map_size = "updated automatically",
 	mountains = {
 		height_threshold = 0.3,
