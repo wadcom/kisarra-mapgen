@@ -2,6 +2,12 @@ extends PanelContainer
 
 
 func update_stats():
+	var stats = _calculate_bt_stats()
+	%TotalLabel.text = "%d total" % [stats.total]
+	%PerCellLabel.text = "%d per cell" % [stats.per_cell]
+
+
+func _calculate_bt_stats():
 	var bt_density = Model.get_betirium_density()
 	var surface = Model.get_surface()
 
@@ -17,5 +23,4 @@ func update_stats():
 			if surface[x][y].type == Model.SurfaceType.SAND:
 				total += bt_density[x][y]
 
-	%TotalLabel.text = "%d total" % [total]
-	%PerCellLabel.text = "%d per cell" % [total / cells]
+	return {total = total, per_cell = total / cells}
