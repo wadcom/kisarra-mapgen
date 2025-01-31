@@ -60,6 +60,8 @@ func update_betirium(params):
 
 	_setup_ground_cells(params, _height_map)
 
+	_prepare_export_data(params)
+
 
 func export_map():
 	return _export_data
