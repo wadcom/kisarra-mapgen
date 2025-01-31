@@ -205,6 +205,7 @@ func pick_base_positions(params, height_map):
 
 func set_base_positions(base_positions):
 	_base_positions = base_positions
+	_satellite_bt_sources_positions = null
 
 
 func get_base_positions():
@@ -219,7 +220,8 @@ func _pick_satellite_bt_sources_positions():
 	var warnings = []
 
 	for base_pos in _base_positions:
-		var available_cxys = {}
+		var available_positions = {}
+
 		for a in 360:
 			var p = (
 				Vector2.from_angle(a / 360.0 * TAU) * satellite_bt_radius \
@@ -229,10 +231,9 @@ func _pick_satellite_bt_sources_positions():
 			if p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size:
 				continue
 
-			var cxy = p.x * 1000 + p.y
-			available_cxys[cxy] = true
+			available_positions[p] = true
 
-		if available_cxys.size() < 1:
+		if available_positions.size() < 1:
 			warnings.append(
 				"Nowhere to put satellite Bt source around base at %d,%d\n" % [
 					base_pos.x, base_pos.y
@@ -240,12 +241,15 @@ func _pick_satellite_bt_sources_positions():
 			)
 			continue
 
-		var cxys = available_cxys.keys()
-		cxys.shuffle()
-
-		positions.append(Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000))
+		positions.append(_pick_random_key(available_positions))
 
 	return {positions = positions, warnings = warnings}
+
+
+func _pick_random_key(dict):
+	var keys = dict.keys()
+	keys.shuffle()
+	return keys[0]
 
 
 func _should_invalidate_satellite_bt_sources_positions(new_params):
