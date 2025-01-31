@@ -247,7 +247,7 @@ func _pick_satellite_bt_sources_positions():
 					+ base_pos + Vector2.ONE / 2.0
 			).floor()
 
-			if p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size:
+			if not _is_good_satellite_bt_source_position(p):
 				continue
 
 			available_positions[p] = true
@@ -283,3 +283,10 @@ func _should_invalidate_satellite_bt_sources_positions(new_params):
 		return true
 
 	return false
+
+
+func _is_good_satellite_bt_source_position(p: Vector2):
+	if p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size:
+		return false
+
+	return true
