@@ -15,6 +15,8 @@ enum SurfaceType { MOUNTAINS, SAND }
 const _globals = preload("res://globals.gd")
 const _perlin_noise = preload("res://perlin_noise.gd")
 
+const SATELLITE_BT_SOURCE_RADIUS = _globals.CELL_SIDE_KMS / 2.0
+
 
 func get_satellite_bt_sources():
 	return _make_satellite_bt_sources()
@@ -134,7 +136,7 @@ func _make_satellite_bt_sources():
 				decay_factor = _params.betirium.satellite_sources.decay,
 				position = p,
 				peak_density = _params.betirium.satellite_sources.peak_density,
-				radius = _globals.CELL_SIDE_KMS / 2.0,
+				radius = SATELLITE_BT_SOURCE_RADIUS,
 			},
 		)
 
@@ -288,8 +290,7 @@ func _is_good_satellite_bt_source_position(potential_pos: Vector2i):
 	if _is_outside_map(potential_pos):
 		return false
 
-	var vicinity_radius = \
-		1.0 + _params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
+	var vicinity_radius = SATELLITE_BT_SOURCE_RADIUS / _globals.CELL_SIDE_KMS
 
 	var min_x = potential_pos.x - int(vicinity_radius)
 	var max_x = potential_pos.x + int(vicinity_radius)
