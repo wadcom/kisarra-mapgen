@@ -78,6 +78,7 @@ func _prepare_export_data(params):
 	}
 
 	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
+		bt_stats = Model.calculate_bt_stats(),
 		params = params
 	}
 
