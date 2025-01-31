@@ -241,12 +241,12 @@ func _pick_satellite_bt_sources_positions():
 		var available_positions = {}
 
 		for a in 360:
-			var p = (
-				Vector2.from_angle(a / 360.0 * TAU) * satellite_bt_radius \
+			var p = Vector2i(
+				(Vector2.from_angle(a / 360.0 * TAU) * satellite_bt_radius \
 					+ base_pos + Vector2.ONE / 2.0
-			).floor()
+			).floor())
 
-			if not _is_good_satellite_bt_source_position(Vector2i(p)):
+			if not _is_good_satellite_bt_source_position(p):
 				continue
 
 			available_positions[p] = true
@@ -285,21 +285,29 @@ func _should_invalidate_satellite_bt_sources_positions(new_params):
 
 
 func _is_good_satellite_bt_source_position(potential_pos: Vector2i):
-	var satellite_bt_radius = \
-		_params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
+	if _is_outside_map(potential_pos):
+		return false
 
-	for y in _params.map_size:
-		for x in _params.map_size:
+	var vicinity_radius = \
+		1.0 + _params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
+
+	var min_x = potential_pos.x - int(vicinity_radius)
+	var max_x = potential_pos.x + int(vicinity_radius)
+	var min_y = potential_pos.y - int(vicinity_radius)
+	var max_y = potential_pos.y + int(vicinity_radius)
+
+	# If any part of vicinity is outside map, position is not good
+	if min_x < 0 or min_y < 0 or max_x >= _params.map_size or max_y >= _params.map_size:
+		return false
+
+	for y in range(min_y, max_y + 1):
+		for x in range(min_x, max_x + 1):
 			var c = Vector2i(x, y)
-
-			var belongs = c.distance_to(potential_pos) < satellite_bt_radius
-			if not belongs:
-				continue
-
-			if c.x < 0 or c.y < 0 or c.x >= _params.map_size or c.y >= _params.map_size:
+			if _is_mountain(_params, c):
 				return false
 
-			# if _is_mountain(_params, _height_map, c):
-			# 	return false
-
 	return true
+
+
+func _is_outside_map(p):
+	return p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size
