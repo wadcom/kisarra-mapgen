@@ -247,7 +247,7 @@ func _pick_satellite_bt_sources_positions():
 					+ base_pos + Vector2.ONE / 2.0
 			).floor()
 
-			if not _is_good_satellite_bt_source_position(p):
+			if not _is_good_satellite_bt_source_position(Vector2i(p)):
 				continue
 
 			available_positions[p] = true
@@ -285,8 +285,22 @@ func _should_invalidate_satellite_bt_sources_positions(new_params):
 	return false
 
 
-func _is_good_satellite_bt_source_position(p: Vector2):
-	if p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size:
-		return false
+func _is_good_satellite_bt_source_position(potential_pos: Vector2i):
+	var satellite_bt_radius = \
+		_params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
+
+	for y in _params.map_size:
+		for x in _params.map_size:
+			var c = Vector2i(x, y)
+
+			var belongs = c.distance_to(potential_pos) < satellite_bt_radius
+			if not belongs:
+				continue
+
+			if c.x < 0 or c.y < 0 or c.x >= _params.map_size or c.y >= _params.map_size:
+				return false
+
+			# if _is_mountain(_params, _height_map, c):
+			# 	return false
 
 	return true
