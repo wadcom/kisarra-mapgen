@@ -48,14 +48,13 @@ func set_params(params):
 	return {warnings = warnings}
 
 
-func setup_surface(params, height_map):
-	_height_map = height_map
+func setup_surface(params):
 	_params = params
 
 	if _bt_density != null and _bt_density.size() != params.map_size:
 		_bt_density = null
 
-	_surface = make_surface(params, height_map)
+	_surface = make_surface(params)
 
 	surface_updated.emit()
 
@@ -104,10 +103,10 @@ func make_height_map(params):
 
 			height.append(h)
 
-	return height
+	_height_map = height
 
 
-func make_surface(params, height_map):
+func make_surface(params):
 	var surface = Array()
 	surface.resize(params.map_size)
 
@@ -117,7 +116,7 @@ func make_surface(params, height_map):
 
 		for y in params.map_size:
 			var cell = {}
-			if _is_mountain(params, height_map, Vector2i(x, y)):
+			if _is_mountain(params, Vector2i(x, y)):
 				cell = { type = SurfaceType.MOUNTAINS }
 			else:
 				cell = { type = SurfaceType.SAND }
@@ -142,12 +141,12 @@ func _make_satellite_bt_sources():
 	return bt_sources
 
 
-func _is_mountain(params, height_map, p: Vector2i):
+func _is_mountain(params, p: Vector2i):
 	var idx = p.y * params.map_size + p.x
-	return height_map[idx] > params.mountains.height_threshold
+	return _height_map[idx] > params.mountains.height_threshold
 
 
-func pick_base_positions(params, height_map):
+func pick_base_positions(params):
 	var map_center = Vector2.ONE * params.map_size / 2.0
 
 	var available = []
@@ -177,7 +176,7 @@ func pick_base_positions(params, height_map):
 			if is_too_close:
 				continue
 
-			if _is_mountain(params, height_map, Vector2i(p)):
+			if _is_mountain(params, Vector2i(p)):
 				continue
 
 			available.append(Vector2(x, y))

@@ -103,12 +103,10 @@ func _on_density_slider_value_changed(value: float) -> void:
 	if params == null:
 		return
 
-	var height_map = Model.get_height_map()
-
 	var threshold = -2.0
 	while threshold <= 2.0:
 		params.mountains.height_threshold = threshold
-		var surface = Model.make_surface(params, height_map)
+		var surface = Model.make_surface(params)
 		var d =_calculate_mountains_density(surface)
 
 		if d >= (value - 0.025) and d <= (value + 0.025):

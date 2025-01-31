@@ -6,7 +6,6 @@ extends ColorRect
 @export var sand_cell_prefab: PackedScene
 
 var _export_data
-var _height_map
 
 const _globals = preload("res://globals.gd")
 
@@ -16,9 +15,9 @@ func update_parameters(params):
 
 	%DiagnosticsText.clear()
 
-	_height_map = Model.make_height_map(params)
+	Model.make_height_map(params)
 
-	var result = Model.pick_base_positions(params, _height_map)
+	var result = Model.pick_base_positions(params)
 	_display_warnings(result.warnings)
 
 	Model.set_base_positions(result.positions)
@@ -33,9 +32,9 @@ func update_parameters(params):
 func update_mountains_height_threshold(params):
 	%DiagnosticsText.clear()
 
-	_setup_ground_cells(params, _height_map)
+	_setup_ground_cells(params)
  
-	var result = Model.pick_base_positions(params, _height_map)
+	var result = Model.pick_base_positions(params)
 	_display_warnings(result.warnings)
 	Model.set_base_positions(result.positions)
 
@@ -58,7 +57,7 @@ func update_betirium(params):
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 	Model.set_betirium_density(bt_density)
 
-	_setup_ground_cells(params, _height_map)
+	_setup_ground_cells(params)
 
 	_prepare_export_data(params)
 
@@ -90,7 +89,7 @@ func _format_terrain(params, base_positions):
 	for y in params.map_size:
 		var t = ""
 		for x in params.map_size:
-			if _is_mountain(params, _height_map, Vector2i(x, y)):
+			if _is_mountain(params, Vector2i(x, y)):
 				t += "m"
 			else:
 				t += "s"
@@ -146,13 +145,13 @@ func _bt_density_from_source(bt_source, p: Vector2i):
 	return bt_source.peak_density * f
 
 
-func _is_mountain(params, height_map, p: Vector2i):
+func _is_mountain(params, p: Vector2i):
 	var idx = p.y * params.map_size + p.x
-	return height_map[idx] > params.mountains.height_threshold
+	return Model.get_height_map()[idx] > params.mountains.height_threshold
 
 
-func _setup_ground_cells(params, height_map):
-	Model.setup_surface(params, height_map)
+func _setup_ground_cells(params):
+	Model.setup_surface(params)
 
 	var bt_density = Model.get_betirium_density()
 
@@ -164,7 +163,7 @@ func _setup_ground_cells(params, height_map):
 		for x in params.map_size:
 
 			var cell
-			if _is_mountain(params, height_map, Vector2i(x, y)):
+			if _is_mountain(params, Vector2i(x, y)):
 				cell = mountain_cell_prefab.instantiate()
 			else:
 				cell = sand_cell_prefab.instantiate()
