@@ -85,7 +85,7 @@ layout_mode = 2
 max_value = 300.0
 step = 5.0
 
-[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="DistanceToMapEdge/DistanceToMapEdgeSlider" to="." method="_on_distance_to_map_edge_slider_value_changed"]
 [connection signal="value_changed" from="CentralDeadZoneRadiusControls/CentralDeadZoneRadiusSlider" to="." method="_on_central_dead_zone_radius_slider_value_changed"]
