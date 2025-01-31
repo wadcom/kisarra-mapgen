@@ -134,12 +134,11 @@ func _calculate_bt_density(params, bt_sources):
 
 
 func _bt_density_from_source(bt_source, p: Vector2i):
-	var radius = 10
 	var d = bt_source.position.distance_to(p) * _globals.CELL_SIDE_KMS
 
 	var f = 1.0
-	if d > radius:
-		f = pow(bt_source.decay_factor, (d - radius) / _globals.CELL_SIDE_KMS)
+	if d > bt_source.radius:
+		f = pow(bt_source.decay_factor, (d - bt_source.radius) / _globals.CELL_SIDE_KMS)
 
 	return bt_source.peak_density * f
 
@@ -228,6 +227,7 @@ func _pick_extra_bt_sources(params, base_positions):
 				decay_factor = params.betirium.extra_sources.decay,
 				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
 				peak_density = params.betirium.extra_sources.peak_density,
+				radius = _globals.CELL_SIDE_KMS,
 			},
 		)
 

@@ -135,6 +135,7 @@ func _make_satellite_bt_sources():
 				decay_factor = _params.betirium.satellite_sources.decay,
 				position = p,
 				peak_density = _params.betirium.satellite_sources.peak_density,
+				radius = _globals.CELL_SIDE_KMS / 2.0,
 			},
 		)
 
