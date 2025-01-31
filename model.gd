@@ -212,6 +212,25 @@ func get_base_positions():
 	return _base_positions
 
 
+func calculate_bt_stats():
+	var bt_density = get_betirium_density()
+	var surface = get_surface()
+
+	assert(bt_density.size() == surface.size())
+
+	var cells = 0
+	var total = 0
+
+	for x in bt_density.size():
+		for y in bt_density[x].size():
+			cells += 1
+
+			if surface[x][y].type == SurfaceType.SAND:
+				total += bt_density[x][y]
+
+	return {total = total, per_cell = total / cells}
+
+
 func _pick_satellite_bt_sources_positions():
 	var satellite_bt_radius = \
 		_params.betirium.satellite_sources.distance_to_base / _globals.CELL_SIDE_KMS
