@@ -126,12 +126,16 @@ func _calculate_bt_density(params, bt_sources):
 			
 			var t = 0.0
 			for s in bt_sources:
-				var d = s.position.distance_to(p)
-				t += s.peak_density * pow(s.decay_factor, d)
+				t += _bt_density_from_source(s, p)
 
 			bt[x][y] = int(t)
 	
 	return bt
+
+
+func _bt_density_from_source(bt_source, p: Vector2i):
+	var d = bt_source.position.distance_to(p)
+	return bt_source.peak_density * pow(bt_source.decay_factor, d)
 
 
 func _is_mountain(params, height_map, p: Vector2i):
