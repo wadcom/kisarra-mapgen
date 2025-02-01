@@ -84,3 +84,7 @@ func _on_extra_sources_decay_slider_value_changed(value):
 
 	_update_controls()
 	parameters_changed.emit(_params)
+
+
+func _on_reposition_extra_sources_button_pressed() -> void:
+	parameters_changed.emit(_params)
