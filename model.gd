@@ -290,7 +290,7 @@ func _is_good_satellite_bt_source_position(potential_pos: Vector2i):
 	if _is_outside_map(potential_pos):
 		return false
 
-	var vicinity_radius = SATELLITE_BT_SOURCE_RADIUS / _globals.CELL_SIDE_KMS
+	var vicinity_radius = 1 + SATELLITE_BT_SOURCE_RADIUS / _globals.CELL_SIDE_KMS
 
 	var min_x = potential_pos.x - int(vicinity_radius)
 	var max_x = potential_pos.x + int(vicinity_radius)
