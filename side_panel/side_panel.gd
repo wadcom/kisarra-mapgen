@@ -15,7 +15,7 @@ var _params = {
 		extra_sources = { count = 2, decay = 0.35, distance_to_any_base = 200, peak_density = 100 },
 		satellite_sources = { decay = 0.25, distance_to_base = 75, peak_density = 80 },
 	},
-	cells_per_player = 200,
+	cells_per_player = 220,
 	map_size = "updated automatically",
 	mountains = {
 		height_threshold = 0.3,
