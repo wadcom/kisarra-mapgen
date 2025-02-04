@@ -32,6 +32,8 @@ func update_parameters(params):
 func update_mountains_height_threshold(params):
 	%DiagnosticsText.clear()
 
+	Model.setup_surface(params)
+
 	_setup_ground_cells(params)
  
 	var result = Model.pick_base_positions(params)
@@ -56,6 +58,8 @@ func update_betirium(params):
 
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 	Model.set_betirium_density(bt_density)
+
+	Model.setup_surface(params)
 
 	_setup_ground_cells(params)
 
@@ -151,8 +155,6 @@ func _is_mountain(params, p: Vector2i):
 
 
 func _setup_ground_cells(params):
-	Model.setup_surface(params)
-
 	var bt_density = Model.get_betirium_density()
 
 	for c in $GroundCells.get_children():
