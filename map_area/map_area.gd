@@ -24,7 +24,7 @@ func update_parameters(params):
 
 	update_betirium(params)
 
-	_setup_bases(params, Model.get_base_positions())
+	_setup_bases(params)
  
 	_prepare_export_data(params)
 
@@ -42,7 +42,7 @@ func update_mountains_height_threshold(params):
 
 	update_betirium(params)
 
-	_setup_bases(params, Model.get_base_positions())
+	_setup_bases(params)
 
 	_prepare_export_data(params)
 
@@ -175,7 +175,9 @@ func _setup_ground_cells(params):
 			$GroundCells.add_child(cell)
 
 
-func _setup_bases(params, base_positions):
+func _setup_bases(params):
+	var base_positions = Model.get_base_positions()
+
 	for b in $Bases.get_children():
 		$Bases.remove_child(b)
 		b.queue_free()
