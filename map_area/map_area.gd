@@ -54,7 +54,7 @@ func update_betirium(params):
 
 	var satellite_bt_sources = Model.get_satellite_bt_sources()
 
-	var extra_bt_sources = _pick_extra_bt_sources(params)
+	var extra_bt_sources = _pick_extra_bt_sources()
 
 	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
 	Model.set_betirium_density(bt_density)
@@ -199,8 +199,9 @@ func _setup_bases(params):
 		$Constraints.add_child(exclusion_area)
 
 
-func _pick_extra_bt_sources(params):
+func _pick_extra_bt_sources():
 	var base_positions = Model.get_base_positions()
+	var params = Model.get_params()
 
 	var bt_sources = []
 
