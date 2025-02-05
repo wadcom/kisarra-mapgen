@@ -47,7 +47,7 @@ func set_params(params):
 	var _bt_sources_warnings = _make_bt_sources()
 	warnings.append_array(_bt_sources_warnings)
 
-	return {warnings = warnings}
+	return warnings
 
 
 func setup_surface(params):
