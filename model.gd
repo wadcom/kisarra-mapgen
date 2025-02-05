@@ -312,3 +312,47 @@ func _is_good_satellite_bt_source_position(potential_pos: Vector2i):
 
 func _is_outside_map(p):
 	return p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size
+
+
+func pick_extra_bt_sources():
+	var bt_sources = []
+	var warnings = []
+
+	var available_cxys = {}
+	for x in _params.map_size:
+		for y in _params.map_size:
+			var p = Vector2(x, y)
+
+			var too_close = false
+			for base_pos in _base_positions:
+				var d = p.distance_to(base_pos) * _globals.CELL_SIDE_KMS
+				if d < _params.betirium.extra_sources.distance_to_any_base:
+					too_close = true
+					break
+
+			if too_close:
+				continue
+
+			var cxy = p.x * 1000 + p.y
+			available_cxys[cxy] = true
+
+	for i in _params.betirium.extra_sources.count:
+		if available_cxys.size() < 1:
+			warnings.append("Nowhere to put extra Bt source\n")
+			break
+
+		var cxys = available_cxys.keys()
+		cxys.shuffle()
+
+		bt_sources.append(
+			{
+				decay_factor = _params.betirium.extra_sources.decay,
+				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
+				peak_density = _params.betirium.extra_sources.peak_density,
+				radius = _globals.CELL_SIDE_KMS,
+			},
+		)
+
+		available_cxys.erase(cxys[0])
+
+	return { sources = bt_sources, warnings = warnings }
