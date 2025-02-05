@@ -50,13 +50,12 @@ func update_mountains_height_threshold(params):
 func update_betirium(params):
 	var result = Model.set_params(params)
 
-	_display_warnings(result.warnings)
-
 	var satellite_bt_sources = Model.get_satellite_bt_sources()
-
 	var extra_bt_sources = _pick_extra_bt_sources()
 
-	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources)
+	_display_warnings(result.warnings + extra_bt_sources.warnings)
+
+	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources.sources)
 	Model.set_betirium_density(bt_density)
 
 	Model.setup_surface(params)
@@ -204,6 +203,7 @@ func _pick_extra_bt_sources():
 	var params = Model.get_params()
 
 	var bt_sources = []
+	var warnings = []
 
 	var available_cxys = {}
 	for x in params.map_size:
@@ -225,7 +225,7 @@ func _pick_extra_bt_sources():
 
 	for i in params.betirium.extra_sources.count:
 		if available_cxys.size() < 1:
-			%DiagnosticsText.add_text("Nowhere to put extra Bt source\n")
+			warnings.append("Nowhere to put extra Bt source\n")
 			break
 
 		var cxys = available_cxys.keys()
@@ -242,7 +242,7 @@ func _pick_extra_bt_sources():
 
 		available_cxys.erase(cxys[0])
 
-	return bt_sources
+	return { sources = bt_sources, warnings = warnings }
 
 
 func _display_warnings(warnings):
