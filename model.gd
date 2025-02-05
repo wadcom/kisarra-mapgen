@@ -18,10 +18,6 @@ const _perlin_noise = preload("res://perlin_noise.gd")
 const SATELLITE_BT_SOURCE_RADIUS = _globals.CELL_SIDE_KMS / 2.0
 
 
-func get_satellite_bt_sources():
-	return _make_satellite_bt_sources()
-
-
 func set_betirium_density(bt_density):
 	_bt_density = bt_density
 
@@ -314,7 +310,7 @@ func _is_outside_map(p):
 	return p.x < 0 or p.y < 0 or p.x >= _params.map_size or p.y >= _params.map_size
 
 
-func pick_extra_bt_sources():
+func _make_extra_bt_sources():
 	var bt_sources = []
 	var warnings = []
 
@@ -356,3 +352,13 @@ func pick_extra_bt_sources():
 		available_cxys.erase(cxys[0])
 
 	return { sources = bt_sources, warnings = warnings }
+
+
+func get_bt_sources():
+	var satellite_bt_sources = _make_satellite_bt_sources()
+	var extra_bt_sources = _make_extra_bt_sources()
+
+	return {
+		sources = satellite_bt_sources + extra_bt_sources.sources,
+		warnings = extra_bt_sources.warnings,
+	}

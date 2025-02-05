@@ -50,12 +50,11 @@ func update_mountains_height_threshold(params):
 func update_betirium(params):
 	var result = Model.set_params(params)
 
-	var satellite_bt_sources = Model.get_satellite_bt_sources()
-	var extra_bt_sources = Model.pick_extra_bt_sources()
+	var bt_sources = Model.get_bt_sources()
 
-	_display_warnings(result.warnings + extra_bt_sources.warnings)
+	_display_warnings(result.warnings + bt_sources.warnings)
 
-	var bt_density = _calculate_bt_density(params, satellite_bt_sources + extra_bt_sources.sources)
+	var bt_density = _calculate_bt_density(params, bt_sources.sources)
 	Model.set_betirium_density(bt_density)
 
 	Model.setup_surface(params)
