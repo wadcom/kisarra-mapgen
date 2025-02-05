@@ -4,6 +4,7 @@ signal surface_updated
 
 var _base_positions
 var _bt_density
+var _bt_sources
 var _height_map
 var _params
 var _prev_params
@@ -355,10 +356,14 @@ func _make_extra_bt_sources():
 
 
 func get_bt_sources():
+	var warnings = _make_bt_sources()
+
+	return { sources = _bt_sources, warnings = warnings }
+
+
+func _make_bt_sources():
 	var satellite_bt_sources = _make_satellite_bt_sources()
 	var extra_bt_sources = _make_extra_bt_sources()
 
-	return {
-		sources = satellite_bt_sources + extra_bt_sources.sources,
-		warnings = extra_bt_sources.warnings,
-	}
+	_bt_sources = satellite_bt_sources + extra_bt_sources.sources
+	return extra_bt_sources.warnings
