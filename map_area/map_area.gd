@@ -52,9 +52,9 @@ func update_betirium(params):
 
 	var bt_sources = Model.get_bt_sources()
 
-	_display_warnings(result.warnings + bt_sources.warnings)
+	_display_warnings(result.warnings)
 
-	var bt_density = _calculate_bt_density(params, bt_sources.sources)
+	var bt_density = _calculate_bt_density(params, bt_sources)
 	Model.set_betirium_density(bt_density)
 
 	Model.setup_surface(params)

@@ -44,6 +44,9 @@ func set_params(params):
 		_satellite_bt_sources_positions = result.positions
 		warnings.append_array(result.warnings)
 
+	var _bt_sources_warnings = _make_bt_sources()
+	warnings.append_array(_bt_sources_warnings)
+
 	return {warnings = warnings}
 
 
@@ -356,9 +359,7 @@ func _make_extra_bt_sources():
 
 
 func get_bt_sources():
-	var warnings = _make_bt_sources()
-
-	return { sources = _bt_sources, warnings = warnings }
+	return _bt_sources
 
 
 func _make_bt_sources():
