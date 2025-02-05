@@ -51,9 +51,7 @@ func update_betirium(params):
 	var warnings = Model.set_params(params)
 	_display_warnings(warnings)
 
-	var bt_sources = Model.get_bt_sources()
-
-	var bt_density = _calculate_bt_density(params, bt_sources)
+	var bt_density = _calculate_bt_density(params)
 	Model.set_betirium_density(bt_density)
 
 	Model.setup_surface(params)
@@ -116,7 +114,9 @@ func _format_bt(bt_density):
 	return result
 
 
-func _calculate_bt_density(params, bt_sources):
+func _calculate_bt_density(params):
+	var bt_sources = Model.get_bt_sources()
+
 	var bt = Array()
 	bt.resize(params.map_size)
 
