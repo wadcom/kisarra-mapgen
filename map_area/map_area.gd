@@ -51,7 +51,7 @@ func update_betirium(params):
 	var warnings = Model.set_params(params)
 	_display_warnings(warnings)
 
-	var bt_density = _calculate_bt_density(params)
+	var bt_density = Model.calculate_bt_density()
 	Model.set_betirium_density(bt_density)
 
 	Model.setup_surface(params)
@@ -112,38 +112,6 @@ func _format_bt(bt_density):
 			result.append(bt_density[x][y])
 
 	return result
-
-
-func _calculate_bt_density(params):
-	var bt_sources = Model.get_bt_sources()
-
-	var bt = Array()
-	bt.resize(params.map_size)
-
-	for x in params.map_size:
-		bt[x] = Array()
-		bt[x].resize(params.map_size)
-
-		for y in params.map_size:
-			var p = Vector2(x, y)
-			
-			var t = 0.0
-			for s in bt_sources:
-				t += _bt_density_from_source(s, p)
-
-			bt[x][y] = int(t)
-	
-	return bt
-
-
-func _bt_density_from_source(bt_source, p: Vector2i):
-	var d = bt_source.position.distance_to(p) * _globals.CELL_SIDE_KMS
-
-	var f = 1.0
-	if d > bt_source.radius:
-		f = pow(bt_source.decay_factor, (d - bt_source.radius) / _globals.CELL_SIDE_KMS)
-
-	return bt_source.peak_density * f
 
 
 func _is_mountain(params, p: Vector2i):

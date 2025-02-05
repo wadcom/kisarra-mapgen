@@ -368,3 +368,33 @@ func _make_bt_sources():
 
 	_bt_sources = satellite_bt_sources + extra_bt_sources.sources
 	return extra_bt_sources.warnings
+
+
+func calculate_bt_density():
+	var bt = Array()
+	bt.resize(_params.map_size)
+
+	for x in _params.map_size:
+		bt[x] = Array()
+		bt[x].resize(_params.map_size)
+
+		for y in _params.map_size:
+			var p = Vector2(x, y)
+			
+			var t = 0.0
+			for s in _bt_sources:
+				t += _bt_density_from_source(s, p)
+
+			bt[x][y] = int(t)
+	
+	return bt
+
+
+func _bt_density_from_source(bt_source, p: Vector2i):
+	var d = bt_source.position.distance_to(p) * _globals.CELL_SIDE_KMS
+
+	var f = 1.0
+	if d > bt_source.radius:
+		f = pow(bt_source.decay_factor, (d - bt_source.radius) / _globals.CELL_SIDE_KMS)
+
+	return bt_source.peak_density * f
