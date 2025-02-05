@@ -51,11 +51,6 @@ func update_betirium(params):
 	var warnings = Model.set_params(params)
 	_display_warnings(warnings)
 
-	var bt_density = Model.calculate_bt_density()
-	Model.set_betirium_density(bt_density)
-
-	Model.setup_surface(params)
-
 	_setup_ground_cells(params)
 
 	_prepare_export_data(params)
