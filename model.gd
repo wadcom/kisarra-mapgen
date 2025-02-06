@@ -6,6 +6,7 @@ var _base_positions
 var _bt_density
 var _bt_sources
 var _height_map
+var _locked_extra_bt_sources = {}
 var _params
 var _prev_params
 var _satellite_bt_sources_positions
@@ -416,3 +417,11 @@ func _bt_density_from_source(bt_source, p: Vector2i):
 		f = pow(bt_source.decay_factor, (d - bt_source.radius) / _globals.CELL_SIDE_KMS)
 
 	return bt_source.peak_density * f
+
+
+func lock_bt_source(p: Vector2i):
+	_locked_extra_bt_sources[p] = true
+
+
+func unlock_bt_source(p: Vector2i):
+	_locked_extra_bt_sources.erase(p)

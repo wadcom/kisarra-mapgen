@@ -1,8 +1,14 @@
 extends Node2D
 
+signal locked(p: Vector2i)
+signal unlocked(p: Vector2i)
+
+var _cell_position: Vector2i
+
 const _globals = preload("res://globals.gd")
 
 func setup(p: Vector2i):
+	_cell_position = p
 	position = p * _globals.PIXELS_PER_CELL_SIDE
 
 
@@ -17,5 +23,7 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 		if event.pressed:
 			if $LockSprite.visible:
 				$LockSprite.visible = false
+				unlocked.emit(_cell_position)
 			else:
 				$LockSprite.visible = true
+				locked.emit(_cell_position)
