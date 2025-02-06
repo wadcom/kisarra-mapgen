@@ -9,6 +9,8 @@ var _export_data
 
 const _globals = preload("res://globals.gd")
 
+const MAPGEN_URL = "https://github.com/wadcom/kisarra-mapgen"
+
 
 func update_parameters(params):
 	custom_minimum_size = Vector2.ONE * _globals.PIXELS_PER_CELL_SIDE * params.map_size
@@ -65,15 +67,26 @@ func _prepare_export_data(params):
 
 	_export_data = {
 		betirium = _format_bt(Model.get_betirium_density()),
+		id = _generate_id(params),
 		size = params.map_size,
 		terrain = terrain,
 		version = 1,
 	}
 
-	_export_data["https://github.com/wadcom/kisarra-mapgen"] = {
+	_export_data[MAPGEN_URL] = {
 		bt_stats = Model.calculate_bt_stats(),
 		params = params
 	}
+
+
+func _generate_id(params):
+	const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
+
+	var id = ""
+	for i in 10:
+		id += alphabet[randi() % alphabet.length()]
+
+	return "%s/map-ids/%d/%s" % [MAPGEN_URL, params.players_qty, id]
 
 
 func _format_terrain(params, base_positions):
