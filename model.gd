@@ -12,6 +12,7 @@ var _satellite_bt_sources_positions
 var _surface
 
 enum SurfaceType { MOUNTAINS, SAND }
+enum BTSourceType { SATELLITE, EXTRA }
 
 const _globals = preload("res://globals.gd")
 const _perlin_noise = preload("res://perlin_noise.gd")
@@ -142,6 +143,7 @@ func _make_satellite_bt_sources():
 				position = p,
 				peak_density = _params.betirium.satellite_sources.peak_density,
 				radius = SATELLITE_BT_SOURCE_RADIUS,
+				type = BTSourceType.SATELLITE,
 			},
 		)
 
@@ -326,7 +328,7 @@ func _make_extra_bt_sources():
 	var available_cxys = {}
 	for x in _params.map_size:
 		for y in _params.map_size:
-			var p = Vector2(x, y)
+			var p = Vector2i(x, y)
 
 			var too_close = false
 			for base_pos in _base_positions:
@@ -357,6 +359,7 @@ func _make_extra_bt_sources():
 				position = positions[0],
 				peak_density = _params.betirium.extra_sources.peak_density,
 				radius = _globals.CELL_SIDE_KMS,
+				type = BTSourceType.EXTRA,
 			},
 		)
 
@@ -367,6 +370,14 @@ func _make_extra_bt_sources():
 
 func get_bt_sources():
 	return _bt_sources
+
+
+func get_bt_source(p: Vector2i):
+	for s in _bt_sources:
+		if s.position == p:
+			return s
+
+	return null
 
 
 func _make_bt_sources():
