@@ -338,27 +338,26 @@ func _make_extra_bt_sources():
 			if too_close:
 				continue
 
-			var cxy = p.x * 1000 + p.y
-			available_cxys[cxy] = true
+			available_cxys[p] = true
 
 	for i in _params.betirium.extra_sources.count:
 		if available_cxys.size() < 1:
 			warnings.append("Nowhere to put extra Bt source\n")
 			break
 
-		var cxys = available_cxys.keys()
-		cxys.shuffle()
+		var positions = available_cxys.keys()
+		positions.shuffle()
 
 		bt_sources.append(
 			{
 				decay_factor = _params.betirium.extra_sources.decay,
-				position = Vector2(int(cxys[0] / 1000.0), int(cxys[0]) % 1000),
+				position = positions[0],
 				peak_density = _params.betirium.extra_sources.peak_density,
 				radius = _globals.CELL_SIDE_KMS,
 			},
 		)
 
-		available_cxys.erase(cxys[0])
+		available_cxys.erase(positions[0])
 
 	return { sources = bt_sources, warnings = warnings }
 
