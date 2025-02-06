@@ -154,7 +154,7 @@ func _setup_ground_cells(params):
 			var bt_source = Model.get_bt_source(Vector2i(x, y))
 			if bt_source != null and bt_source.type == Model.BTSourceType.EXTRA:
 				var extra_source = extra_source_prefab.instantiate()
-				extra_source.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
+				extra_source.setup(Vector2i(x, y))
 				$GroundCells.add_child(extra_source)
 
 

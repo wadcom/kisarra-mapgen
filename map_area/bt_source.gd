@@ -2,6 +2,9 @@ extends Node2D
 
 const _globals = preload("res://globals.gd")
 
+func setup(p: Vector2i):
+	position = p * _globals.PIXELS_PER_CELL_SIDE
+
 
 func _ready() -> void:
 	var size = Vector2(_globals.PIXELS_PER_CELL_SIDE, _globals.PIXELS_PER_CELL_SIDE)
