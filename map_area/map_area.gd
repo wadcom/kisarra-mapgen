@@ -4,6 +4,7 @@ extends ColorRect
 @export var mountain_cell_prefab: PackedScene
 @export var round_area_prefab: PackedScene
 @export var sand_cell_prefab: PackedScene
+@export var extra_source_prefab: PackedScene
 
 var _export_data
 
@@ -146,6 +147,15 @@ func _setup_ground_cells(params):
 
 			cell.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
 			$GroundCells.add_child(cell)
+
+	# Controls should be on top of the ground cells
+	for y in params.map_size:
+		for x in params.map_size:
+			var bt_source = Model.get_bt_source(Vector2i(x, y))
+			if bt_source != null and bt_source.type == Model.BTSourceType.EXTRA:
+				var extra_source = extra_source_prefab.instantiate()
+				extra_source.position = Vector2(x, y) * _globals.PIXELS_PER_CELL_SIDE
+				$GroundCells.add_child(extra_source)
 
 
 func _setup_bases(params):
