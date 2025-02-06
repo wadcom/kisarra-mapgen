@@ -338,6 +338,9 @@ func _make_extra_bt_sources():
 			if too_close:
 				continue
 
+			if _is_mountain(_params, p):
+				continue
+
 			available_cxys[p] = true
 
 	for i in _params.betirium.extra_sources.count:
