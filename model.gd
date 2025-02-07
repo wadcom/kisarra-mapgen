@@ -369,19 +369,21 @@ func _make_extra_bt_sources():
 		var positions = available_cxys.keys()
 		positions.shuffle()
 
-		bt_sources.append(
-			{
-				decay_factor = _params.betirium.extra_sources.decay,
-				position = positions[0],
-				peak_density = _params.betirium.extra_sources.peak_density,
-				radius = _globals.CELL_SIDE_KMS,
-				type = BTSourceType.EXTRA,
-			},
-		)
+		bt_sources.append(_make_extra_bt_source(positions[0]))
 
 		available_cxys.erase(positions[0])
 
 	return { sources = bt_sources, warnings = warnings }
+
+
+func _make_extra_bt_source(p: Vector2i):
+	return {
+		decay_factor = _params.betirium.extra_sources.decay,
+		position = p,
+		peak_density = _params.betirium.extra_sources.peak_density,
+		radius = _globals.CELL_SIDE_KMS,
+		type = BTSourceType.EXTRA,
+	}
 
 
 func get_bt_sources():
