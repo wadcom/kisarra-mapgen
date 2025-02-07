@@ -443,3 +443,7 @@ func lock_bt_source(p: Vector2i):
 
 func unlock_bt_source(p: Vector2i):
 	_locked_extra_bt_sources.erase(p)
+
+
+func is_bt_source_locked(p: Vector2i):
+	return _locked_extra_bt_sources.has(p)

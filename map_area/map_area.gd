@@ -154,7 +154,7 @@ func _setup_ground_cells(params):
 			var bt_source = Model.get_bt_source(Vector2i(x, y))
 			if bt_source != null and bt_source.type == Model.BTSourceType.EXTRA:
 				var extra_source = extra_source_prefab.instantiate()
-				extra_source.setup(Vector2i(x, y))
+				extra_source.setup(Vector2i(x, y), Model.is_bt_source_locked(Vector2i(x, y)))
 				extra_source.locked.connect(Model.lock_bt_source)
 				extra_source.unlocked.connect(Model.unlock_bt_source)
 				$GroundCells.add_child(extra_source)

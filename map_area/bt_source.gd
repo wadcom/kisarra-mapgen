@@ -7,9 +7,10 @@ var _cell_position: Vector2i
 
 const _globals = preload("res://globals.gd")
 
-func setup(p: Vector2i):
+func setup(p: Vector2i, is_locked: bool):
 	_cell_position = p
 	position = p * _globals.PIXELS_PER_CELL_SIDE
+	$LockSprite.visible = is_locked
 
 
 func _ready() -> void:
