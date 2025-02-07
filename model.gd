@@ -367,6 +367,9 @@ func _make_extra_bt_sources():
 			break
 
 		var p = _pick_random_key(available_cxys)
+		if i < _locked_extra_bt_sources.size():
+			p = _locked_extra_bt_sources.keys()[i]
+
 		bt_sources.append(_make_extra_bt_source(p))
 
 		available_cxys.erase(p)
