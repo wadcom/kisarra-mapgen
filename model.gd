@@ -32,6 +32,9 @@ func set_params(params):
 	if _should_invalidate_satellite_bt_sources_positions(params):
 		_satellite_bt_sources_positions = null
 
+	if _should_invalidate_locked_extra_bt_sources(params):
+		_locked_extra_bt_sources = {}
+
 	if _params == null:
 		_prev_params = null
 	else:
@@ -290,6 +293,18 @@ func _should_invalidate_satellite_bt_sources_positions(new_params):
 	if _prev_params.betirium.satellite_sources.distance_to_base != \
 		new_params.betirium.satellite_sources.distance_to_base:
 		return true
+
+	return false
+
+
+func _should_invalidate_locked_extra_bt_sources(new_params):
+	if _prev_params == null:
+		return true
+
+	if _prev_params.map_size != new_params.map_size:
+		return true
+
+	# XXX: invalidate if mountain positions changed
 
 	return false
 
