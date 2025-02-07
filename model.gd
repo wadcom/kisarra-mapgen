@@ -366,12 +366,10 @@ func _make_extra_bt_sources():
 			warnings.append("Nowhere to put extra Bt source\n")
 			break
 
-		var positions = available_cxys.keys()
-		positions.shuffle()
+		var p = _pick_random_key(available_cxys)
+		bt_sources.append(_make_extra_bt_source(p))
 
-		bt_sources.append(_make_extra_bt_source(positions[0]))
-
-		available_cxys.erase(positions[0])
+		available_cxys.erase(p)
 
 	return { sources = bt_sources, warnings = warnings }
 
