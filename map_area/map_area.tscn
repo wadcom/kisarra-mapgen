@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://ca8i0jh687k0m"]
 
-[ext_resource type="Script" path="res://map_area/map_area.gd" id="1_8qfge"]
+[ext_resource type="Script" uid="uid://be2fsyu1wqmpt" path="res://map_area/map_area.gd" id="1_8qfge"]
 [ext_resource type="PackedScene" uid="uid://djvis3o7e1smv" path="res://map_area/base_cell.tscn" id="2_e1c3d"]
 [ext_resource type="PackedScene" uid="uid://de6ailbpe4obu" path="res://map_area/sand_cell.tscn" id="2_fjadh"]
 [ext_resource type="PackedScene" uid="uid://dtp0putph15ls" path="res://map_area/mountain_cell.tscn" id="3_7gub7"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cmaianmlgg7yw"]
 
-[ext_resource type="Script" path="res://side_panel/bases_settings.gd" id="1_n0dl5"]
+[ext_resource type="Script" uid="uid://cotq05ktv3s13" path="res://side_panel/bases_settings.gd" id="1_n0dl5"]
 
 [node name="BasesSettings" type="VBoxContainer"]
 custom_minimum_size = Vector2(300, 2.08165e-12)
@@ -85,7 +85,7 @@ layout_mode = 2
 max_value = 300.0
 step = 5.0
 
-[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
+[connection signal="value_changed" from="DistanceToOtherBasesSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
 [connection signal="value_changed" from="DistanceToMapEdge/DistanceToMapEdgeSlider" to="." method="_on_distance_to_map_edge_slider_value_changed"]
 [connection signal="value_changed" from="CentralDeadZoneRadiusControls/CentralDeadZoneRadiusSlider" to="." method="_on_central_dead_zone_radius_slider_value_changed"]

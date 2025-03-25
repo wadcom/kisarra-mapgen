@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dgxgawmmqyyqm"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_43uwm"]
+[ext_resource type="Script" uid="uid://b2efts03c1n7n" path="res://main.gd" id="1_43uwm"]
 [ext_resource type="PackedScene" uid="uid://dx3nhpeskgree" path="res://side_panel/side_panel.tscn" id="2_fiq7s"]
 [ext_resource type="PackedScene" uid="uid://ca8i0jh687k0m" path="res://map_area/map_area.tscn" id="2_rts0s"]
 [ext_resource type="PackedScene" uid="uid://b8jwe0t6h8s5q" path="res://betirium_stats.tscn" id="3_db5po"]

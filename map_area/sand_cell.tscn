@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://de6ailbpe4obu"]
 
-[ext_resource type="Script" path="res://map_area/sand_cell.gd" id="1_kmikc"]
+[ext_resource type="Script" uid="uid://brc1g4i0dt0md" path="res://map_area/sand_cell.gd" id="1_kmikc"]
 
 [node name="SandCell" type="ColorRect"]
 offset_right = 40.0

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dm0td7dg4tqpp"]
 
-[ext_resource type="Script" path="res://side_panel/betirium_settings.gd" id="1_8ko5e"]
+[ext_resource type="Script" uid="uid://dgmdcmw5vix1v" path="res://side_panel/betirium_settings.gd" id="1_8ko5e"]
 
 [node name="BetiriumSettings" type="VBoxContainer"]
 offset_right = 40.0

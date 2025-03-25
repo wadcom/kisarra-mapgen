@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dk4mfhpnkvxup"]
 
-[ext_resource type="Script" path="res://side_panel/mountains_settings.gd" id="1_miht6"]
+[ext_resource type="Script" uid="uid://xa8a4388akbd" path="res://side_panel/mountains_settings.gd" id="1_miht6"]
 [ext_resource type="Theme" uid="uid://bv58i8ec478w2" path="res://main_theme.tres" id="2_h6t42"]
 
 [node name="MountainsSettings" type="VBoxContainer"]
@@ -165,7 +165,7 @@ layout_mode = 2
 text = "33%"
 horizontal_alignment = 1
 
+[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_height_threshold_slider_value_changed"]
 [connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_distance_to_other_bases_slider_value_changed"]
-[connection signal="value_changed" from="HeightThresholdSlider" to="." method="_on_base_distance_to_other_bases_value_changed"]
 [connection signal="value_changed" from="DensitySlider" to="." method="_on_density_slider_value_changed"]

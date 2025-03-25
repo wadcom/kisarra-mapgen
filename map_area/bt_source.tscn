@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cyg0432dah0wh"]
 
-[ext_resource type="Script" path="res://map_area/bt_source.gd" id="1_0sa4m"]
+[ext_resource type="Script" uid="uid://c5pfpknc3sdm6" path="res://map_area/bt_source.gd" id="1_0sa4m"]
 [ext_resource type="Texture2D" uid="uid://bl8w4rimkbdpg" path="res://media/lock-icon-29071.png" id="1_c13t3"]
 
 [node name="BtSource" type="Node2D"]

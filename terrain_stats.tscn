@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dj1x5wbbo3buw"]
 
-[ext_resource type="Script" path="res://terrain_stats.gd" id="1_w7hv2"]
+[ext_resource type="Script" uid="uid://usik4ry8ed15" path="res://terrain_stats.gd" id="1_w7hv2"]
 
 [node name="TerrainStats" type="PanelContainer"]
 anchors_preset = 15

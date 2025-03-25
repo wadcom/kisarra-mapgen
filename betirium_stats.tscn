@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b8jwe0t6h8s5q"]
 
-[ext_resource type="Script" path="res://betirium_stats.gd" id="1_0i1il"]
+[ext_resource type="Script" uid="uid://dk1l4wb7p8km" path="res://betirium_stats.gd" id="1_0i1il"]
 
 [node name="BetiriumStats" type="PanelContainer"]
 custom_minimum_size = Vector2(120, 2.08165e-12)
