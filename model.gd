@@ -182,8 +182,8 @@ func pick_base_positions(params):
 
 			var is_too_close = off_edge.any(
 				func(off_edge_pos):
-					d = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
-					return d < params.base_placement.min_dist_to_map_edge
+					var dist = p.distance_to(off_edge_pos) * _globals.CELL_SIDE_KMS
+					return dist < params.base_placement.min_dist_to_map_edge
 			)
 
 			if is_too_close:
