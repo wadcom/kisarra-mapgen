@@ -1,8 +1,6 @@
 extends VBoxContainer
 
-# Design tokens (see UI.md)
-const COLOR_ACCENT := Color("ffbf4d")
-const COLOR_MUTED := Color("808080")
+const DesignTokens = preload("res://editor_v2/ui/design_tokens.gd")
 
 signal size_changed(value: int)
 signal player_count_changed(value: int)
@@ -12,7 +10,7 @@ var _player_count := 2
 
 
 func _ready():
-	%RecommendedLabel.add_theme_color_override("font_color", COLOR_MUTED)
+	%RecommendedLabel.add_theme_color_override("font_color", DesignTokens.COLOR_MUTED)
 	%CellsPerPlayerLabel.text = str(_cells_per_player)
 	_update_recommended_size()
 
@@ -31,7 +29,7 @@ func _update_recommended_size():
 	var differs := recommended != current_size
 	%RecommendedSizeLabel.text = str(recommended)
 	%RecommendedSizeLabel.add_theme_color_override(
-		"font_color", COLOR_ACCENT if differs else COLOR_MUTED
+		"font_color", DesignTokens.COLOR_ACCENT if differs else DesignTokens.COLOR_MUTED
 	)
 	%UseRecommendedButton.disabled = not differs
 

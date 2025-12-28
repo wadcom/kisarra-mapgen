@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://editor_v2/ui/editor.gd" id="1_editor"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/map_view.tscn" id="2_map_view"]
-[ext_resource type="PackedScene" path="res://editor_v2/ui/dimensions_panel.tscn" id="3_dimensions_panel"]
+[ext_resource type="PackedScene" path="res://editor_v2/ui/size_panel.tscn" id="3_size_panel"]
+[ext_resource type="PackedScene" path="res://editor_v2/ui/terrain_panel.tscn" id="4_terrain_panel"]
 
 [node name="Editor" type="MarginContainer"]
 anchors_preset = 15
@@ -48,7 +49,14 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DimensionsPanel" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("3_dimensions_panel")]
+[node name="TabContainer" type="TabContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Size" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("3_size_panel")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Terrain" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("4_terrain_panel")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -61,6 +69,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
 
-[connection signal="player_count_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/DimensionsPanel" to="." method="_on_player_count_changed"]
-[connection signal="size_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/DimensionsPanel" to="." method="_on_size_changed"]
+[connection signal="player_count_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Size" to="." method="_on_player_count_changed"]
+[connection signal="size_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Size" to="." method="_on_size_changed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

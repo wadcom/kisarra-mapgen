@@ -2,21 +2,19 @@ extends Control
 
 const EditorV2Constants = preload("res://editor_v2/constants.gd")
 const EditorDocument = preload("res://editor_v2/document.gd")
+const MountainsLayer = preload("res://editor_v2/layers/mountains.gd")
 
-## The document to visualize. Must be set before the view can render.
-var document: EditorDocument:
-	set(value):
-		# Disconnect from old document if any
-		if document:
-			document.dimensions.changed.disconnect(_on_dimensions_changed)
+var _document: EditorDocument
 
-		document = value
 
-		# Connect to new document
-		if document:
-			document.dimensions.changed.connect(_on_dimensions_changed)
-			_update_size()
-			queue_redraw()
+func set_document(doc: EditorDocument) -> void:
+	assert(_document == null, "Document already set")
+	assert(doc != null, "Document cannot be null")
+	_document = doc
+	_document.size_changed.connect(_on_size_changed)
+	_document.mountains.changed.connect(_on_mountains_changed)
+	_update_size()
+	queue_redraw()
 
 
 func _ready():
@@ -24,21 +22,23 @@ func _ready():
 
 
 func _draw():
-	if not document:
+	if not _document:
 		return
 
 	var cell_size := EditorV2Constants.CELL_SIZE_PX
-	var grid_size := document.dimensions.size
-	var total_size := grid_size * cell_size
+	var total_size := _document.size * cell_size
 
-	# Draw background
-	draw_rect(
-		Rect2(Vector2.ZERO, Vector2(total_size, total_size)),
-		EditorV2Constants.GRID_BACKGROUND_COLOR
-	)
+	# Draw terrain cells if mountains layer has data, otherwise draw background
+	if _document.mountains.has_terrain():
+		_draw_terrain(cell_size)
+	else:
+		draw_rect(
+			Rect2(Vector2.ZERO, Vector2(total_size, total_size)),
+			EditorV2Constants.GRID_BACKGROUND_COLOR
+		)
 
-	# Draw vertical grid lines
-	for x in range(grid_size + 1):
+	# Draw vertical grid lines (on top of terrain)
+	for x in range(_document.size + 1):
 		var x_pos := x * cell_size
 		draw_line(
 			Vector2(x_pos, 0),
@@ -46,8 +46,8 @@ func _draw():
 			EditorV2Constants.GRID_LINE_COLOR
 		)
 
-	# Draw horizontal grid lines
-	for y in range(grid_size + 1):
+	# Draw horizontal grid lines (on top of terrain)
+	for y in range(_document.size + 1):
 		var y_pos := y * cell_size
 		draw_line(
 			Vector2(0, y_pos),
@@ -56,15 +56,36 @@ func _draw():
 		)
 
 
+func _draw_terrain(cell_size: int) -> void:
+	for x in _document.size:
+		for y in _document.size:
+			var terrain_type := _document.mountains.get_terrain_at(x, y)
+			var color: Color
+			if terrain_type == MountainsLayer.TerrainType.MOUNTAIN:
+				color = EditorV2Constants.TERRAIN_COLOR_MOUNTAIN
+			else:
+				color = EditorV2Constants.TERRAIN_COLOR_SAND
+
+			var rect := Rect2(
+				Vector2(x * cell_size, y * cell_size),
+				Vector2(cell_size, cell_size)
+			)
+			draw_rect(rect, color)
+
+
 func _update_size():
-	if not document:
+	if not _document:
 		custom_minimum_size = Vector2.ZERO
 		return
 
-	var total := document.dimensions.size * EditorV2Constants.CELL_SIZE_PX
+	var total := _document.size * EditorV2Constants.CELL_SIZE_PX
 	custom_minimum_size = Vector2(total, total)
 
 
-func _on_dimensions_changed():
+func _on_size_changed():
 	_update_size()
+	queue_redraw()
+
+
+func _on_mountains_changed():
 	queue_redraw()

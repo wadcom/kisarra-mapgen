@@ -1,12 +1,9 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://editor_v2/ui/dimensions_panel.gd" id="1_dimensions_panel"]
+[ext_resource type="Script" path="res://editor_v2/ui/size_panel.gd" id="1_size_panel"]
 
-[node name="DimensionsPanel" type="VBoxContainer"]
-script = ExtResource("1_dimensions_panel")
-
-[node name="Title" type="Label" parent="."]
-text = "Dimensions"
+[node name="SizePanel" type="VBoxContainer"]
+script = ExtResource("1_size_panel")
 
 [node name="PlayerCountRow" type="HBoxContainer" parent="."]
 layout_mode = 2
