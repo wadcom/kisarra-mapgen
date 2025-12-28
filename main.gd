@@ -1,5 +1,13 @@
 extends MarginContainer
 
+const _globals = preload("res://globals.gd")
+
+
+func _ready():
+	# Check feature flag and switch to v2 editor if enabled
+	if _globals.USE_EDITOR_V2:
+		get_tree().change_scene_to_file.call_deferred("res://editor_v2/ui/editor.tscn")
+
 
 func _on_parameters_changed(params):
 	%MapArea.update_parameters(params)
