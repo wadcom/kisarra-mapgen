@@ -1,17 +1,38 @@
 extends VBoxContainer
 
+const _COMMANDS = "res://editor_v2/commands"
+
 const DesignTokens = preload("res://editor_v2/ui/design_tokens.gd")
+const EditorDocument = preload("res://editor_v2/document.gd")
+const SetCellsPerPlayerCommand = preload(_COMMANDS + "/set_cells_per_player_command.gd")
+const SetPlayerCountCommand = preload(_COMMANDS + "/set_player_count_command.gd")
+const SetSizeCommand = preload(_COMMANDS + "/set_size_command.gd")
 
-signal size_changed(value: int)
-signal player_count_changed(value: int)
+signal command_requested(command: EditorCommand)
 
-var _cells_per_player := 250
-var _player_count := 2
+var _document: EditorDocument
 
 
 func _ready():
 	%RecommendedLabel.add_theme_color_override("font_color", DesignTokens.COLOR_MUTED)
-	%CellsPerPlayerLabel.text = str(_cells_per_player)
+
+
+func set_document(doc: EditorDocument) -> void:
+	assert(_document == null, "Document already set")
+	assert(doc != null, "Document cannot be null")
+	_document = doc
+	_document.changed.connect(_sync_ui)
+	_sync_ui()
+
+
+## Syncs UI spinners with document state without triggering signals.
+func _sync_ui() -> void:
+	if not _document:
+		return
+	%CellsPerPlayerSlider.set_value_no_signal(_document.cells_per_player)
+	%CellsPerPlayerLabel.text = str(_document.cells_per_player)
+	%PlayerCountSpinBox.set_value_no_signal(_document.player_count)
+	%SizeSpinBox.set_value_no_signal(_document.size)
 	_update_recommended_size()
 
 
@@ -20,7 +41,9 @@ func apply_recommended_size():
 
 
 func _calculate_recommended_size() -> int:
-	return ceili(sqrt(_player_count * _cells_per_player))
+	if not _document:
+		return 22
+	return ceili(sqrt(_document.player_count * _document.cells_per_player))
 
 
 func _update_recommended_size():
@@ -35,17 +58,16 @@ func _update_recommended_size():
 
 
 func _on_cells_per_player_value_changed(value: float):
-	_cells_per_player = int(value)
-	%CellsPerPlayerLabel.text = str(_cells_per_player)
-	_update_recommended_size()
+	var cmd := SetCellsPerPlayerCommand.new(_document.cells_per_player, int(value))
+	command_requested.emit(cmd)
 
 
 func _on_player_count_value_changed(value: float):
-	_player_count = int(value)
-	_update_recommended_size()
-	player_count_changed.emit(_player_count)
+	var cmd := SetPlayerCountCommand.new(_document.player_count, int(value))
+	command_requested.emit(cmd)
 
 
 func _on_size_value_changed(value: float):
 	_update_recommended_size()
-	size_changed.emit(int(value))
+	var cmd := SetSizeCommand.new(_document.size, int(value))
+	command_requested.emit(cmd)

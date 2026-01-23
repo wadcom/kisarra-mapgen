@@ -11,7 +11,7 @@ func set_document(doc: EditorDocument) -> void:
 	assert(_document == null, "Document already set")
 	assert(doc != null, "Document cannot be null")
 	_document = doc
-	_document.size_changed.connect(_on_size_changed)
+	_document.changed.connect(_on_document_changed)
 	_document.mountains.changed.connect(_on_mountains_changed)
 	_update_size()
 	queue_redraw()
@@ -82,7 +82,7 @@ func _update_size():
 	custom_minimum_size = Vector2(total, total)
 
 
-func _on_size_changed():
+func _on_document_changed():
 	_update_size()
 	queue_redraw()
 

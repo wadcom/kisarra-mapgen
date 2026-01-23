@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://ct3mgacx12xel"]
 
-[ext_resource type="Script" path="res://editor_v2/ui/editor.gd" id="1_editor"]
-[ext_resource type="PackedScene" path="res://editor_v2/ui/map_view.tscn" id="2_map_view"]
+[ext_resource type="Script" uid="uid://cgva86bbeq20q" path="res://editor_v2/ui/editor.gd" id="1_editor"]
+[ext_resource type="PackedScene" uid="uid://lyu1sv3lvqw5" path="res://editor_v2/ui/map_view.tscn" id="2_map_view"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/size_panel.tscn" id="3_size_panel"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/terrain_panel.tscn" id="4_terrain_panel"]
 
@@ -49,16 +49,34 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="Toolbar" type="HBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="UndoButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Undo"
+
+[node name="RedoButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Redo"
+
 [node name="TabContainer" type="TabContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+current_tab = 0
 
 [node name="Size" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("3_size_panel")]
 unique_name_in_owner = true
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="Terrain" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("4_terrain_panel")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Spacer" type="Control" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -69,6 +87,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
 
-[connection signal="player_count_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Size" to="." method="_on_player_count_changed"]
-[connection signal="size_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Size" to="." method="_on_size_changed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/UndoButton" to="." method="_on_undo_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/RedoButton" to="." method="_on_redo_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,6 +1,12 @@
 extends VBoxContainer
 
+const _COMMANDS = "res://editor_v2/commands"
+
 const EditorDocument = preload("res://editor_v2/document.gd")
+const GenerateTerrainCommand = preload(_COMMANDS + "/generate_terrain_command.gd")
+const ReclassifyTerrainCommand = preload(_COMMANDS + "/reclassify_terrain_command.gd")
+
+signal command_requested(command: EditorCommand)
 
 var _document: EditorDocument
 
@@ -23,22 +29,37 @@ func _sync_ui() -> void:
 
 
 func _on_regenerate_button_pressed():
-	_document.terrain_seed = randi_range(0, 1000)
+	var percentage := int(%MountainPercentSpinBox.value)
+	var new_seed := randi_range(0, 1000)
+	var cmd := GenerateTerrainCommand.new(
+		_document.terrain_seed,
+		_document.mountains.get_actual_percentage(),
+		new_seed,
+		percentage
+	)
+	command_requested.emit(cmd)
 
 
 func _on_seed_spin_box_value_changed(_value: float):
-	_generate()
+	_request_generate()
 
 
 func _on_mountain_percent_spin_box_value_changed(_value: float):
-	_generate()
+	_request_generate()
 
 
 func _on_threshold_spin_box_value_changed(value: float):
-	_document.reclassify_terrain(value)
+	var cmd := ReclassifyTerrainCommand.new(_document.mountains.height_threshold, value)
+	command_requested.emit(cmd)
 
 
-func _generate() -> void:
+func _request_generate() -> void:
 	var percentage := int(%MountainPercentSpinBox.value)
 	var rng_seed := int(%SeedSpinBox.value)
-	_document.generate_terrain(percentage, rng_seed)
+	var cmd := GenerateTerrainCommand.new(
+		_document.terrain_seed,
+		_document.mountains.get_actual_percentage(),
+		rng_seed,
+		percentage
+	)
+	command_requested.emit(cmd)
