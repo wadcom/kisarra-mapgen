@@ -5,6 +5,7 @@ extends RefCounted
 ## Mutations should go through document methods (generate_terrain, etc.)
 ## to ensure proper coordination between layers.
 
+const BasesLayer = preload("res://editor_v2/layers/bases.gd")
 const MountainsLayer = preload("res://editor_v2/layers/mountains.gd")
 
 ## Emitted when any document property changes.
@@ -14,6 +15,9 @@ signal changed
 ## Default mountain percentage for initial generation.
 const DEFAULT_MOUNTAIN_PERCENTAGE := 25
 
+
+## The bases layer containing player base positions.
+var bases: BasesLayer
 
 ## The mountains layer containing terrain generation.
 var mountains: MountainsLayer
@@ -42,6 +46,7 @@ var player_count: int:
 	set(value):
 		_player_count = clampi(value, 2, 9)
 		changed.emit()
+		generate_bases(bases.rng_seed)
 
 var _cells_per_player := 250
 var _player_count := 2
@@ -59,7 +64,9 @@ var _terrain_seed := 0
 
 
 func _init():
+	bases = BasesLayer.new()
 	mountains = MountainsLayer.new()
+	mountains.changed.connect(_on_mountains_changed)
 
 
 ## Returns current mountain percentage, or default if no terrain exists yet.
@@ -79,3 +86,14 @@ func generate_terrain(mountain_percentage: int, seed_value: int) -> void:
 ## Reclassifies terrain using the given threshold.
 func reclassify_terrain(threshold: float) -> void:
 	mountains.reclassify(threshold)
+
+
+## Generates bases with the given seed.
+func generate_bases(seed_value: int) -> void:
+	if not mountains.has_terrain():
+		return
+	bases.generate(mountains, size, player_count, seed_value)
+
+
+func _on_mountains_changed() -> void:
+	generate_bases(bases.rng_seed)

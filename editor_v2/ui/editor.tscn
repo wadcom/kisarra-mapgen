@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ct3mgacx12xel"]
+[gd_scene load_steps=6 format=3 uid="uid://ct3mgacx12xel"]
 
 [ext_resource type="Script" uid="uid://cgva86bbeq20q" path="res://editor_v2/ui/editor.gd" id="1_editor"]
 [ext_resource type="PackedScene" uid="uid://lyu1sv3lvqw5" path="res://editor_v2/ui/map_view.tscn" id="2_map_view"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/size_panel.tscn" id="3_size_panel"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/terrain_panel.tscn" id="4_terrain_panel"]
+[ext_resource type="PackedScene" path="res://editor_v2/ui/bases_panel.tscn" id="5_bases_panel"]
 
 [node name="Editor" type="MarginContainer"]
 anchors_preset = 15
@@ -78,6 +79,12 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="Bases" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("5_bases_panel")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
 [node name="Spacer" type="Control" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -90,3 +97,4 @@ text = "Quit"
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/RedoButton" to="." method="_on_redo_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="show_constraints_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Bases" to="HBoxContainer/ScrollContainer/CenterContainer/MapView" method="set_show_base_constraints"]
