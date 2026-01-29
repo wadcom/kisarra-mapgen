@@ -14,7 +14,6 @@ extends RefCounted
 ##   - generate(terrain, map_size, player_count, seed) - generate new positions
 ##   - get_positions() -> Array[Vector2i] - returns base positions (copy)
 ##   - get_constraint_params(map_size) -> Dictionary - returns computed constraint parameters
-##   - clear() -> void - clears all base positions
 ##
 ## Signal:
 ##   - changed - emitted when positions or seed change
@@ -66,12 +65,6 @@ func get_positions() -> Array[Vector2i]:
 	var copy: Array[Vector2i] = []
 	copy.assign(_positions)
 	return copy
-
-
-## Clears all base positions.
-func clear() -> void:
-	_positions.clear()
-	changed.emit()
 
 
 ## Returns computed constraint parameters for a given map size.

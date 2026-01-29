@@ -17,6 +17,10 @@ const TERRAIN_COLOR_MOUNTAIN := Color(0.481474, 0.281624, 0.0667262, 1.0)
 # Base colors
 const BASE_COLOR := Color.BLUE
 
+# Betirium colors (matching v1)
+const BETIRIUM_DENSITY_COLOR := Color(0.65098, 0.25098, 0.137255, 1.0)
+const BETIRIUM_SOURCE_COLOR := Color(0.85, 0.35, 0.2, 1.0)
+
 # Constraint visualization colors (semi-transparent)
 const CONSTRAINT_EDGE_BUFFER_COLOR := Color(0.3, 0.3, 0.3, 0.3)
 const CONSTRAINT_DEAD_ZONE_COLOR := Color(0.4, 0.4, 0.4, 0.2)

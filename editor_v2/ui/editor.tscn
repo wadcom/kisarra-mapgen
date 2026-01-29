@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://ct3mgacx12xel"]
+[gd_scene load_steps=7 format=3 uid="uid://ct3mgacx12xel"]
 
 [ext_resource type="Script" uid="uid://cgva86bbeq20q" path="res://editor_v2/ui/editor.gd" id="1_editor"]
 [ext_resource type="PackedScene" uid="uid://lyu1sv3lvqw5" path="res://editor_v2/ui/map_view.tscn" id="2_map_view"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/size_panel.tscn" id="3_size_panel"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/terrain_panel.tscn" id="4_terrain_panel"]
 [ext_resource type="PackedScene" path="res://editor_v2/ui/bases_panel.tscn" id="5_bases_panel"]
+[ext_resource type="PackedScene" path="res://editor_v2/ui/betirium_panel.tscn" id="6_betirium_panel"]
 
 [node name="Editor" type="MarginContainer"]
 anchors_preset = 15
@@ -66,6 +67,7 @@ text = "Redo"
 
 [node name="TabContainer" type="TabContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+clip_tabs = false
 current_tab = 0
 
 [node name="Size" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("3_size_panel")]
@@ -84,6 +86,12 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Betirium" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer" instance=ExtResource("6_betirium_panel")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
 
 [node name="Spacer" type="Control" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -16,16 +16,19 @@ func _ready():
 	%Size.set_document(_document)
 	%Terrain.set_document(_document)
 	%Bases.set_document(_document)
+	%Betirium.set_document(_document)
 	%Size.apply_recommended_size()
 
 	# Connect panel commands directly to history
 	%Size.command_requested.connect(_command_history.execute)
 	%Terrain.command_requested.connect(_command_history.execute)
 	%Bases.command_requested.connect(_command_history.execute)
+	%Betirium.command_requested.connect(_command_history.execute)
 
-	# Auto-generate terrain and bases on editor load so user sees a complete map
+	# Auto-generate everything on editor load so user sees a complete map
 	_document.terrain_seed = randi_range(0, 1000)
 	_document.generate_bases(randi_range(0, 1000))
+	_document.generate_betirium_satellites(randi_range(0, 1000))
 
 	# Initialize toolbar button states
 	_on_history_changed()

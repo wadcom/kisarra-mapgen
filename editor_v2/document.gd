@@ -6,6 +6,8 @@ extends RefCounted
 ## to ensure proper coordination between layers.
 
 const BasesLayer = preload("res://editor_v2/layers/bases.gd")
+const BetiriumDensityLayer = preload("res://editor_v2/layers/betirium_density.gd")
+const BetiriumSourcesLayer = preload("res://editor_v2/layers/betirium_sources.gd")
 const MountainsLayer = preload("res://editor_v2/layers/mountains.gd")
 
 ## Emitted when any document property changes.
@@ -18,6 +20,12 @@ const DEFAULT_MOUNTAIN_PERCENTAGE := 25
 
 ## The bases layer containing player base positions.
 var bases: BasesLayer
+
+## The betirium density layer (derived from sources).
+var betirium_density: BetiriumDensityLayer
+
+## The betirium sources layer containing satellite positions.
+var betirium_sources: BetiriumSourcesLayer
 
 ## The mountains layer containing terrain generation.
 var mountains: MountainsLayer
@@ -65,7 +73,11 @@ var _terrain_seed := 0
 
 func _init():
 	bases = BasesLayer.new()
+	betirium_density = BetiriumDensityLayer.new()
+	betirium_sources = BetiriumSourcesLayer.new()
 	mountains = MountainsLayer.new()
+	bases.changed.connect(_on_bases_changed)
+	betirium_sources.changed.connect(_on_betirium_sources_changed)
 	mountains.changed.connect(_on_mountains_changed)
 
 
@@ -93,6 +105,19 @@ func generate_bases(seed_value: int) -> void:
 	if not mountains.has_terrain():
 		return
 	bases.generate(mountains, size, player_count, seed_value)
+
+
+## Generates betirium satellite sources with the given seed.
+func generate_betirium_satellites(seed_value: int) -> void:
+	betirium_sources.generate(bases, mountains, size, seed_value)
+
+
+func _on_bases_changed() -> void:
+	betirium_sources.regenerate(bases, mountains, size)
+
+
+func _on_betirium_sources_changed() -> void:
+	betirium_density.calculate(betirium_sources, size)
 
 
 func _on_mountains_changed() -> void:

@@ -15,6 +15,8 @@ func set_document(doc: EditorDocument) -> void:
 	_document.changed.connect(_on_document_changed)
 	_document.mountains.changed.connect(queue_redraw)
 	_document.bases.changed.connect(queue_redraw)
+	_document.betirium_density.changed.connect(queue_redraw)
+	_document.betirium_sources.changed.connect(queue_redraw)
 	_update_size()
 	queue_redraw()
 
@@ -70,6 +72,7 @@ func _draw():
 	if _show_base_constraints:
 		_draw_inter_base_circles(cell_size)
 
+	_draw_satellite_sources(cell_size)
 	_draw_bases(cell_size)
 
 
@@ -81,7 +84,12 @@ func _draw_terrain(cell_size: int) -> void:
 			if terrain_type == MountainsLayer.TerrainType.MOUNTAIN:
 				color = EditorV2Constants.TERRAIN_COLOR_MOUNTAIN
 			else:
-				color = EditorV2Constants.TERRAIN_COLOR_SAND
+				# Sand cells: lerp toward betirium color based on density
+				var density := _document.betirium_density.get_density_at(x, y)
+				var lerp_factor := density / 100.0
+				color = EditorV2Constants.TERRAIN_COLOR_SAND.lerp(
+					EditorV2Constants.BETIRIUM_DENSITY_COLOR, lerp_factor,
+				)
 
 			var rect := Rect2(
 				Vector2(x * cell_size, y * cell_size),
@@ -144,6 +152,21 @@ func _draw_inter_base_circles(cell_size: int) -> void:
 	for pos in _document.bases.get_positions():
 		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
 		draw_circle(center, inter_base_px, EditorV2Constants.CONSTRAINT_INTER_BASE_COLOR)
+
+
+## Draws satellite source markers as cyan diamonds.
+func _draw_satellite_sources(cell_size: int) -> void:
+	for pos in _document.betirium_sources.get_satellite_positions():
+		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
+		var half_size := (cell_size - 2) / 2.0
+		# Draw diamond shape (rotated square)
+		var points := PackedVector2Array([
+			center + Vector2(0, -half_size),  # Top
+			center + Vector2(half_size, 0),   # Right
+			center + Vector2(0, half_size),   # Bottom
+			center + Vector2(-half_size, 0),  # Left
+		])
+		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_SOURCE_COLOR)
 
 
 ## Draws base markers as blue rectangles.

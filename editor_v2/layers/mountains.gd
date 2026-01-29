@@ -15,10 +15,9 @@ extends RefCounted
 ##   - has_terrain() -> bool - check if terrain exists
 ##   - get_terrain_at(x, y) -> TerrainType - query cell type
 ##   - get_actual_percentage() -> int - compute current mountain %
-##   - clear() - remove all terrain data
 ##
 ## Signal:
-##   - changed - emitted after generate(), reclassify(), or clear()
+##   - changed - emitted after generate() or reclassify()
 ##
 
 const PerlinNoise = preload("res://editor_v2/perlin_noise.gd")
@@ -90,13 +89,6 @@ func get_terrain_at(x: int, y: int) -> TerrainType:
 	assert(x >= 0 and x < _terrain.size(), "X coordinate out of bounds")
 	assert(y >= 0 and y < _terrain[x].size(), "Y coordinate out of bounds")
 	return _terrain[x][y]
-
-
-## Clears the terrain data.
-func clear() -> void:
-	_terrain = []
-	_height_map = []
-	changed.emit()
 
 
 ## Computes the actual mountain percentage from current terrain.

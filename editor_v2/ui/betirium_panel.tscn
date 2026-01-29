@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://editor_v2/ui/betirium_panel.gd" id="1_betirium_panel"]
+
+[node name="BetiriumPanel" type="VBoxContainer"]
+script = ExtResource("1_betirium_panel")
+
+[node name="SeedRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SeedRow"]
+layout_mode = 2
+text = "Satellite Seed:"
+
+[node name="SeedSpinBox" type="SpinBox" parent="SeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1e+09
+max_value = 1e+09
+allow_greater = true
+allow_lesser = true
+
+[node name="RegenerateButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Regenerate"
+
+[connection signal="value_changed" from="SeedRow/SeedSpinBox" to="." method="_on_seed_spin_box_value_changed"]
+[connection signal="pressed" from="RegenerateButton" to="." method="_on_regenerate_button_pressed"]
