@@ -112,8 +112,14 @@ func generate_betirium_satellites(seed_value: int) -> void:
 	betirium_sources.generate(bases, mountains, size, seed_value)
 
 
+## Generates extra betirium sources with the given seed.
+func generate_betirium_extras(seed_value: int) -> void:
+	betirium_sources.generate_extras(bases, mountains, size, player_count, seed_value)
+
+
 func _on_bases_changed() -> void:
 	betirium_sources.regenerate(bases, mountains, size)
+	betirium_sources.regenerate_extras(bases, mountains, size, player_count)
 
 
 func _on_betirium_sources_changed() -> void:

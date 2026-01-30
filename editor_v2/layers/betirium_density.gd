@@ -50,10 +50,6 @@ func _compute_density_grid(sources: BetiriumSourcesLayer, map_size: int) -> Arra
 	grid.resize(map_size)
 
 	var cell_side_km := EditorV2Constants.CELL_SIDE_KMS
-	var positions := sources.get_satellite_positions()
-	var radius_km := BetiriumSourcesLayer.SATELLITE_RADIUS_KM
-	var peak_density := BetiriumSourcesLayer.SATELLITE_PEAK_DENSITY
-	var decay_factor := BetiriumSourcesLayer.SATELLITE_DECAY_FACTOR
 
 	for x in map_size:
 		var column: Array[int] = []
@@ -62,23 +58,49 @@ func _compute_density_grid(sources: BetiriumSourcesLayer, map_size: int) -> Arra
 			var cell_center := Vector2(x + 0.5, y + 0.5)
 			var total := 0.0
 
-			for source_pos in positions:
-				var source_center := Vector2(source_pos.x + 0.5, source_pos.y + 0.5)
-				var distance_cells := cell_center.distance_to(source_center)
-				var distance_km := distance_cells * cell_side_km
+			# Sum contributions from satellites
+			total += _compute_source_contributions(
+				cell_center, sources.get_satellite_positions(), cell_side_km,
+				BetiriumSourcesLayer.SATELLITE_RADIUS_KM,
+				BetiriumSourcesLayer.SATELLITE_PEAK_DENSITY,
+				BetiriumSourcesLayer.SATELLITE_DECAY_FACTOR,
+			)
 
-				var contribution: float
-				if distance_km <= radius_km:
-					# Within source radius: full peak density
-					contribution = peak_density
-				else:
-					# Outside radius: exponential decay
-					var decay_distance_cells := (distance_km - radius_km) / cell_side_km
-					contribution = peak_density * pow(decay_factor, decay_distance_cells)
-
-				total += contribution
+			# Sum contributions from extras
+			total += _compute_source_contributions(
+				cell_center, sources.get_extra_positions(), cell_side_km,
+				BetiriumSourcesLayer.EXTRA_RADIUS_KM,
+				BetiriumSourcesLayer.EXTRA_PEAK_DENSITY,
+				BetiriumSourcesLayer.EXTRA_DECAY_FACTOR,
+			)
 
 			column[y] = clampi(int(total), 0, 100)
 		grid[x] = column
 
 	return grid
+
+
+## Computes density contributions from a set of sources at a given cell.
+func _compute_source_contributions(
+	cell_center: Vector2, positions: Array[Vector2i], cell_side_km: float,
+	radius_km: float, peak_density: int, decay_factor: float,
+) -> float:
+	var total := 0.0
+
+	for source_pos in positions:
+		var source_center := Vector2(source_pos.x + 0.5, source_pos.y + 0.5)
+		var distance_cells := cell_center.distance_to(source_center)
+		var distance_km := distance_cells * cell_side_km
+
+		var contribution: float
+		if distance_km <= radius_km:
+			# Within source radius: full peak density
+			contribution = peak_density
+		else:
+			# Outside radius: exponential decay
+			var decay_distance_cells := (distance_km - radius_km) / cell_side_km
+			contribution = peak_density * pow(decay_factor, decay_distance_cells)
+
+		total += contribution
+
+	return total

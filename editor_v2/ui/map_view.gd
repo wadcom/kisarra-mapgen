@@ -73,6 +73,7 @@ func _draw():
 		_draw_inter_base_circles(cell_size)
 
 	_draw_satellite_sources(cell_size)
+	_draw_extra_sources(cell_size)
 	_draw_bases(cell_size)
 
 
@@ -154,7 +155,7 @@ func _draw_inter_base_circles(cell_size: int) -> void:
 		draw_circle(center, inter_base_px, EditorV2Constants.CONSTRAINT_INTER_BASE_COLOR)
 
 
-## Draws satellite source markers as cyan diamonds.
+## Draws satellite source markers as small diamonds.
 func _draw_satellite_sources(cell_size: int) -> void:
 	for pos in _document.betirium_sources.get_satellite_positions():
 		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
@@ -166,7 +167,22 @@ func _draw_satellite_sources(cell_size: int) -> void:
 			center + Vector2(0, half_size),   # Bottom
 			center + Vector2(-half_size, 0),  # Left
 		])
-		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_SOURCE_COLOR)
+		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_SATELLITE_COLOR)
+
+
+## Draws extra source markers as larger diamonds (richer than satellites).
+func _draw_extra_sources(cell_size: int) -> void:
+	for pos in _document.betirium_sources.get_extra_positions():
+		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
+		# Larger diamond for extras (extends beyond cell)
+		var half_size := cell_size / 2.0 + 1
+		var points := PackedVector2Array([
+			center + Vector2(0, -half_size),  # Top
+			center + Vector2(half_size, 0),   # Right
+			center + Vector2(0, half_size),   # Bottom
+			center + Vector2(-half_size, 0),  # Left
+		])
+		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_EXTRA_COLOR)
 
 
 ## Draws base markers as blue rectangles.
