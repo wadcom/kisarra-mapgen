@@ -63,5 +63,11 @@ func _on_redo_button_pressed() -> void:
 	_command_history.redo()
 
 
+func _on_export_button_pressed() -> void:
+	var export_data := _document.export_to_dict()
+	var json_string := JSON.stringify(export_data, "\t")
+	DisplayServer.clipboard_set(json_string)
+
+
 func _on_quit_button_pressed():
 	get_tree().quit()

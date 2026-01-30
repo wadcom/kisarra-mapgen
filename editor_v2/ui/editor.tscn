@@ -97,12 +97,23 @@ metadata/_tab_index = 3
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="QuitButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BottomButtons" type="HBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExportButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Export"
+
+[node name="QuitButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Quit"
 
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Toolbar/RedoButton" to="." method="_on_redo_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons/ExportButton" to="." method="_on_export_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/BottomButtons/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="show_constraints_changed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Bases" to="HBoxContainer/ScrollContainer/CenterContainer/MapView" method="set_show_base_constraints"]

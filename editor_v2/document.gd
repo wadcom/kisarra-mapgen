@@ -128,3 +128,57 @@ func _on_betirium_sources_changed() -> void:
 
 func _on_mountains_changed() -> void:
 	generate_bases(bases.rng_seed)
+
+
+## Returns export dictionary.
+func export_to_dict() -> Dictionary:
+	return {
+		"betirium": _format_betirium(),
+		"https://github.com/wadcom/kisarra-mapgen": {
+			"bases_seed": bases.rng_seed,
+			"betirium_extras_seed": betirium_sources.get_extra_seed(),
+			"betirium_satellites_seed": betirium_sources.get_satellite_seed(),
+			"editor_version": 2,
+			"id": _generate_export_id(),
+			"terrain_seed": terrain_seed,
+		},
+		"size": size,
+		"terrain": _format_terrain(),
+		"version": 1,
+	}
+
+
+func _format_betirium() -> Array[int]:
+	var result: Array[int] = []
+	for y in range(size):
+		for x in range(size):
+			result.append(betirium_density.get_density_at(x, y))
+	return result
+
+
+func _format_terrain() -> Array[String]:
+	var base_set := {}
+	for pos in bases.get_positions():
+		base_set[pos] = true
+
+	var rows: Array[String] = []
+	for y in range(size):
+		var row := ""
+		for x in range(size):
+			var pos := Vector2i(x, y)
+			if base_set.has(pos):
+				row += "b"
+			elif mountains.get_terrain_at(x, y) == MountainsLayer.TerrainType.MOUNTAIN:
+				row += "m"
+			else:
+				row += "s"
+		rows.append(row)
+	return rows
+
+
+func _generate_export_id() -> String:
+	var chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	var suffix := ""
+	for i in range(10):
+		suffix += chars[randi() % chars.length()]
+	return "https://github.com/wadcom/kisarra-mapgen/v2/map-ids/%d/%s" % [player_count, suffix]
