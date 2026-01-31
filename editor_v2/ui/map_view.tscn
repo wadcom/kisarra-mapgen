@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://lyu1sv3lvqw5"]
-
-[ext_resource type="Script" uid="uid://ce5b8dw0dkmd6" path="res://editor_v2/ui/map_view.gd" id="1_map_view"]
-
-[node name="MapView" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_map_view")

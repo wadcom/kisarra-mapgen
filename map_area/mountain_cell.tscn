@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtp0putph15ls"]
-
-[ext_resource type="Script" uid="uid://dwohc4iq6qyp5" path="res://map_area/mountain_cell.gd" id="1_xwk7p"]
-
-[node name="MountainCell" type="ColorRect"]
-offset_right = 40.0
-offset_bottom = 40.0
-color = Color(0.481474, 0.281624, 0.0667262, 1)
-script = ExtResource("1_xwk7p")

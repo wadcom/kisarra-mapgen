@@ -15,13 +15,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Kisarra Map Generator"
-run/main_scene="res://main.tscn"
+run/main_scene="res://editor/ui/editor.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://media/icon.png"
-
-[autoload]
-
-Model="*res://model.tscn"
 
 [display]
 

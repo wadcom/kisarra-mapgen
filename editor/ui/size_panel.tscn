@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://editor/ui/size_panel.gd" id="1_size_panel"]
+
+[node name="SizePanel" type="VBoxContainer"]
+script = ExtResource("1_size_panel")
+
+[node name="PlayerCountRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PlayerCountRow"]
+layout_mode = 2
+text = "Players:"
+
+[node name="PlayerCountSpinBox" type="SpinBox" parent="PlayerCountRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 2.0
+max_value = 9.0
+value = 2.0
+
+[node name="SizeRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SizeRow"]
+layout_mode = 2
+text = "Size:"
+
+[node name="SizeSpinBox" type="SpinBox" parent="SizeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 9.0
+max_value = 120.0
+value = 22.0
+
+[node name="RecommendedRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RecommendedLabel" type="Label" parent="RecommendedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Recommended:"
+
+[node name="RecommendedSizeLabel" type="Label" parent="RecommendedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "22"
+
+[node name="UseRecommendedButton" type="Button" parent="RecommendedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Use"
+
+[node name="CellsPerPlayerRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CellsPerPlayerRow"]
+layout_mode = 2
+text = "Cells/Player:"
+
+[node name="CellsPerPlayerSlider" type="HSlider" parent="CellsPerPlayerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 50.0
+max_value = 1000.0
+step = 50.0
+value = 250.0
+
+[node name="CellsPerPlayerLabel" type="Label" parent="CellsPerPlayerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "250"
+
+[connection signal="value_changed" from="PlayerCountRow/PlayerCountSpinBox" to="." method="_on_player_count_value_changed"]
+[connection signal="value_changed" from="SizeRow/SizeSpinBox" to="." method="_on_size_value_changed"]
+[connection signal="pressed" from="RecommendedRow/UseRecommendedButton" to="." method="apply_recommended_size"]
+[connection signal="value_changed" from="CellsPerPlayerRow/CellsPerPlayerSlider" to="." method="_on_cells_per_player_value_changed"]
