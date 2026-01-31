@@ -117,6 +117,12 @@ func generate_betirium_extras(seed_value: int) -> void:
 	betirium_sources.generate_extras(bases, mountains, size, player_count, seed_value)
 
 
+## Sets the extra distance fraction and regenerates extras.
+func set_extra_distance_fraction(value: float) -> void:
+	betirium_sources.set_extra_distance_fraction(value)
+	betirium_sources.regenerate_extras(bases, mountains, size, player_count)
+
+
 func _on_bases_changed() -> void:
 	betirium_sources.regenerate(bases, mountains, size)
 	betirium_sources.regenerate_extras(bases, mountains, size, player_count)

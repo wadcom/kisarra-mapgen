@@ -12,6 +12,7 @@ extends RefCounted
 ## Properties:
 ##   - SATELLITE_* constants - satellite source parameters
 ##   - EXTRA_* constants - extra source parameters
+##   - extra_distance_fraction - min distance from bases as fraction of map size
 ##
 ## Methods:
 ##   - generate(bases, terrain, map_size, seed) - generate satellites with new seed
@@ -51,8 +52,8 @@ const SATELLITE_DECAY_FACTOR := 0.3
 ## Number of extras per two players (integer division).
 const EXTRA_COUNT_PER_TWO_PLAYERS := 1
 
-## Minimum distance from any base as fraction of map size.
-const EXTRA_DISTANCE_FRACTION := 0.4
+## Minimum distance from any base as fraction of map size (0.0 to 1.0).
+var extra_distance_fraction: float = 0.4
 
 ## Radius for density contribution in km.
 const EXTRA_RADIUS_KM := 20.0
@@ -99,6 +100,17 @@ func get_extra_positions() -> Array[Vector2i]:
 	var copy: Array[Vector2i] = []
 	copy.assign(_extra_positions)
 	return copy
+
+
+## Returns the extra distance fraction.
+func get_extra_distance_fraction() -> float:
+	return extra_distance_fraction
+
+
+## Sets the extra distance fraction (clamped to 0.0-1.0).
+## Does not emit changed - caller should regenerate extras afterward.
+func set_extra_distance_fraction(value: float) -> void:
+	extra_distance_fraction = clampf(value, 0.0, 1.0)
 
 
 ## Generates satellite source positions using orbit placement.
@@ -188,14 +200,14 @@ func regenerate_extras(
 func _pick_extra_positions(
 	bases: BasesLayer, terrain: MountainsLayer, map_size: int, player_count: int, seed_value: int,
 ) -> Array[Vector2i]:
-	var count := player_count / 2  # Integer division
+	var count := int(player_count / 2)
 	if count <= 0:
 		return []
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 
-	var min_distance_cells := map_size * EXTRA_DISTANCE_FRACTION
+	var min_distance_cells := map_size * extra_distance_fraction
 	var edge_buffer := 2
 
 	# Build list of valid candidate cells

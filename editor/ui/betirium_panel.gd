@@ -5,6 +5,7 @@ const _COMMANDS = "res://editor/commands"
 const EditorDocument = preload("res://editor/document.gd")
 const GenerateBetiriumExtrasCommand = preload(_COMMANDS + "/generate_betirium_extras_command.gd")
 const GenerateBetiriumSatellitesCommand = preload(_COMMANDS + "/generate_betirium_satellites_command.gd")
+const SetExtraDistanceFractionCommand = preload(_COMMANDS + "/set_extra_distance_fraction_command.gd")
 
 signal command_requested(command: EditorCommand)
 
@@ -27,6 +28,10 @@ func _sync_ui() -> void:
 	%SeedSpinBox.set_value_no_signal(_document.betirium_sources.get_satellite_seed())
 	%ExtraSeedSpinBox.set_value_no_signal(_document.betirium_sources.get_extra_seed())
 	%ExtraCountLabel.text = str(_document.player_count / 2)
+
+	var fraction := _document.betirium_sources.get_extra_distance_fraction()
+	%ExtraDistanceSlider.set_value_no_signal(fraction)
+	%ExtraDistanceLabel.text = "%d%%" % roundi(fraction * 100)
 
 
 func _on_regenerate_button_pressed():
@@ -56,4 +61,13 @@ func _on_extra_seed_spin_box_value_changed(_value: float):
 	var cmd := GenerateBetiriumExtrasCommand.new(
 		_document.betirium_sources.get_extra_seed(), new_seed,
 	)
+	command_requested.emit(cmd)
+
+
+func _on_extra_distance_slider_value_changed(_value: float):
+	var old_fraction := _document.betirium_sources.get_extra_distance_fraction()
+	var new_fraction: float = %ExtraDistanceSlider.value
+	if is_equal_approx(old_fraction, new_fraction):
+		return
+	var cmd := SetExtraDistanceFractionCommand.new(old_fraction, new_fraction)
 	command_requested.emit(cmd)
