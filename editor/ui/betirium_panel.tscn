@@ -30,5 +30,32 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Regenerate"
 
+[node name="AmbientDepositsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Ambient Deposits"
+
+[node name="AmbientSeedRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AmbientSeedRow"]
+layout_mode = 2
+text = "Seed:"
+
+[node name="AmbientSeedSpinBox" type="SpinBox" parent="AmbientSeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1e+09
+max_value = 1e+09
+allow_greater = true
+allow_lesser = true
+
+[node name="AmbientRegenerateButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Regenerate"
+
 [connection signal="value_changed" from="SeedRow/SeedSpinBox" to="." method="_on_seed_spin_box_value_changed"]
 [connection signal="pressed" from="RegenerateButton" to="." method="_on_regenerate_button_pressed"]
+[connection signal="value_changed" from="AmbientSeedRow/AmbientSeedSpinBox" to="." method="_on_ambient_seed_spin_box_value_changed"]
+[connection signal="pressed" from="AmbientRegenerateButton" to="." method="_on_ambient_regenerate_button_pressed"]

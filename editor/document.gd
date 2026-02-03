@@ -107,6 +107,11 @@ func generate_bases(seed_value: int) -> void:
 	bases.generate(mountains, size, player_count, seed_value)
 
 
+## Generates betirium ambient deposits with the given seed.
+func generate_betirium_ambient_deposits(seed_value: int) -> void:
+	betirium_sources.generate_ambient(mountains, size, seed_value)
+
+
 ## Generates betirium home deposit sources with the given seed.
 func generate_betirium_home_deposits(seed_value: int) -> void:
 	betirium_sources.generate(bases, mountains, size, seed_value)
@@ -127,9 +132,11 @@ func _on_mountains_changed() -> void:
 ## Returns export dictionary.
 func export_to_dict() -> Dictionary:
 	return {
-		"betirium": _format_betirium(),
+		"betirium_content": _format_betirium_content(),
+		"betirium_regeneration_rate": _format_betirium_regen_rate(),
 		"https://github.com/wadcom/kisarra-mapgen": {
 			"bases_seed": bases.rng_seed,
+			"betirium_ambient_seed": betirium_sources.get_ambient_seed(),
 			"betirium_home_deposits_seed": betirium_sources.get_home_deposit_seed(),
 			"editor_version": 2,
 			"id": _generate_export_id(),
@@ -137,15 +144,23 @@ func export_to_dict() -> Dictionary:
 		},
 		"size": size,
 		"terrain": _format_terrain(),
-		"version": 1,
+		"version": 2,
 	}
 
 
-func _format_betirium() -> Array[int]:
+func _format_betirium_content() -> Array[int]:
 	var result: Array[int] = []
 	for y in range(size):
 		for x in range(size):
-			result.append(betirium_density.get_density_at(x, y))
+			result.append(betirium_density.get_content_at(x, y))
+	return result
+
+
+func _format_betirium_regen_rate() -> Array[int]:
+	var result: Array[int] = []
+	for y in range(size):
+		for x in range(size):
+			result.append(betirium_density.get_regen_rate_at(x, y))
 	return result
 
 

@@ -3,6 +3,7 @@ extends VBoxContainer
 const _COMMANDS = "res://editor/commands"
 
 const EditorDocument = preload("res://editor/document.gd")
+const GenerateBetiriumAmbientCommand = preload(_COMMANDS + "/generate_betirium_ambient_command.gd")
 const GenerateBetiriumHomeDepositsCommand = preload(_COMMANDS + "/generate_betirium_home_deposits_command.gd")
 
 signal command_requested(command: EditorCommand)
@@ -24,6 +25,23 @@ func _sync_ui() -> void:
 		return
 
 	%SeedSpinBox.set_value_no_signal(_document.betirium_sources.get_home_deposit_seed())
+	%AmbientSeedSpinBox.set_value_no_signal(_document.betirium_sources.get_ambient_seed())
+
+
+func _on_ambient_regenerate_button_pressed():
+	var new_seed := randi_range(0, 1000)
+	var cmd := GenerateBetiriumAmbientCommand.new(
+		_document.betirium_sources.get_ambient_seed(), new_seed,
+	)
+	command_requested.emit(cmd)
+
+
+func _on_ambient_seed_spin_box_value_changed(_value: float):
+	var new_seed := int(%AmbientSeedSpinBox.value)
+	var cmd := GenerateBetiriumAmbientCommand.new(
+		_document.betirium_sources.get_ambient_seed(), new_seed,
+	)
+	command_requested.emit(cmd)
 
 
 func _on_regenerate_button_pressed():

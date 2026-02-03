@@ -72,6 +72,7 @@ func _draw():
 	if _show_base_constraints:
 		_draw_inter_base_circles(cell_size)
 
+	_draw_ambient_deposit_sources(cell_size)
 	_draw_home_deposit_sources(cell_size)
 	_draw_bases(cell_size)
 
@@ -85,7 +86,7 @@ func _draw_terrain(cell_size: int) -> void:
 				color = EditorV2Constants.TERRAIN_COLOR_MOUNTAIN
 			else:
 				# Sand cells: lerp toward betirium color based on density
-				var density := _document.betirium_density.get_density_at(x, y)
+				var density := _document.betirium_density.get_content_at(x, y)
 				var lerp_factor := density / 100.0
 				color = EditorV2Constants.TERRAIN_COLOR_SAND.lerp(
 					EditorV2Constants.BETIRIUM_DENSITY_COLOR, lerp_factor,
@@ -152,6 +153,14 @@ func _draw_inter_base_circles(cell_size: int) -> void:
 	for pos in _document.bases.get_positions():
 		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
 		draw_circle(center, inter_base_px, EditorV2Constants.CONSTRAINT_INTER_BASE_COLOR)
+
+
+## Draws ambient deposit source markers as small circles.
+func _draw_ambient_deposit_sources(cell_size: int) -> void:
+	for pos in _document.betirium_sources.get_ambient_positions():
+		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
+		var radius := (cell_size - 2) / 4.0  # Smaller than home deposits
+		draw_circle(center, radius, EditorV2Constants.BETIRIUM_AMBIENT_DEPOSIT_COLOR)
 
 
 ## Draws home deposit source markers as small diamonds.
