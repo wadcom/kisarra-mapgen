@@ -112,20 +112,8 @@ func generate_betirium_home_deposits(seed_value: int) -> void:
 	betirium_sources.generate(bases, mountains, size, seed_value)
 
 
-## Generates extra betirium sources with the given seed.
-func generate_betirium_extras(seed_value: int) -> void:
-	betirium_sources.generate_extras(bases, mountains, size, player_count, seed_value)
-
-
-## Sets the extra distance fraction and regenerates extras.
-func set_extra_distance_fraction(value: float) -> void:
-	betirium_sources.set_extra_distance_fraction(value)
-	betirium_sources.regenerate_extras(bases, mountains, size, player_count)
-
-
 func _on_bases_changed() -> void:
 	betirium_sources.regenerate(bases, mountains, size)
-	betirium_sources.regenerate_extras(bases, mountains, size, player_count)
 
 
 func _on_betirium_sources_changed() -> void:
@@ -142,7 +130,6 @@ func export_to_dict() -> Dictionary:
 		"betirium": _format_betirium(),
 		"https://github.com/wadcom/kisarra-mapgen": {
 			"bases_seed": bases.rng_seed,
-			"betirium_extras_seed": betirium_sources.get_extra_seed(),
 			"betirium_home_deposits_seed": betirium_sources.get_home_deposit_seed(),
 			"editor_version": 2,
 			"id": _generate_export_id(),

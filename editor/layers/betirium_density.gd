@@ -66,14 +66,6 @@ func _compute_density_grid(sources: BetiriumSourcesLayer, map_size: int) -> Arra
 				BetiriumSourcesLayer.HOME_DEPOSIT_DECAY_FACTOR,
 			)
 
-			# Sum contributions from extras
-			total += _compute_source_contributions(
-				cell_center, sources.get_extra_positions(), cell_side_km,
-				BetiriumSourcesLayer.EXTRA_RADIUS_KM,
-				BetiriumSourcesLayer.EXTRA_PEAK_DENSITY,
-				BetiriumSourcesLayer.EXTRA_DECAY_FACTOR,
-			)
-
 			column[y] = clampi(int(total), 0, 100)
 		grid[x] = column
 

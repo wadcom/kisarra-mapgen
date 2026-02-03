@@ -29,7 +29,6 @@ func _ready():
 	_document.terrain_seed = randi_range(0, 1000)
 	_document.generate_bases(randi_range(0, 1000))
 	_document.generate_betirium_home_deposits(randi_range(0, 1000))
-	_document.generate_betirium_extras(randi_range(0, 1000))
 
 	# Initialize toolbar button states
 	_on_history_changed()
