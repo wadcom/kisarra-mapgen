@@ -26,12 +26,12 @@ signal changed
 ## Placement constraints (currently fixed, UI controls may be added later).
 
 ## Central dead zone diameter as fraction of map size (0.0 to 1.0).
-const CENTRAL_DEAD_ZONE_DIAMETER_FRACTION := 0.4
+const CENTRAL_DEAD_ZONE_DIAMETER_FRACTION := 0.3
 
 const MIN_DIST_TO_EDGE_KM := 60.0
 
 ## Minimum inter-base distance as fraction of map size (0.0 to 1.0).
-const MIN_DIST_BETWEEN_BASES_FRACTION := 0.3
+const MIN_DIST_BETWEEN_BASES_FRACTION := 0.4
 
 ## Base positions as cell coordinates.
 ## One base per player, indexed by player number.
