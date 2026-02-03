@@ -72,7 +72,7 @@ func _draw():
 	if _show_base_constraints:
 		_draw_inter_base_circles(cell_size)
 
-	_draw_satellite_sources(cell_size)
+	_draw_home_deposit_sources(cell_size)
 	_draw_extra_sources(cell_size)
 	_draw_bases(cell_size)
 
@@ -155,9 +155,9 @@ func _draw_inter_base_circles(cell_size: int) -> void:
 		draw_circle(center, inter_base_px, EditorV2Constants.CONSTRAINT_INTER_BASE_COLOR)
 
 
-## Draws satellite source markers as small diamonds.
-func _draw_satellite_sources(cell_size: int) -> void:
-	for pos in _document.betirium_sources.get_satellite_positions():
+## Draws home deposit source markers as small diamonds.
+func _draw_home_deposit_sources(cell_size: int) -> void:
+	for pos in _document.betirium_sources.get_home_deposit_positions():
 		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size
 		var half_size := (cell_size - 2) / 2.0
 		# Draw diamond shape (rotated square)
@@ -167,10 +167,10 @@ func _draw_satellite_sources(cell_size: int) -> void:
 			center + Vector2(0, half_size),   # Bottom
 			center + Vector2(-half_size, 0),  # Left
 		])
-		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_SATELLITE_COLOR)
+		draw_colored_polygon(points, EditorV2Constants.BETIRIUM_HOME_DEPOSIT_COLOR)
 
 
-## Draws extra source markers as larger diamonds (richer than satellites).
+## Draws extra source markers as larger diamonds (richer than home deposits).
 func _draw_extra_sources(cell_size: int) -> void:
 	for pos in _document.betirium_sources.get_extra_positions():
 		var center := Vector2(pos.x + 0.5, pos.y + 0.5) * cell_size

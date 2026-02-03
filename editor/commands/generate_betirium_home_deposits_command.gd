@@ -1,5 +1,5 @@
 extends "res://editor/commands/command.gd"
-## Command for generating/regenerating betirium satellite sources.
+## Command for generating/regenerating betirium home deposits.
 ##
 ## Generation is deterministic - same bases, terrain, and seed produces
 ## the same positions. Undo simply regenerates with the old seed.
@@ -14,12 +14,12 @@ func _init(old_seed: int, new_seed: int):
 
 
 func get_change_description() -> String:
-	return "betirium satellites: seed %d → %d" % [_old_seed, _new_seed]
+	return "betirium home deposits: seed %d → %d" % [_old_seed, _new_seed]
 
 
 func execute(document: Document) -> void:
-	document.generate_betirium_satellites(_new_seed)
+	document.generate_betirium_home_deposits(_new_seed)
 
 
 func undo(document: Document) -> void:
-	document.generate_betirium_satellites(_old_seed)
+	document.generate_betirium_home_deposits(_old_seed)

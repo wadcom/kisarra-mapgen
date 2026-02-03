@@ -1,8 +1,8 @@
 extends RefCounted
-## Betirium sources layer - satellite and extra source positions.
+## Betirium sources layer - home deposit and extra source positions.
 ##
 ## Two source types:
-## - Satellites: One per base, orbiting at fixed distance
+## - Home deposits: One per base, orbiting at fixed distance
 ## - Extras: Scattered far from all bases (exploration incentives)
 ##
 ## Each type has its own RNG seed for independent variation.
@@ -10,15 +10,15 @@ extends RefCounted
 ## ## Public API
 ##
 ## Properties:
-##   - SATELLITE_* constants - satellite source parameters
+##   - HOME_DEPOSIT_* constants - home deposit source parameters
 ##   - EXTRA_* constants - extra source parameters
 ##   - extra_distance_fraction - min distance from bases as fraction of map size
 ##
 ## Methods:
-##   - generate(bases, terrain, map_size, seed) - generate satellites with new seed
-##   - regenerate(bases, terrain, map_size) - regenerate satellites using current seed
-##   - get_satellite_seed() -> int - RNG seed for satellite placement
-##   - get_satellite_positions() -> Array[Vector2i] - satellite positions (copy)
+##   - generate(bases, terrain, map_size, seed) - generate home deposits with new seed
+##   - regenerate(bases, terrain, map_size) - regenerate home deposits using current seed
+##   - get_home_deposit_seed() -> int - RNG seed for home deposit placement
+##   - get_home_deposit_positions() -> Array[Vector2i] - home deposit positions (copy)
 ##   - generate_extras(bases, terrain, map_size, player_count, seed) - generate extras
 ##   - regenerate_extras(bases, terrain, map_size, player_count) - regenerate extras
 ##   - get_extra_seed() -> int - RNG seed for extra placement
@@ -35,17 +35,17 @@ signal changed
 
 ## Fixed source parameters (configurable UI deferred to later).
 
-## Distance from base to satellite in km.
-const SATELLITE_DISTANCE_KM := 75.0
+## Distance from base to home deposit in km.
+const HOME_DEPOSIT_DISTANCE_KM := 75.0
 
 ## Radius for density contribution in km.
-const SATELLITE_RADIUS_KM := 10.0
+const HOME_DEPOSIT_RADIUS_KM := 10.0
 
 ## Density at source center (0-100).
-const SATELLITE_PEAK_DENSITY := 80
+const HOME_DEPOSIT_PEAK_DENSITY := 80
 
 ## Exponential decay rate.
-const SATELLITE_DECAY_FACTOR := 0.3
+const HOME_DEPOSIT_DECAY_FACTOR := 0.3
 
 ## Extra source parameters.
 
@@ -65,11 +65,11 @@ const EXTRA_PEAK_DENSITY := 100
 const EXTRA_DECAY_FACTOR := 0.35
 
 ## Source positions as cell coordinates.
-## One satellite source per player, indexed by player number.
-var _satellite_positions: Array[Vector2i] = []
+## One home deposit per player, indexed by player number.
+var _home_deposit_positions: Array[Vector2i] = []
 
-## RNG seed for satellite source placement.
-var _satellite_seed: int = 0
+## RNG seed for home deposit placement.
+var _home_deposit_seed: int = 0
 
 ## Extra source positions as cell coordinates.
 var _extra_positions: Array[Vector2i] = []
@@ -78,15 +78,15 @@ var _extra_positions: Array[Vector2i] = []
 var _extra_seed: int = 0
 
 
-## Returns the RNG seed for satellite placement.
-func get_satellite_seed() -> int:
-	return _satellite_seed
+## Returns the RNG seed for home deposit placement.
+func get_home_deposit_seed() -> int:
+	return _home_deposit_seed
 
 
-## Returns satellite positions (read-only copy).
-func get_satellite_positions() -> Array[Vector2i]:
+## Returns home deposit positions (read-only copy).
+func get_home_deposit_positions() -> Array[Vector2i]:
 	var copy: Array[Vector2i] = []
-	copy.assign(_satellite_positions)
+	copy.assign(_home_deposit_positions)
 	return copy
 
 
@@ -113,33 +113,33 @@ func set_extra_distance_fraction(value: float) -> void:
 	extra_distance_fraction = clampf(value, 0.0, 1.0)
 
 
-## Generates satellite source positions using orbit placement.
+## Generates home deposit positions using orbit placement.
 ##
 ## Algorithm:
-## 1. For each base, calculate orbit circle at SATELLITE_DISTANCE_KM
+## 1. For each base, calculate orbit circle at HOME_DEPOSIT_DISTANCE_KM
 ## 2. Build list of valid candidate cells around orbit (every degree)
 ## 3. Pick one randomly using provided RNG
 func generate(bases: BasesLayer, terrain: MountainsLayer, map_size: int, seed_value: int) -> void:
-	_satellite_seed = seed_value
-	_satellite_positions = _pick_satellite_positions(bases, terrain, map_size, seed_value)
+	_home_deposit_seed = seed_value
+	_home_deposit_positions = _pick_home_deposit_positions(bases, terrain, map_size, seed_value)
 	changed.emit()
 
 
-## Regenerates satellites using the current seed.
+## Regenerates home deposits using the current seed.
 func regenerate(bases: BasesLayer, terrain: MountainsLayer, map_size: int) -> void:
-	_satellite_positions = _pick_satellite_positions(bases, terrain, map_size, _satellite_seed)
+	_home_deposit_positions = _pick_home_deposit_positions(bases, terrain, map_size, _home_deposit_seed)
 	changed.emit()
 
 
-func _pick_satellite_positions(
+func _pick_home_deposit_positions(
 	bases: BasesLayer, terrain: MountainsLayer, map_size: int, seed_value: int,
 ) -> Array[Vector2i]:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 
 	var cell_side_km := EditorV2Constants.CELL_SIDE_KMS
-	var radius_cells := SATELLITE_DISTANCE_KM / cell_side_km
-	var edge_buffer := 2.0  # Keep satellites at least 2 cells from edge
+	var radius_cells := HOME_DEPOSIT_DISTANCE_KM / cell_side_km
+	var edge_buffer := 2.0  # Keep home deposits at least 2 cells from edge
 
 	var positions: Array[Vector2i] = []
 

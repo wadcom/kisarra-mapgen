@@ -58,12 +58,12 @@ func _compute_density_grid(sources: BetiriumSourcesLayer, map_size: int) -> Arra
 			var cell_center := Vector2(x + 0.5, y + 0.5)
 			var total := 0.0
 
-			# Sum contributions from satellites
+			# Sum contributions from home deposits
 			total += _compute_source_contributions(
-				cell_center, sources.get_satellite_positions(), cell_side_km,
-				BetiriumSourcesLayer.SATELLITE_RADIUS_KM,
-				BetiriumSourcesLayer.SATELLITE_PEAK_DENSITY,
-				BetiriumSourcesLayer.SATELLITE_DECAY_FACTOR,
+				cell_center, sources.get_home_deposit_positions(), cell_side_km,
+				BetiriumSourcesLayer.HOME_DEPOSIT_RADIUS_KM,
+				BetiriumSourcesLayer.HOME_DEPOSIT_PEAK_DENSITY,
+				BetiriumSourcesLayer.HOME_DEPOSIT_DECAY_FACTOR,
 			)
 
 			# Sum contributions from extras

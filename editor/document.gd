@@ -24,7 +24,7 @@ var bases: BasesLayer
 ## The betirium density layer (derived from sources).
 var betirium_density: BetiriumDensityLayer
 
-## The betirium sources layer containing satellite positions.
+## The betirium sources layer containing home deposit positions.
 var betirium_sources: BetiriumSourcesLayer
 
 ## The mountains layer containing terrain generation.
@@ -107,8 +107,8 @@ func generate_bases(seed_value: int) -> void:
 	bases.generate(mountains, size, player_count, seed_value)
 
 
-## Generates betirium satellite sources with the given seed.
-func generate_betirium_satellites(seed_value: int) -> void:
+## Generates betirium home deposit sources with the given seed.
+func generate_betirium_home_deposits(seed_value: int) -> void:
 	betirium_sources.generate(bases, mountains, size, seed_value)
 
 
@@ -143,7 +143,7 @@ func export_to_dict() -> Dictionary:
 		"https://github.com/wadcom/kisarra-mapgen": {
 			"bases_seed": bases.rng_seed,
 			"betirium_extras_seed": betirium_sources.get_extra_seed(),
-			"betirium_satellites_seed": betirium_sources.get_satellite_seed(),
+			"betirium_home_deposits_seed": betirium_sources.get_home_deposit_seed(),
 			"editor_version": 2,
 			"id": _generate_export_id(),
 			"terrain_seed": terrain_seed,

@@ -19,7 +19,7 @@ const BASE_COLOR := Color.BLUE
 
 # Betirium colors
 const BETIRIUM_DENSITY_COLOR := Color(0.65098, 0.25098, 0.137255, 1.0)
-const BETIRIUM_SATELLITE_COLOR := Color(0.85, 0.35, 0.2, 1.0)
+const BETIRIUM_HOME_DEPOSIT_COLOR := Color(0.85, 0.35, 0.2, 1.0)
 const BETIRIUM_EXTRA_COLOR := Color(0.9, 0.45, 0.15, 1.0)
 
 # Constraint visualization colors (semi-transparent)
