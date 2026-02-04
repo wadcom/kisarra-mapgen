@@ -127,6 +127,7 @@ func _on_betirium_sources_changed() -> void:
 
 func _on_mountains_changed() -> void:
 	generate_bases(bases.rng_seed)
+	betirium_sources.regenerate_ambient(mountains, size)
 
 
 ## Returns export dictionary.
