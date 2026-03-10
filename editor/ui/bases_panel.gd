@@ -24,6 +24,18 @@ func _sync_ui() -> void:
 		return
 
 	%SeedSpinBox.set_value_no_signal(_document.bases.rng_seed)
+	_update_warning()
+
+
+func _update_warning() -> void:
+	var placed := _document.bases.get_positions().size()
+	var expected := _document.player_count
+	if placed < expected:
+		%WarningLabel.text = "Only placed %d of %d bases" % [placed, expected]
+		%WarningLabel.visible = true
+		%WarningLabel.add_theme_color_override("font_color", Color.ORANGE_RED)
+	else:
+		%WarningLabel.visible = false
 
 
 func _on_regenerate_button_pressed():

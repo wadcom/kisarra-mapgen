@@ -115,7 +115,7 @@ func _on_document_changed():
 
 ## Draws the edge buffer border showing the exclusion zone around map edges.
 func _draw_edge_buffer(cell_size: int, total_size: int) -> void:
-	var params := _document.bases.get_constraint_params(_document.size)
+	var params := _document.bases.get_constraint_params(_document.size, _document.player_count)
 	var edge_buffer_px: float = params.edge_buffer * cell_size
 	var color := EditorV2Constants.CONSTRAINT_EDGE_BUFFER_COLOR
 
@@ -139,7 +139,7 @@ func _draw_edge_buffer(cell_size: int, total_size: int) -> void:
 
 ## Draws the dead zone circle at map center.
 func _draw_dead_zone(cell_size: int) -> void:
-	var params := _document.bases.get_constraint_params(_document.size)
+	var params := _document.bases.get_constraint_params(_document.size, _document.player_count)
 	var dead_zone_px: float = params.dead_zone_radius * cell_size
 	var center := Vector2(_document.size / 2.0, _document.size / 2.0) * cell_size
 	draw_circle(center, dead_zone_px, EditorV2Constants.CONSTRAINT_DEAD_ZONE_COLOR)
@@ -147,7 +147,7 @@ func _draw_dead_zone(cell_size: int) -> void:
 
 ## Draws inter-base distance circles around each base.
 func _draw_inter_base_circles(cell_size: int) -> void:
-	var params := _document.bases.get_constraint_params(_document.size)
+	var params := _document.bases.get_constraint_params(_document.size, _document.player_count)
 	var inter_base_px: float = params.inter_base_radius * cell_size
 
 	for pos in _document.bases.get_positions():

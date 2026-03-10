@@ -31,6 +31,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Show Constraints"
 
+[node name="WarningLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+
 [connection signal="value_changed" from="SeedRow/SeedSpinBox" to="." method="_on_seed_spin_box_value_changed"]
 [connection signal="pressed" from="RegenerateButton" to="." method="_on_regenerate_button_pressed"]
 [connection signal="toggled" from="ShowConstraintsCheckBox" to="." method="_on_show_constraints_check_box_toggled"]

@@ -7,16 +7,9 @@ extends RefCounted
 ##
 ## ## Public API
 ##
-## Properties:
-##   - rng_seed: int - RNG seed for base placement
-##
-## Methods:
-##   - generate(terrain, map_size, player_count, seed) - generate new positions
-##   - get_positions() -> Array[Vector2i] - returns base positions (copy)
-##   - get_constraint_params(map_size) -> Dictionary - returns computed constraint parameters
-##
-## Signal:
-##   - changed - emitted when positions or seed change
+## Properties: rng_seed
+## Methods: generate(), get_positions(), get_constraint_params()
+## Signal: changed
 
 const EditorV2Constants = preload("res://editor/constants.gd")
 const MountainsLayer = preload("res://editor/layers/mountains.gd")
@@ -31,7 +24,14 @@ const CENTRAL_DEAD_ZONE_DIAMETER_FRACTION := 0.3
 const MIN_DIST_TO_EDGE_KM := 60.0
 
 ## Minimum inter-base distance as fraction of map size (0.0 to 1.0).
-const MIN_DIST_BETWEEN_BASES_FRACTION := 0.4
+## Scales linearly from MAX (2 players) to MIN (9 players).
+const MIN_DIST_BETWEEN_BASES_FRACTION_MAX := 0.4
+const MIN_DIST_BETWEEN_BASES_FRACTION_MIN := 0.3
+const MIN_PLAYER_COUNT := 2
+const MAX_PLAYER_COUNT := 9
+
+## Number of placement attempts with different shuffles before giving up.
+const PLACEMENT_RETRY_COUNT := 100
 
 ## Base positions as cell coordinates.
 ## One base per player, indexed by player number.
@@ -77,11 +77,13 @@ func get_positions() -> Array[Vector2i]:
 ##   - inter_base_radius: float - half of inter_base_distance (for visualization:
 ##       circles of this radius around each base will just touch when bases are
 ##       at minimum distance)
-func get_constraint_params(map_size: int) -> Dictionary:
+func get_constraint_params(map_size: int, player_count: int) -> Dictionary:
 	var cell_side_km := EditorV2Constants.CELL_SIDE_KMS
 	var dead_zone_radius := (map_size * CENTRAL_DEAD_ZONE_DIAMETER_FRACTION) / 2.0
 	var edge_buffer := MIN_DIST_TO_EDGE_KM / cell_side_km
-	var inter_base_distance := map_size * MIN_DIST_BETWEEN_BASES_FRACTION
+	var fraction := _inter_base_fraction(player_count)
+	var inter_base_distance := map_size * fraction
+
 	return {
 		dead_zone_radius = dead_zone_radius,
 		edge_buffer = edge_buffer,
@@ -90,18 +92,49 @@ func get_constraint_params(map_size: int) -> Dictionary:
 	}
 
 
-func _pick_positions(terrain: MountainsLayer, map_size: int, player_count: int, seed_value: int) -> Array[Vector2i]:
+## Linearly interpolates inter-base fraction from MAX (2 players) to MIN (9 players).
+static func _inter_base_fraction(player_count: int) -> float:
+	var t := float(player_count - MIN_PLAYER_COUNT) / (MAX_PLAYER_COUNT - MIN_PLAYER_COUNT)
+	return lerpf(MIN_DIST_BETWEEN_BASES_FRACTION_MAX, MIN_DIST_BETWEEN_BASES_FRACTION_MIN, t)
+
+
+func _pick_positions(
+	terrain: MountainsLayer, map_size: int,
+	player_count: int, seed_value: int,
+) -> Array[Vector2i]:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 
-	var params := get_constraint_params(map_size)
+	var params := get_constraint_params(map_size, player_count)
+	var candidates := _build_candidates(terrain, map_size, params)
+
+	if candidates.is_empty():
+		return [] as Array[Vector2i]
+
+	# Try multiple shuffles, keep the best result
+	var best_positions: Array[Vector2i] = []
+	for attempt in PLACEMENT_RETRY_COUNT:
+		var positions := _try_place_bases(
+			candidates.duplicate(), player_count, params.inter_base_distance, rng,
+		)
+
+		if positions.size() > best_positions.size():
+			best_positions = positions
+
+		if best_positions.size() >= player_count:
+			break
+
+	return best_positions
+
+
+## Returns all sand cells satisfying dead zone and edge constraints.
+func _build_candidates(
+	terrain: MountainsLayer, map_size: int, params: Dictionary,
+) -> Array[Vector2i]:
 	var dead_zone_cells: float = params.dead_zone_radius
 	var edge_buffer_cells: float = params.edge_buffer
-	var inter_base_cells: float = params.inter_base_distance
-
 	var map_center := Vector2(map_size / 2.0, map_size / 2.0)
 
-	# Build list of valid candidate cells
 	var candidates: Array[Vector2i] = []
 	for x in map_size:
 		for y in map_size:
@@ -112,19 +145,28 @@ func _pick_positions(terrain: MountainsLayer, map_size: int, player_count: int, 
 
 			if cell_center.distance_to(map_center) < dead_zone_cells:
 				continue
+
 			if x < edge_buffer_cells or x >= map_size - edge_buffer_cells:
 				continue
+
 			if y < edge_buffer_cells or y >= map_size - edge_buffer_cells:
 				continue
 
 			candidates.append(Vector2i(x, y))
 
-	if candidates.is_empty():
-		return [] as Array[Vector2i]
+	return candidates
 
+
+## Greedy placement: shuffle candidates, pick one per player, filtering by inter-base distance after 
+## each pick.
+func _try_place_bases(
+	candidates: Array[Vector2i], 
+	player_count: int,
+	inter_base_cells: float, 
+	rng: RandomNumberGenerator,
+) -> Array[Vector2i]:
 	_shuffle_array(candidates, rng)
 
-	# Pick positions for each player
 	var positions: Array[Vector2i] = []
 	for i in player_count:
 		if candidates.is_empty():
@@ -133,12 +175,11 @@ func _pick_positions(terrain: MountainsLayer, map_size: int, player_count: int, 
 		var pos: Vector2i = candidates.pop_back()
 		positions.append(pos)
 
-		# Filter remaining candidates by inter-base distance
 		var pos_center := Vector2(pos.x + 0.5, pos.y + 0.5)
 		var filtered: Array[Vector2i] = []
 		for candidate in candidates:
-			var candidate_center := Vector2(candidate.x + 0.5, candidate.y + 0.5)
-			if candidate_center.distance_to(pos_center) >= inter_base_cells:
+			var center := Vector2(candidate.x + 0.5, candidate.y + 0.5)
+			if center.distance_to(pos_center) >= inter_base_cells:
 				filtered.append(candidate)
 		candidates = filtered
 
