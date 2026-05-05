@@ -33,19 +33,19 @@ signal changed
 ## Fixed source parameters (configurable UI deferred to later).
 
 ## Exponential decay rate for ambient deposits (faster decay = more localized).
-const AMBIENT_DECAY_FACTOR := 0.2
+const AMBIENT_DECAY_FACTOR := 0.4
 
 ## Minimum distance between ambient deposits in km.
-const AMBIENT_MIN_SPACING_KM := 80.0
+const AMBIENT_MIN_SPACING_KM := 160.0
 
 ## Maximum peak density for ambient deposits.
-const AMBIENT_PEAK_DENSITY_MAX := 20
+const AMBIENT_PEAK_DENSITY_MAX := 25
 
 ## Minimum peak density for ambient deposits.
-const AMBIENT_PEAK_DENSITY_MIN := 10
+const AMBIENT_PEAK_DENSITY_MIN := 15
 
 ## Radius for ambient density contribution in km.
-const AMBIENT_RADIUS_KM := 10.0
+const AMBIENT_RADIUS_KM := 25.0
 
 ## Exponential decay rate for home deposits.
 const HOME_DEPOSIT_DECAY_FACTOR := 0.3
