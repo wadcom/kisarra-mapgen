@@ -33,7 +33,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 9.0
 max_value = 120.0
-value = 22.0
+value = 32.0
 
 [node name="RecommendedRow" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -69,12 +69,12 @@ size_flags_vertical = 1
 min_value = 50.0
 max_value = 1000.0
 step = 50.0
-value = 250.0
+value = 500.0
 
 [node name="CellsPerPlayerLabel" type="Label" parent="CellsPerPlayerRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "250"
+text = "500"
 
 [connection signal="value_changed" from="PlayerCountRow/PlayerCountSpinBox" to="." method="_on_player_count_value_changed"]
 [connection signal="value_changed" from="SizeRow/SizeSpinBox" to="." method="_on_size_value_changed"]

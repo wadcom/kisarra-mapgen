@@ -56,9 +56,9 @@ var player_count: int:
 		changed.emit()
 		generate_bases(bases.rng_seed)
 
-var _cells_per_player := 250
+var _cells_per_player := 500
 var _player_count := 2
-var _size := 22
+var _size := 32
 
 ## RNG seed for terrain generation.
 var terrain_seed: int:
