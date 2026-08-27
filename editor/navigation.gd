@@ -16,11 +16,10 @@ var _grid := AStarGrid2D.new()
 
 ## Builds the search grid over the terrain, marking mountain cells solid.
 ##
-## The terrain must answer get_terrain_at(x, y). Movement runs in eight
-## directions. An orthogonal step costs 1 cell and a diagonal step costs the
+## Movement runs in eight directions. An orthogonal step costs 1 cell and a diagonal step costs the
 ## square root of 2. A diagonal step between two mountains that touch at a
 ## corner is allowed.
-func _init(terrain, map_size: int) -> void:
+func _init(terrain: MountainsLayer, map_size: int) -> void:
 	_grid.region = Rect2i(0, 0, map_size, map_size)
 	_grid.cell_size = Vector2.ONE
 	_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ALWAYS

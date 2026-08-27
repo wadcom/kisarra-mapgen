@@ -12,7 +12,8 @@ extends RefCounted
 ##
 ## ## Public API
 ##
-## Methods: compute_isolation_ratio(), compute_vulnerability(), validate()
+## Methods: compute_isolation_ratio(), compute_vulnerability(),
+##   max_isolation_ratio(), validate()
 
 
 ## Counts, for each base, how many other bases treat it as their nearest
@@ -54,8 +55,18 @@ static func _nearest_opponent(distances: Array, attacker: int) -> int:
 ## Highest number of opponents that may treat one base as their first target.
 const MAX_VULNERABILITY := 2
 
-## Highest ratio allowed between the most and the least isolated base.
-const MAX_ISOLATION_RATIO := 1.3
+## Highest ratio allowed between the most and the least isolated base, at the
+## smallest and the largest supported placement. The limit widens as bases are
+## added, because map area grows more slowly than base count: the placement
+## constraints push bases into a ring around the central dead zone, and the
+## more bases share that ring, the further the widest gap in it sits from the
+## narrowest, whatever the arrangement.
+const MAX_ISOLATION_RATIO_AT_FEWEST := 1.3
+const MAX_ISOLATION_RATIO_AT_MOST := 1.5
+
+## Placement sizes that the two isolation limits above apply to.
+const FEWEST_BASES := 2
+const MOST_BASES := 9
 
 ## Number of nearest opponents that the isolation score adds up.
 const ISOLATION_OPPONENT_COUNT := 2
@@ -102,6 +113,16 @@ static func _isolation_score(distances: Array, base: int) -> float:
 	return total
 
 
+## Returns the isolation ratio a placement of the given size must stay within.
+## Interpolates between the two limits, and holds flat outside the supported
+## range of placement sizes.
+static func max_isolation_ratio(base_count: int) -> float:
+	var position := float(base_count - FEWEST_BASES) / (MOST_BASES - FEWEST_BASES)
+	return lerpf(
+		MAX_ISOLATION_RATIO_AT_FEWEST, MAX_ISOLATION_RATIO_AT_MOST, clampf(position, 0.0, 1.0),
+	)
+
+
 ## Runs every balance rule over a placement and reports the outcome.
 ##
 ## Returns:
@@ -119,6 +140,9 @@ static func validate(distances: Array) -> Dictionary:
 
 	var penalty := 0.0
 
+	# One of any two consecutive whole numbers is even, so halving their
+	# product never discards a fraction.
+	@warning_ignore("integer_division")
 	var pair_count := distances.size() * (distances.size() - 1) / 2
 	var unreachable := _count_unreachable_pairs(distances)
 	if unreachable > 0:
@@ -133,12 +157,13 @@ static func validate(distances: Array) -> Dictionary:
 			counts.find(most_targeted), most_targeted, MAX_VULNERABILITY,
 		])
 
+	var limit := max_isolation_ratio(distances.size())
 	var ratio := compute_isolation_ratio(distances)
-	penalty += _overshoot(ratio, MAX_ISOLATION_RATIO)
+	penalty += _overshoot(ratio, limit)
 	if ratio == INF:
 		failures.append("Some bases have fewer than two reachable opponents.")
-	elif ratio > MAX_ISOLATION_RATIO:
-		failures.append("Isolation ratio %.2f (limit %.2f)." % [ratio, MAX_ISOLATION_RATIO])
+	elif ratio > limit:
+		failures.append("Isolation ratio %.2f (limit %.2f)." % [ratio, limit])
 
 	return {accepted = failures.is_empty(), failures = failures, penalty = penalty}
 

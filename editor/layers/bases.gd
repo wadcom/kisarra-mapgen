@@ -8,11 +8,14 @@ extends RefCounted
 ## ## Public API
 ##
 ## Properties: rng_seed
-## Methods: generate(), get_positions(), get_constraint_params()
+## Methods: generate(), get_constraint_params(), get_positions(),
+##   get_validation_failures()
 ## Signal: changed
 
 const EditorV2Constants = preload("res://editor/constants.gd")
 const MountainsLayer = preload("res://editor/layers/mountains.gd")
+const Navigation = preload("res://editor/navigation.gd")
+const Validation = preload("res://editor/layers/base_placement_validation.gd")
 
 signal changed
 
@@ -37,6 +40,9 @@ const PLACEMENT_RETRY_COUNT := 100
 ## One base per player, indexed by player number.
 var _positions: Array[Vector2i] = []
 
+## Balance rules broken by the current placement, one sentence each.
+var _validation_failures: Array[String] = []
+
 ## RNG seed for base placement (separate from terrain seed).
 var rng_seed: int:
 	get:
@@ -54,6 +60,10 @@ var _seed: int = 0
 ## 1. Build list of valid candidate cells (sand, outside dead zone, away from edges)
 ## 2. Shuffle candidates using provided RNG
 ## 3. For each player, pop a candidate and filter remaining by inter-base distance
+## 4. Check the balance rules, and retry from step 2 until a placement passes
+##
+## After the attempt budget runs out, the placement closest to passing is kept
+## and get_validation_failures() reports what it breaks.
 func generate(terrain: MountainsLayer, map_size: int, player_count: int, seed_value: int) -> void:
 	_seed = seed_value
 	_positions = _pick_positions(terrain, map_size, player_count, seed_value)
@@ -64,6 +74,14 @@ func generate(terrain: MountainsLayer, map_size: int, player_count: int, seed_va
 func get_positions() -> Array[Vector2i]:
 	var copy: Array[Vector2i] = []
 	copy.assign(_positions)
+	return copy
+
+
+## Returns the balance rules that the current placement breaks, one sentence
+## each (read-only copy). Empty when the placement passed every rule.
+func get_validation_failures() -> Array[String]:
+	var copy: Array[String] = []
+	copy.assign(_validation_failures)
 	return copy
 
 
@@ -108,23 +126,40 @@ func _pick_positions(
 	var params := get_constraint_params(map_size, player_count)
 	var candidates := _build_candidates(terrain, map_size, params)
 
+	_validation_failures = [] as Array[String]
+
 	if candidates.is_empty():
 		return [] as Array[Vector2i]
 
-	# Try multiple shuffles, keep the best result
+	var navigation := Navigation.new(terrain, map_size)
 	var best_positions: Array[Vector2i] = []
+	var best_penalty := INF
+
 	for attempt in PLACEMENT_RETRY_COUNT:
 		var positions := _try_place_bases(
 			candidates.duplicate(), player_count, params.inter_base_distance, rng,
 		)
+		var report := Validation.validate(navigation.distance_matrix(positions))
 
-		if positions.size() > best_positions.size():
+		if _beats_best(positions.size(), report.penalty, best_positions.size(), best_penalty):
 			best_positions = positions
+			best_penalty = report.penalty
+			_validation_failures = report.failures
 
-		if best_positions.size() >= player_count:
+		if positions.size() >= player_count and report.accepted:
 			break
 
 	return best_positions
+
+
+## Returns true when an attempt should replace the best one so far. More bases
+## always wins, because a placement missing a player is unusable whatever its
+## balance. Between attempts holding equally many bases, the smaller penalty
+## wins, which keeps the attempt closest to passing every rule.
+static func _beats_best(count: int, penalty: float, best_count: int, best_penalty: float) -> bool:
+	if count != best_count:
+		return count > best_count
+	return penalty < best_penalty
 
 
 ## Returns all sand cells satisfying dead zone and edge constraints.

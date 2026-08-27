@@ -1,28 +1,13 @@
 extends "res://tests/assertions.gd"
 
-const MountainsLayer = preload("res://editor/layers/mountains.gd")
+const FakeTerrain = preload("res://tests/fake_terrain.gd")
 const Navigation = preload("res://editor/navigation.gd")
 
 
-## Terrain built from ASCII rows, so a test can state an obstacle directly.
-## A "#" is a mountain and any other character is sand. Rows run top to bottom,
-## so rows[y][x] holds the cell at (x, y).
-class FakeTerrain:
-	var _rows: Array
-
-	func _init(rows: Array) -> void:
-		_rows = rows
-
-	func get_terrain_at(x: int, y: int) -> int:
-		if _rows[y][x] == "#":
-			return MountainsLayer.TerrainType.MOUNTAIN
-		return MountainsLayer.TerrainType.SAND
-
-
-## Builds a navigation grid over ASCII terrain. Maps are square, so the number
-## of rows gives the map size and no test states it twice.
+## Builds a navigation grid over ASCII terrain.
 func _navigation_over(rows: Array) -> Navigation:
-	return Navigation.new(FakeTerrain.new(rows), rows.size())
+	var terrain := FakeTerrain.new(rows)
+	return Navigation.new(terrain, terrain.size())
 
 
 ## Two bases two cells apart on open sand, with nothing to walk around.

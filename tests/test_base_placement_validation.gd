@@ -179,17 +179,48 @@ func test_validate_accepts_a_placement_too_small_to_judge() -> void:
 	assert_eq(Validation.validate([]).accepted, true)
 
 
-## Four bases on a line at 0, 3, 10 and 13. The end bases score 3 + 10 and the
-## middle bases score 3 + 7, giving a ratio of exactly 1.3. The limit accepts
-## its own value, so this placement passes.
+## Nine bases evenly spaced 10 apart along a line. Each end base reaches past
+## its neighbour for a second opponent and scores 10 + 20, while every middle
+## base scores 10 + 10, so the ratio is exactly 1.5. Nine bases is the largest
+## supported placement, where the limit is also exactly 1.5, and a limit
+## accepts its own value.
 func test_validate_accepts_an_isolation_ratio_exactly_at_the_limit() -> void:
 	var distances := [
-		[ 0.0,  3.0, 10.0, 13.0],
-		[ 3.0,  0.0,  7.0, 10.0],
-		[10.0,  7.0,  0.0,  3.0],
-		[13.0, 10.0,  3.0,  0.0],
+		[ 0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0],
+		[10.0,  0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0],
+		[20.0, 10.0,  0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0],
+		[30.0, 20.0, 10.0,  0.0, 10.0, 20.0, 30.0, 40.0, 50.0],
+		[40.0, 30.0, 20.0, 10.0,  0.0, 10.0, 20.0, 30.0, 40.0],
+		[50.0, 40.0, 30.0, 20.0, 10.0,  0.0, 10.0, 20.0, 30.0],
+		[60.0, 50.0, 40.0, 30.0, 20.0, 10.0,  0.0, 10.0, 20.0],
+		[70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,  0.0, 10.0],
+		[80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0,  0.0],
 	]
 	assert_eq(Validation.validate(distances).accepted, true)
+
+
+# --- The isolation limit widens as bases are added ---
+
+
+## Two bases is the smallest supported placement and nine is the largest, so
+## those sizes carry the two limits directly.
+func test_isolation_limit_matches_its_constants_at_both_ends() -> void:
+	assert_eq(Validation.max_isolation_ratio(2), 1.3)
+	assert_eq(Validation.max_isolation_ratio(9), 1.5)
+
+
+## A placement between the two ends takes a limit between the two values, so
+## the limit rises gradually rather than in one step.
+func test_isolation_limit_rises_between_the_ends() -> void:
+	assert_almost_eq(Validation.max_isolation_ratio(5), 1.386, 0.001)
+
+
+## Placement can stop early and leave fewer bases than any supported count,
+## and a caller may ask about more. Neither may push the limit outside the two
+## constants.
+func test_isolation_limit_holds_flat_outside_the_supported_sizes() -> void:
+	assert_eq(Validation.max_isolation_ratio(0), 1.3)
+	assert_eq(Validation.max_isolation_ratio(12), 1.5)
 
 
 # --- Combined validation: rejecting ---
@@ -213,9 +244,14 @@ func test_validate_rejects_a_base_targeted_by_three_opponents() -> void:
 
 ## Every base is the first target of at most two opponents, so only the
 ## isolation rule rejects the evenly spaced line.
+##
+## The penalty measures the overshoot against the limit for four bases, 1.357,
+## not against the limit for the largest placement. Measuring against 1.5 would
+## report no overshoot at all.
 func test_validate_rejects_an_isolation_ratio_above_the_limit() -> void:
 	var result := Validation.validate(EVENLY_SPACED_LINE)
-	assert_eq(result.failures, ["Isolation ratio 1.50 (limit 1.30)."])
+	assert_eq(result.failures, ["Isolation ratio 1.50 (limit 1.36)."])
+	assert_almost_eq(result.penalty, 0.105, 0.001)
 
 
 ## Both other rules pass on two evenly spaced groups: every base is the first
@@ -231,7 +267,7 @@ func test_validate_rejects_a_placement_split_into_unreachable_groups() -> void:
 func test_validate_reports_every_broken_rule() -> void:
 	assert_eq(Validation.validate(TWO_TRIOS_SECOND_SPREAD).failures, [
 		"Unreachable base pairs: 9 of 15.",
-		"Isolation ratio 2.00 (limit 1.30).",
+		"Isolation ratio 2.00 (limit 1.41).",
 	])
 
 
