@@ -3,8 +3,12 @@
 #
 # GDScript has no exception handling, so a runtime error inside a test does not
 # fail that test: Godot logs the error, the assertion never runs, and the test
-# reports a pass. This wrapper fails the run whenever Godot logs a script
-# error, which turns those silent passes into failures.
+# reports a pass. This wrapper fails the run whenever Godot logs an error,
+# which turns those silent passes into failures.
+#
+# The pattern covers both "SCRIPT ERROR" from GDScript and plain "ERROR" from
+# the engine itself. An out-of-bounds pathfinding query reports the second kind
+# and then quietly answers that no route exists.
 #
 # Set GODOT to point at another engine build.
 
@@ -16,9 +20,9 @@ status=$?
 
 echo "$output" | grep -v "^Godot Engine v"
 
-if echo "$output" | grep -q "SCRIPT ERROR"; then
+if echo "$output" | grep -q "ERROR"; then
 	echo ""
-	echo "FAILED: Godot logged a script error, so some test did not run to its assertions."
+	echo "FAILED: Godot logged an error, so some test did not run to its assertions."
 	exit 1
 fi
 
