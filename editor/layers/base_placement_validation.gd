@@ -12,7 +12,7 @@ extends RefCounted
 ##
 ## ## Public API
 ##
-## Methods: compute_vulnerability()
+## Methods: compute_isolation_ratio(), compute_vulnerability()
 
 
 ## Counts, for each base, how many other bases treat it as their nearest
@@ -49,3 +49,48 @@ static func _nearest_opponent(distances: Array, attacker: int) -> int:
 			nearest = target
 
 	return nearest
+
+
+## Number of nearest opponents that the isolation score adds up.
+const ISOLATION_OPPONENT_COUNT := 2
+
+
+## Returns the ratio between the most isolated and the least isolated base.
+## A ratio of 1.0 means every base is equally well connected to its nearest
+## opponents. Larger values mean some base sits further out than the rest.
+##
+## The ratio is INF when any base lacks a second reachable opponent. That case
+## needs its own answer, because dividing INF by INF would give NaN, and NaN
+## compares false against every limit.
+##
+## Fewer than two bases gives 1.0. No pair of bases exists, so no base can be
+## more isolated than another.
+static func compute_isolation_ratio(distances: Array) -> float:
+	if distances.size() < 2:
+		return 1.0
+
+	var scores: Array[float] = []
+	for base in distances.size():
+		scores.append(_isolation_score(distances, base))
+
+	var most_isolated: float = scores.max()
+	if most_isolated == INF:
+		return INF
+
+	return most_isolated / scores.min()
+
+
+## Returns the sum of the distances to the base's nearest opponents, over at
+## most ISOLATION_OPPONENT_COUNT of them. The sum is INF when any of those
+## opponents is unreachable.
+static func _isolation_score(distances: Array, base: int) -> float:
+	var others: Array[float] = []
+	for other in distances.size():
+		if other != base:
+			others.append(distances[base][other])
+	others.sort()
+
+	var total := 0.0
+	for rank in mini(ISOLATION_OPPONENT_COUNT, others.size()):
+		total += others[rank]
+	return total
