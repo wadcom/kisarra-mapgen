@@ -2,6 +2,43 @@ extends "res://tests/assertions.gd"
 
 const Validation = preload("res://editor/layers/base_placement_validation.gd")
 
+## Three bases 10, 11 and 12 apart. Every base reaches the others, the most
+## targeted base is the first choice of two opponents, and the isolation ratio
+## is about 1.10, so every rule passes.
+const BALANCED_TRIO := [[0.0, 10.0, 11.0], [10.0, 0.0, 12.0], [11.0, 12.0, 0.0]]
+
+## Four bases evenly spaced along a line, 10 apart. Each end base must reach
+## past its neighbour for a second opponent, scoring 30 against the middle
+## bases' 20, so the isolation ratio is 1.5.
+const EVENLY_SPACED_LINE := [
+	[ 0.0, 10.0, 20.0, 30.0],
+	[10.0,  0.0, 10.0, 20.0],
+	[20.0, 10.0,  0.0, 10.0],
+	[30.0, 20.0, 10.0,  0.0],
+]
+
+## Two groups of three bases with no path between them. Each group is equally
+## spaced, so every isolation score is 20 and the ratio is 1.0.
+const TWO_TRIOS_EVENLY_SPACED := [
+	[ 0.0, 10.0, 10.0,  INF,  INF,  INF],
+	[10.0,  0.0, 10.0,  INF,  INF,  INF],
+	[10.0, 10.0,  0.0,  INF,  INF,  INF],
+	[ INF,  INF,  INF,  0.0, 10.0, 10.0],
+	[ INF,  INF,  INF, 10.0,  0.0, 10.0],
+	[ INF,  INF,  INF, 10.0, 10.0,  0.0],
+]
+
+## The same split, but the second group is spread unevenly, so its most
+## isolated base scores 40 against the first group's 20, giving a ratio of 2.0.
+const TWO_TRIOS_SECOND_SPREAD := [
+	[ 0.0, 10.0, 10.0,  INF,  INF,  INF],
+	[10.0,  0.0, 10.0,  INF,  INF,  INF],
+	[10.0, 10.0,  0.0,  INF,  INF,  INF],
+	[ INF,  INF,  INF,  0.0, 10.0, 20.0],
+	[ INF,  INF,  INF, 10.0,  0.0, 20.0],
+	[ INF,  INF,  INF, 20.0, 20.0,  0.0],
+]
+
 
 # --- Vulnerability: which base each opponent attacks first ---
 
@@ -116,17 +153,126 @@ func test_isolation_is_infinite_when_one_base_is_walled_off() -> void:
 	assert_eq(Validation.compute_isolation_ratio(distances), INF)
 
 
-## Two groups of three bases with no path between them. Every base still has
-## two reachable opponents inside its own group, so no score is infinite and
-## the ratio stays finite. An unreachable opponent only forces INF when it
-## costs some base its second nearest opponent.
+## Every base still has two reachable opponents inside its own group, so no
+## score is infinite and the ratio stays finite. An unreachable opponent only
+## forces INF when it costs some base its second nearest opponent.
 func test_isolation_stays_finite_when_each_group_holds_three_bases() -> void:
+	assert_eq(Validation.compute_isolation_ratio(TWO_TRIOS_SECOND_SPREAD), 2.0)
+
+
+# --- Combined validation: accepting ---
+
+
+func test_validate_accepts_a_balanced_placement() -> void:
+	assert_eq(Validation.validate(BALANCED_TRIO).accepted, true)
+
+
+## An accepted placement sits at no distance from passing.
+func test_validate_penalty_is_zero_when_accepted() -> void:
+	assert_eq(Validation.validate(BALANCED_TRIO).penalty, 0.0)
+
+
+## Placement can stop early and leave one base, or none at all. Neither case
+## holds a pair to judge, so no rule can break.
+func test_validate_accepts_a_placement_too_small_to_judge() -> void:
+	assert_eq(Validation.validate([[0.0]]).accepted, true)
+	assert_eq(Validation.validate([]).accepted, true)
+
+
+## Four bases on a line at 0, 3, 10 and 13. The end bases score 3 + 10 and the
+## middle bases score 3 + 7, giving a ratio of exactly 1.3. The limit accepts
+## its own value, so this placement passes.
+func test_validate_accepts_an_isolation_ratio_exactly_at_the_limit() -> void:
 	var distances := [
-		[ 0.0, 10.0, 10.0,  INF,  INF,  INF],
-		[10.0,  0.0, 10.0,  INF,  INF,  INF],
-		[10.0, 10.0,  0.0,  INF,  INF,  INF],
-		[ INF,  INF,  INF,  0.0, 10.0, 20.0],
-		[ INF,  INF,  INF, 10.0,  0.0, 20.0],
-		[ INF,  INF,  INF, 20.0, 20.0,  0.0],
+		[ 0.0,  3.0, 10.0, 13.0],
+		[ 3.0,  0.0,  7.0, 10.0],
+		[10.0,  7.0,  0.0,  3.0],
+		[13.0, 10.0,  3.0,  0.0],
 	]
-	assert_eq(Validation.compute_isolation_ratio(distances), 2.0)
+	assert_eq(Validation.validate(distances).accepted, true)
+
+
+# --- Combined validation: rejecting ---
+
+
+## Bases 1, 2 and 3 all lie nearer to base 0 than to each other, so base 0 is
+## the first target of three opponents. They sit close enough together that
+## the isolation ratio stays at about 1.24, so only vulnerability breaks. The
+## penalty is the overshoot of 1 over the limit of 2.
+func test_validate_rejects_a_base_targeted_by_three_opponents() -> void:
+	var distances := [
+		[0.0, 5.0, 5.5, 6.0],
+		[5.0, 0.0, 7.0, 7.0],
+		[5.5, 7.0, 0.0, 7.0],
+		[6.0, 7.0, 7.0, 0.0],
+	]
+	var result := Validation.validate(distances)
+	assert_eq(result.failures, ["Base 0 is the first target of 3 opponents (limit 2)."])
+	assert_eq(result.penalty, 0.5)
+
+
+## Every base is the first target of at most two opponents, so only the
+## isolation rule rejects the evenly spaced line.
+func test_validate_rejects_an_isolation_ratio_above_the_limit() -> void:
+	var result := Validation.validate(EVENLY_SPACED_LINE)
+	assert_eq(result.failures, ["Isolation ratio 1.50 (limit 1.30)."])
+
+
+## Both other rules pass on two evenly spaced groups: every base is the first
+## target of at most two opponents, and every isolation score is 20. Only the
+## connectivity rule sees that half the players cannot be reached.
+func test_validate_rejects_a_placement_split_into_unreachable_groups() -> void:
+	var result := Validation.validate(TWO_TRIOS_EVENLY_SPACED)
+	assert_eq(result.failures, ["Unreachable base pairs: 9 of 15."])
+
+
+## Spreading the second group breaks isolation on top of connectivity. Both
+## sentences appear, in rule order.
+func test_validate_reports_every_broken_rule() -> void:
+	assert_eq(Validation.validate(TWO_TRIOS_SECOND_SPREAD).failures, [
+		"Unreachable base pairs: 9 of 15.",
+		"Isolation ratio 2.00 (limit 1.30).",
+	])
+
+
+## Two players on terrain that splits in half. The single base pair has no
+## path, which is the smallest possible break in connectivity. Neither base
+## then has a second reachable opponent, so isolation breaks as well and
+## reports the cause rather than an infinite ratio.
+##
+## The penalty is 1.0 from connectivity plus 1.0 from the isolation ceiling.
+func test_validate_rejects_two_bases_that_cannot_reach_each_other() -> void:
+	var result := Validation.validate([[0.0, INF], [INF, 0.0]])
+	assert_eq(result.failures, [
+		"Unreachable base pairs: 1 of 1.",
+		"Some bases have fewer than two reachable opponents.",
+	])
+	assert_eq(result.penalty, 2.0)
+
+
+# --- Combined validation: ranking rejected placements ---
+
+
+## Nine of the fifteen base pairs have no path between them, and no other rule
+## breaks, so the penalty is exactly 9 / 15.
+func test_validate_penalty_stays_finite_when_bases_cannot_reach_each_other() -> void:
+	assert_eq(Validation.validate(TWO_TRIOS_EVENLY_SPACED).penalty, 0.6)
+
+
+## Bases at 0, 5, 10 and 40 on a line leave the last base far from the rest,
+## giving a ratio of 6.5 against the evenly spaced line's 1.5. The worse
+## placement must rank worse, so that a caller keeps the closer one.
+##
+## An overshoot of 4.0 saturates at the per-rule ceiling of 1.0, which is the
+## bound that keeps a hopeless placement comparable instead of infinite.
+func test_validate_penalty_grows_with_the_size_of_the_breach() -> void:
+	var one_base_far_out := [
+		[ 0.0,  5.0, 10.0, 40.0],
+		[ 5.0,  0.0,  5.0, 35.0],
+		[10.0,  5.0,  0.0, 30.0],
+		[40.0, 35.0, 30.0,  0.0],
+	]
+	var milder: float = Validation.validate(EVENLY_SPACED_LINE).penalty
+	var worse: float = Validation.validate(one_base_far_out).penalty
+	assert_true(worse > milder, "%f should exceed %f" % [worse, milder])
+	assert_eq(worse, 1.0)

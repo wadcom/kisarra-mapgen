@@ -12,7 +12,7 @@ extends RefCounted
 ##
 ## ## Public API
 ##
-## Methods: compute_isolation_ratio(), compute_vulnerability()
+## Methods: compute_isolation_ratio(), compute_vulnerability(), validate()
 
 
 ## Counts, for each base, how many other bases treat it as their nearest
@@ -50,6 +50,12 @@ static func _nearest_opponent(distances: Array, attacker: int) -> int:
 
 	return nearest
 
+
+## Highest number of opponents that may treat one base as their first target.
+const MAX_VULNERABILITY := 2
+
+## Highest ratio allowed between the most and the least isolated base.
+const MAX_ISOLATION_RATIO := 1.3
 
 ## Number of nearest opponents that the isolation score adds up.
 const ISOLATION_OPPONENT_COUNT := 2
@@ -94,3 +100,64 @@ static func _isolation_score(distances: Array, base: int) -> float:
 	for rank in mini(ISOLATION_OPPONENT_COUNT, others.size()):
 		total += others[rank]
 	return total
+
+
+## Runs every balance rule over a placement and reports the outcome.
+##
+## Returns:
+##   - accepted: bool - true when every rule passes
+##   - failures: Array[String] - one sentence per broken rule, empty when
+##       accepted. Ready to show to the user.
+##   - penalty: float - 0.0 when accepted, larger the further the placement
+##       sits from passing. Lets a caller keep the closest of several attempts.
+##       Each rule adds at most 1.0, so the penalty never reaches INF and
+##       always orders one rejected placement against another. That ceiling
+##       makes the penalty order near misses rather than disasters: two badly
+##       broken placements both saturate and tie.
+static func validate(distances: Array) -> Dictionary:
+	var failures: Array[String] = []
+
+	var penalty := 0.0
+
+	var pair_count := distances.size() * (distances.size() - 1) / 2
+	var unreachable := _count_unreachable_pairs(distances)
+	if unreachable > 0:
+		penalty += float(unreachable) / pair_count
+		failures.append("Unreachable base pairs: %d of %d." % [unreachable, pair_count])
+
+	var counts := compute_vulnerability(distances)
+	var most_targeted: int = counts.max() if not counts.is_empty() else 0
+	penalty += _overshoot(most_targeted, MAX_VULNERABILITY)
+	if most_targeted > MAX_VULNERABILITY:
+		failures.append("Base %d is the first target of %d opponents (limit %d)." % [
+			counts.find(most_targeted), most_targeted, MAX_VULNERABILITY,
+		])
+
+	var ratio := compute_isolation_ratio(distances)
+	penalty += _overshoot(ratio, MAX_ISOLATION_RATIO)
+	if ratio == INF:
+		failures.append("Some bases have fewer than two reachable opponents.")
+	elif ratio > MAX_ISOLATION_RATIO:
+		failures.append("Isolation ratio %.2f (limit %.2f)." % [ratio, MAX_ISOLATION_RATIO])
+
+	return {accepted = failures.is_empty(), failures = failures, penalty = penalty}
+
+
+## Returns how far a value overshoots its limit, as a fraction of that limit,
+## bounded to the range 0.0 to 1.0. A value at or under the limit gives 0.0,
+## and an infinite value gives 1.0.
+static func _overshoot(value: float, limit: float) -> float:
+	if value == INF:
+		return 1.0
+	return clampf((value - limit) / limit, 0.0, 1.0)
+
+
+## Counts the pairs of bases with no path between them. The matrix is
+## symmetric, so each pair is read once.
+static func _count_unreachable_pairs(distances: Array) -> int:
+	var count := 0
+	for base in distances.size():
+		for other in range(base + 1, distances.size()):
+			if distances[base][other] == INF:
+				count += 1
+	return count

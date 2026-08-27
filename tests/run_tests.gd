@@ -9,8 +9,9 @@ extends SceneTree
 ## A file is unusable when it fails to parse or does not extend assertions.gd.
 ## The runner reports it as one failure and moves on, rather than crashing.
 ##
-## Run with:
-##   godot --headless --path . --script tests/run_tests.gd
+## Run with tests/run.sh, which also fails the run when Godot logs a script
+## error. A runtime error inside a test does not fail that test on its own,
+## because GDScript has no exception handling.
 
 const TESTS_DIR := "res://tests"
 const ASSERTIONS_PATH := "res://tests/assertions.gd"

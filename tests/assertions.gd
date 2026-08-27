@@ -7,7 +7,7 @@ extends RefCounted
 ## ## Public API
 ##
 ## Properties: failures
-## Methods: assert_eq(), fail()
+## Methods: assert_eq(), assert_true(), fail()
 
 ## Messages for the assertions that failed, in call order.
 var failures: Array[String] = []
@@ -19,6 +19,12 @@ func assert_eq(actual: Variant, expected: Variant, message: String = "") -> void
 	var prefix := "%s: " % message if message else ""
 	if actual != expected:
 		fail("%sexpected %s, got %s" % [prefix, expected, actual])
+
+
+## Records a failure when value is not true.
+func assert_true(value: bool, message: String) -> void:
+	if not value:
+		fail("%s: expected true" % message)
 
 
 ## Records a failure with the given message.
